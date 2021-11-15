@@ -35,3 +35,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# idea
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/social-network-reborn.iml
+/.idea/vcs.xml
