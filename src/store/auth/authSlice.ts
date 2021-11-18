@@ -1,12 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit"
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { login } from "./authThunks"
+import {IToken} from "../../models/IToken";
 
-type initialState = {
-
+interface initialState extends IToken {
+    userId: string
 }
 
 const initialState: initialState = {
-
+    access_token: '',
+    userId: ''
 }
 
 const authSlice = createSlice({
@@ -14,13 +16,13 @@ const authSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        [login.pending.type]: (state) => {
+        [login.pending.type]: (state, {payload}: PayloadAction<IToken>) => {
 
         },
-        [login.fulfilled.type]: (state) => {
+        [login.fulfilled.type]: (state, {payload}: PayloadAction<IToken>) => {
 
         },
-        [login.rejected.type]: (state) => {
+        [login.rejected.type]: (state, {payload}: PayloadAction<IToken>) => {
 
         }
     }

@@ -1,16 +1,16 @@
 import { instance,  ResponseType} from "./api"
-
-type auth = {
-    email: string
-    password: string
-}
+import {IAuth} from "../models/IAuth";
+import {IUser} from "../models/IUser";
+import {IToken} from "../models/IToken";
 
 export const authAPI = {
-    register({ email, password }: auth) {
-
+    register(authData: IAuth) {
+        return instance.post<ResponseType<IUser>>(`auth/login`, authData)
+            .then(response => response.data)
     },
-    login(authData: auth) {
-        return instance.post<ResponseType<auth>>(`auth/login`, [])
+    login(authData: IAuth) {
+        return instance.post<ResponseType<IToken>>(`auth/login`, authData)
+            .then(response => response.data)
     },
 
 }

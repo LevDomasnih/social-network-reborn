@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import axios from "axios"
+import {authAPI} from "../../API/authAPI";
+import {IAuth} from "../../models/IAuth";
 
 export const login = createAsyncThunk(
     'auth/login',
-    async (_, thunkAPI) => {
+    async (authData: IAuth, thunkAPI) => {
         try {
-            const response = await axios.get('https://jsonplaceholder.typicode.com/user2s')
-            return response.data;
+            return authAPI.login(authData)
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
         }
