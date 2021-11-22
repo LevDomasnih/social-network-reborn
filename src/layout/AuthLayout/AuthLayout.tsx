@@ -4,10 +4,8 @@ import styles from './AuthLayout.module.css'
 
 const AuthLayout: FC<AuthLayoutProps> = ({children}) => {
     return (
-        <div>
-            <main>
-                {children}
-            </main>
+        <div className={styles.authContainer}>
+            {children}
         </div>
     )
 }

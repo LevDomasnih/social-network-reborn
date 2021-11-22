@@ -22,7 +22,7 @@ const authSlice = createSlice({
         [login.fulfilled.type]: (state, {payload}: PayloadAction<IToken>) => {
 
         },
-        [login.rejected.type]: (state, {payload}: PayloadAction<IToken>) => {
+        [login.rejected.type]: (state, error: any) => {
 
         }
     }
