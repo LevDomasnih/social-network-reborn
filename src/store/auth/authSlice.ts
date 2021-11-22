@@ -15,16 +15,17 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {},
-    extraReducers: {
-        [login.pending.type]: (state, {payload}: PayloadAction<IToken>) => {
-
-        },
-        [login.fulfilled.type]: (state, {payload}: PayloadAction<IToken>) => {
-
-        },
-        [login.rejected.type]: (state, error: any) => {
-
-        }
+    extraReducers: (builder) => {
+        builder.addCase(login.fulfilled, (state, payload) => {
+            console.log(payload)
+            console.log('success')
+        })
+        builder.addCase(login.pending, (state, { payload }) => {
+            console.log('pending')
+        })
+        builder.addCase(login.rejected, (state, action) => {
+            console.log({action})
+        })
     }
 })
 
