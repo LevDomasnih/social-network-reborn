@@ -11,7 +11,6 @@ const Login: FC<LoginProps> = () => {
     const dispatch = useAppDispatch()
 
     const onFinish = (values: IAuth) => {
-        console.log('Success:', values);
         dispatch(login(values))
     };
 

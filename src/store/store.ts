@@ -4,6 +4,7 @@ import {
     ThunkAction,
 } from "@reduxjs/toolkit"
 import authSlice from "./auth/authSlice"
+import logger from 'redux-logger'
 
 const rootReducer = combineReducers({
     authSlice
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export type AppDispatch = typeof store.dispatch;
