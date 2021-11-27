@@ -29,7 +29,7 @@ const Login: FC<LoginProps> = () => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Login"
+                    label="Last name"
                     name="login"
                     rules={[{required: true, message: 'Please input your login!'}]}
                 >
