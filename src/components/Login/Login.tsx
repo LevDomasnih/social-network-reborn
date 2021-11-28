@@ -1,10 +1,11 @@
-import {Button, Card, Checkbox, Form, Input} from "antd";
+import {Button, Card, Checkbox, Form} from "antd";
 import React, {FC} from "react";
 import {LoginProps} from "./Login.props";
 import styles from './Login.module.css'
 import {useAppDispatch} from "../../store/hooks";
 import {login} from "../../store/auth/authThunks";
 import {IAuth} from "../../models/IAuth";
+import Input from "../Input/Input";
 
 const Login: FC<LoginProps> = () => {
 
@@ -33,7 +34,10 @@ const Login: FC<LoginProps> = () => {
                     name="login"
                     rules={[{required: true, message: 'Please input your login!'}]}
                 >
-                    <Input/>
+                    <Input prefix={<svg xmlns="http://www.w3.org/2000/svg"  fill="#292929" width="14" height="14" viewBox="0 0 14 14">
+                        <path id="Контур_63756" data-name="Контур 63756" d="M149.448,125.425a6.571,6.571,0,0,0-1.5-2.1,7.029,7.029,0,0,0-2.225-1.418l-.022-.009a4.283,4.283,0,0,0,1.914-3.535,4.624,4.624,0,0,0-9.234,0,4.289,4.289,0,0,0,1.914,3.537l-.022.009a6.969,6.969,0,0,0-2.225,1.418,6.6,6.6,0,0,0-1.5,2.1,6.231,6.231,0,0,0-.549,2.429.137.137,0,0,0,.042.1.153.153,0,0,0,.107.042h1.117a.145.145,0,0,0,.149-.137,5.108,5.108,0,0,1,1.635-3.593,5.82,5.82,0,0,1,7.9,0,5.108,5.108,0,0,1,1.635,3.593.144.144,0,0,0,.149.137h1.117a.153.153,0,0,0,.107-.042.137.137,0,0,0,.042-.1A6.247,6.247,0,0,0,149.448,125.425ZM143,121.387a3.278,3.278,0,0,1-2.264-.886,2.907,2.907,0,0,1,0-4.277,3.334,3.334,0,0,1,4.528,0,2.907,2.907,0,0,1,0,4.277A3.278,3.278,0,0,1,143,121.387Z" transform="translate(-135.997 -114)"/>
+                    </svg>
+                    } placeholder={'First name'} />
                 </Form.Item>
 
                 <Form.Item
@@ -41,7 +45,9 @@ const Login: FC<LoginProps> = () => {
                     name="password"
                     rules={[{required: true, message: 'Please input your password!'}]}
                 >
-                    <Input.Password/>
+                    {/*<InputPassword.Password/>*/}
+                    {/*<InputPassword prefix={'asdad'} />*/}
+                    <Input.Password prefix={'asdad'} />
                 </Form.Item>
 
                 {/*<Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 4, span: 16}}>*/}
