@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {MainLayoutProps} from "../AuthLayout/MainLayout.props";
+import {MainLayoutProps} from "./MainLayout.props";
 
 const MainLayout: FC<MainLayoutProps> = ({children}) => {
     return (
