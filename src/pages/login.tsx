@@ -25,7 +25,7 @@ const Login = () => {
             <Head>
                 <title>Create Next App</title>
                 <meta name="description" content="Sign up page"/>
-                <link rel="icon" href='/src/public/favicon.ico'/>
+                <link rel="icon" href='/favicon.ico'/>
             </Head>
             <AuthLayout head={'Login'}>
                 <Form
