@@ -5,7 +5,7 @@ module.exports = function (api) {
     return {
         presets: [['next/babel']],
         plugins: [
-            ['import', { libraryName: 'antd', style: true }],
+            ['import', { libraryName: 'antd', libraryDirectory: 'lib', style: true }],
             ['module-resolver', { alias: { '@': './src' } }],
             ['inline-react-svg'],
             ['add-react-displayname'],
