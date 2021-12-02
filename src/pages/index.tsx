@@ -3,12 +3,11 @@ import Head from 'next/head'
 import 'antd/dist/antd.css';
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
-import {Button, Checkbox, Form} from "antd";
-import Input from "../components/Input/Input";
 import {useAppDispatch} from "../store/hooks";
 import {IAuth} from "../models/IAuth";
 import {login} from "../store/auth/authThunks";
 import Link from 'next/link'
+import { Button, Form, Checkbox, Input } from '../components/antd';
 
 
 const Home: NextPage = () => {

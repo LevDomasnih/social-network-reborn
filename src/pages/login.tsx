@@ -1,12 +1,11 @@
 import Head from "next/head";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
-import {Button, Checkbox, Form} from "antd";
-import Input from "../components/Input/Input";
 import Link from "next/link";
 import React from "react";
 import {useAppDispatch} from "../store/hooks";
 import {IAuth} from "../models/IAuth";
 import {login} from "../store/auth/authThunks";
+import { Button, Form, Checkbox, Input } from '../components/antd';
 
 const Login = () => {
 
