@@ -13,7 +13,7 @@ const Login = () => {
 
     const dispatch = useAppDispatch()
 
-    const onFinish = (values: ILogin) => {
+    const onFinish = ({ remember, ...values }: ILogin & {remember: boolean}) => {
         dispatch(login(values))
     };
 

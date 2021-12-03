@@ -18,7 +18,8 @@ const Home: NextPage = () => {
 
     const dispatch = useAppDispatch()
 
-    const onFinish = ({ confirmPassword, remember, ...values }: IRegister & {confirmPassword: string, remember:boolean }) => {
+    //TODO пробрасывать чекаут
+    const onFinish = ({ confirmPassword, remember, ...values }: IRegister & { confirmPassword: string, remember: boolean }) => {
         if (confirmPassword === values.password) {
             dispatch(register(values))
         }

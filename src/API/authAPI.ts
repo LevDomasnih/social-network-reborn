@@ -6,11 +6,11 @@ import { IRegister } from "../models/IRegister"
 
 export const authAPI = {
     register(authData: IRegister) {
-        return instance.post<ResponseType<IUser>>(`auth/register`, authData)
+        return instance.post<IUser>(`auth/register`, authData)
             .then(response => response.data)
     },
     login(authData: ILogin) {
-        return instance.post<ResponseType<IToken>>(`auth/login`, authData)
+        return instance.post<IToken>(`auth/login`, authData)
             .then(response => response.data)
             .catch((error) => { throw error.response.data })
     },
