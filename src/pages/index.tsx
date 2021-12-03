@@ -4,22 +4,24 @@ import 'antd/dist/antd.css';
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
 import {useAppDispatch} from "../store/hooks";
-import {IAuth} from "../models/IAuth";
-import {login} from "../store/auth/authThunks";
 import Link from 'next/link'
 import { Button, Form, Checkbox, Input } from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import PhoneSvg from '../../public/svg/phone.svg'
 import EmailSvg from '../../public/svg/email.svg'
 import LockSvg from '../../public/svg/lock.svg'
+import { register } from "../store/auth/authThunks"
+import { IRegister } from "../models/IRegister"
 
 
 const Home: NextPage = () => {
 
     const dispatch = useAppDispatch()
 
-    const onFinish = (values: IAuth) => {
-        dispatch(login(values))
+    const onFinish = ({ confirmPassword, remember, ...values }: IRegister & {confirmPassword: string, remember:boolean }) => {
+        if (confirmPassword === values.password) {
+            dispatch(register(values))
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -76,6 +78,7 @@ const Home: NextPage = () => {
                     <Form.Item
                         name="password"
                         rules={[{required: true, message: 'Please input your password!'}]}
+                        hasFeedback
                     >
                         <Input.Password
                             prefix={<LockSvg />} placeholder={'Password'}/>
@@ -83,7 +86,22 @@ const Home: NextPage = () => {
 
                     <Form.Item
                         name="confirmPassword"
-                        rules={[{required: true, message: 'Please input your password!'}]}
+                        dependencies={['password']}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please confirm your password!',
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                },
+                            }),
+                        ]}
                     >
                         <Input.Password
                             prefix={<LockSvg />} placeholder={'Confirm password'}/>

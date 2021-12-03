@@ -1,4 +1,4 @@
-export interface IAuth {
+export interface ILogin {
     login: string
     password: string
 }

@@ -3,7 +3,7 @@ import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Link from "next/link";
 import React from "react";
 import {useAppDispatch} from "../store/hooks";
-import {IAuth} from "../models/IAuth";
+import {ILogin} from "../models/ILogin";
 import {login} from "../store/auth/authThunks";
 import { Button, Form, Checkbox, Input } from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
@@ -13,7 +13,7 @@ const Login = () => {
 
     const dispatch = useAppDispatch()
 
-    const onFinish = (values: IAuth) => {
+    const onFinish = (values: ILogin) => {
         dispatch(login(values))
     };
 
