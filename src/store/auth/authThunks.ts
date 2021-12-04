@@ -22,7 +22,6 @@ export const login = createAsyncThunk<IToken, ILogin>(
     async (authData: ILogin, thunkAPI) => {
         try {
             const action = await authAPI.login(authData)
-            console.log(action)
             instance.defaults.headers.common["Authorization"] = `Bearer ${action.access_token}`
 
             return action

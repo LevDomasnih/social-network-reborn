@@ -8,6 +8,26 @@ import {login} from "../store/auth/authThunks";
 import { Button, Form, Checkbox, Input } from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import LockSvg from '../../public/svg/lock.svg'
+import {GetServerSidePropsContext} from "next";
+import routes from "../../utils/routes";
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+
+    const token = ctx.req.cookies.jwt;
+
+    if (!token) {
+        return {
+            props: { },
+        };
+    }
+
+    return {
+        redirect: {
+            destination: routes.me,
+            permanent: false
+        }
+    };
+};
 
 const Login = () => {
 

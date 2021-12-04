@@ -12,6 +12,26 @@ import EmailSvg from '../../public/svg/email.svg'
 import LockSvg from '../../public/svg/lock.svg'
 import { register } from "../store/auth/authThunks"
 import { IRegister } from "../models/IRegister"
+import {GetServerSidePropsContext} from "next";
+import routes from "../../utils/routes";
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+
+    const token = ctx.req.cookies.jwt;
+
+    if (!token) {
+        return {
+            props: { },
+        };
+    }
+
+    return {
+        redirect: {
+            destination: routes.me,
+            permanent: false
+        }
+    };
+};
 
 
 const Home: NextPage = () => {
