@@ -12,6 +12,7 @@
     "antd": "^4.16.13",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
+    "cookies": "^0.8.0",
     "date-fns": "^2.25.0",
     "less": "^4.1.2",
     "lodash": "^4.17.21",
@@ -24,8 +25,9 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.3.1",
+    "@types/cookies": "^0.7.7",
     "@types/lodash": "^4.14.177",
-    "@types/node": "16.11.7",
+    "@types/node": "^16.11.7",
     "@types/react": "17.0.34",
     "@types/redux-logger": "^3.0.9",
     "@typescript-eslint/eslint-plugin": "^5.3.1",

@@ -1,8 +1,9 @@
-import { instance,  ResponseType} from "./api"
+import { instance } from "./api"
 import {ILogin} from "../models/ILogin";
 import {IUser} from "../models/IUser";
 import {IToken} from "../models/IToken";
 import { IRegister } from "../models/IRegister"
+import axios from "axios";
 
 export const authAPI = {
     register(authData: IRegister) {
@@ -10,7 +11,7 @@ export const authAPI = {
             .then(response => response.data)
     },
     login(authData: ILogin) {
-        return instance.post<IToken>(`auth/login`, authData)
+        return axios.post<IToken>(`/api/login`, authData)
             .then(response => response.data)
             .catch((error) => { throw error.response.data })
     },
