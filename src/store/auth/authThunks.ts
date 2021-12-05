@@ -6,14 +6,17 @@ import { IToken } from "../../models/IToken"
 import { IUser } from "../../models/IUser"
 import {IError} from "../../models/IError";
 
-export const register = createAsyncThunk<IUser, IRegister>(
+export const register = createAsyncThunk<IUser, IRegister, { rejectValue: IError }>(
     'auth/register',
     async (registerData: IRegister, thunkAPI) => {
-        try {
-            return authAPI.register(registerData)
-        } catch (e) {
-            return thunkAPI.rejectWithValue(e);
-        }
+            const action = await authAPI.register(registerData)
+
+            if (action.status !== 200) {
+                return thunkAPI.rejectWithValue(action.data);
+            }
+
+            return action.data
+
     }
 )
 
@@ -22,11 +25,11 @@ export const login = createAsyncThunk<IToken, ILogin, { rejectValue: IError }>(
     async (authData: ILogin, thunkAPI) => {
         const action = await authAPI.login(authData)
 
-        if (action.status !== 'success') {
-            return thunkAPI.rejectWithValue(action);
+        if (action.status !== 200) {
+            return thunkAPI.rejectWithValue(action.data);
         }
 
-        return action
+        return action.data
         // try {
         //     const action = await authAPI.login(authData)
         //     console.log({action})

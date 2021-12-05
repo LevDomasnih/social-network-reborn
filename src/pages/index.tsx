@@ -13,7 +13,8 @@ import LockSvg from '../../public/svg/lock.svg'
 import { register } from "../store/auth/authThunks"
 import { IRegister } from "../models/IRegister"
 import {GetServerSidePropsContext} from "next";
-import routes from "../../utils/routes";
+import routes from "../utils/routes";
+import {defaultError} from "../store/auth/authSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -48,6 +49,10 @@ const Home: NextPage = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
+
+    const onLink = () => {
+        dispatch(defaultError())
+    }
 
     return (
         <div>
@@ -142,7 +147,7 @@ const Home: NextPage = () => {
                 <div>
                     Already have an account?
                     <Link href={'/login'}>
-                        <a>Log in</a>
+                        <a onClick={onLink}>Log in</a>
                     </Link>
                 </div>
             </AuthLayout>

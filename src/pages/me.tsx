@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import {GetServerSidePropsContext} from "next";
-import routes from "../../utils/routes";
+import routes from "../utils/routes";
 import axios from "axios";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {

@@ -8,12 +8,13 @@ import axios from "axios";
 export const authAPI = {
     register(authData: IRegister) {
         return instance.post<IUser>(`auth/register`, authData)
-            .then(response => response.data)
+            .then(response => response)
+            .catch((error) => error.response)
     },
     login(authData: ILogin) {
         return axios.post<IToken>(`/api/login`, authData)
-            .then(response => response.data)
-            .catch((error) => error.response.data )
+            .then(response => response)
+            .catch((error) => error.response)
     },
 
 }

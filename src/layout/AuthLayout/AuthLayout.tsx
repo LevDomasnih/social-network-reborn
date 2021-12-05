@@ -5,6 +5,8 @@ import Htag from "../../components/Htag/Htag";
 // @ts-ignore
 import styles from './AuthLayout.module.less'
 import {useAppSelector} from "../../store/hooks";
+import { useRouter } from 'next/router'
+import routes from "../../utils/routes";
 
 const openNotification = (error: string) => {
     notification.open({
@@ -15,13 +17,22 @@ const openNotification = (error: string) => {
 
 const AuthLayout: FC<AuthLayoutProps> = ({children, head, ...props}) => {
 
-    const authError = useAppSelector(state => state.authSlice.authError)
+    const router = useRouter()
+
+    const {authError} = useAppSelector(state => state.authSlice)
+    const {access_token} = useAppSelector(state => state.authSlice)
 
     useEffect(() => {
         if (authError.message) {
             openNotification(authError.message)
         }
     }, [authError])
+
+    useEffect( () => {
+        if (access_token !== '') {
+            router.push(routes.me)
+        }
+    }, [access_token, router])
 
 
     return (

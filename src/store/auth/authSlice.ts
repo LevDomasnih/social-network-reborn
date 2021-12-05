@@ -22,7 +22,15 @@ const initialState: initialState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        defaultError: (state) => ({
+            ...state,
+            authError: {
+                message: null,
+                requestId: null
+            }
+        })
+    },
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, { payload }) => {
             state.access_token = payload.access_token
@@ -35,7 +43,6 @@ const authSlice = createSlice({
 
         })
         builder.addCase(login.rejected, (state, action) => {
-            console.log(action)
             return {
                 ...state,
                 authError: {
@@ -45,15 +52,28 @@ const authSlice = createSlice({
             }
         })
         builder.addCase(register.fulfilled, (state, action) => {
-
+            //TODO будет добавлен токен в запросе на регистрацию
+           // state.access_token = payload.access_token
+            state.authError = {
+                message: null,
+                requestId: null
+            }
         })
         builder.addCase(register.pending, (state, { payload }) => {
 
         })
         builder.addCase(register.rejected, (state, action) => {
-
+            return {
+                ...state,
+                authError: {
+                    message: action.payload!.message,
+                    requestId: action.meta.requestId
+                }
+            }
         })
     }
 })
+
+export const { defaultError } = authSlice.actions
 
 export default authSlice.reducer

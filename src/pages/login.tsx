@@ -9,7 +9,8 @@ import { Button, Form, Checkbox, Input } from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import LockSvg from '../../public/svg/lock.svg'
 import {GetServerSidePropsContext} from "next";
-import routes from "../../utils/routes";
+import routes from "../utils/routes";
+import {defaultError} from "../store/auth/authSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -40,6 +41,11 @@ const Login = () => {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
+
+
+    const onLink = () => {
+        dispatch(defaultError())
+    }
 
     return (
         <div>
@@ -90,8 +96,8 @@ const Login = () => {
 
                 <div>
                     Already have an account?
-                    <Link href={'/'}>
-                        <a>Sign Up</a>
+                    <Link href={'/'} >
+                        <a onClick={onLink}>Sign Up</a>
                     </Link>
                 </div>
             </AuthLayout>

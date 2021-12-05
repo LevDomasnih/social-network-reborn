@@ -29,9 +29,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(500)
         })
         .catch((err) => {
-            return res.status(401).json({
-                status: 'fail',
-                message: err.response.data.message,
+
+            const {statusCode, ...error} = err.response.data
+
+            return res.status(statusCode).json({
+                ...error
             });
         });
 };
