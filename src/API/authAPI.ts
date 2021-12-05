@@ -13,7 +13,7 @@ export const authAPI = {
     login(authData: ILogin) {
         return axios.post<IToken>(`/api/login`, authData)
             .then(response => response.data)
-            .catch((error) => { throw error.response.data })
+            .catch((error) => error.response.data )
     },
 
 }

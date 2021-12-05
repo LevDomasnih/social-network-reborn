@@ -4,7 +4,7 @@ import {ILogin} from "../../models/ILogin";
 import { IRegister } from "../../models/IRegister"
 import { IToken } from "../../models/IToken"
 import { IUser } from "../../models/IUser"
-import { instance } from "../../API/api"
+import {IError} from "../../models/IError";
 
 export const register = createAsyncThunk<IUser, IRegister>(
     'auth/register',
@@ -17,16 +17,25 @@ export const register = createAsyncThunk<IUser, IRegister>(
     }
 )
 
-export const login = createAsyncThunk<IToken, ILogin>(
+export const login = createAsyncThunk<IToken, ILogin, { rejectValue: IError }>(
     'auth/login',
     async (authData: ILogin, thunkAPI) => {
-        try {
-            const action = await authAPI.login(authData)
-            instance.defaults.headers.common["Authorization"] = `Bearer ${action.access_token}`
+        const action = await authAPI.login(authData)
 
-            return action
-        } catch (e) {
-            return thunkAPI.rejectWithValue(e);
+        if (action.status !== 'success') {
+            return thunkAPI.rejectWithValue(action);
         }
+
+        return action
+        // try {
+        //     const action = await authAPI.login(authData)
+        //     console.log({action})
+        //     // instance.defaults.headers.common["Authorization"] = `Bearer ${action.access_token}`
+        //
+        //     return action
+        // } catch (e) {
+        //     console.log({e})
+        //     return thunkAPI.rejectWithValue(e);
+        // }
     }
 )
