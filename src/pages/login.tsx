@@ -35,6 +35,7 @@ const Login = () => {
     const dispatch = useAppDispatch()
 
     const { loading } = useAppSelector(state => state.authSlice)
+    const [form] = Form.useForm();
 
     const onFinish = ({ remember, ...values }: ILogin & {remember: boolean}) => {
         dispatch(login(values))
@@ -58,6 +59,7 @@ const Login = () => {
             </Head>
             <AuthLayout head={'Login'}>
                 <Form
+                    form={form}
                     name="Login"
                     initialValues={{remember: true}}
                     onFinish={onFinish}
@@ -90,10 +92,18 @@ const Login = () => {
                         <Checkbox>Запомнить меня</Checkbox>
                     </Form.Item>
 
-                    <Form.Item>
-                        <Button loading={loading} type="primary" style={{width: '100%'}} htmlType="submit">
-                            LOGIN
-                        </Button>
+                    <Form.Item shouldUpdate>
+                        {() => (
+                            <Button
+                                loading={loading}
+                                type="primary"
+                                style={{width: '100%'}}
+                                htmlType="submit"
+                                disabled={!!form.getFieldsError().filter(({ errors }) => errors.length).length}
+                            >
+                                LOGIN
+                            </Button>
+                        )}
                     </Form.Item>
                 </Form>
 

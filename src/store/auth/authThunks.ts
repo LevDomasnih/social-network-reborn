@@ -35,16 +35,3 @@ export const login = createAsyncThunk<IToken, ILogin, { rejectValue: IError }>(
         return action.data
     },
 )
-
-export const emailExist = createAsyncThunk<boolean, string, { rejectValue: IError }>(
-    "auth/emailExist",
-    async (email: string, thunkAPI) => {
-        const action = await authAPI.emailExist(email)
-
-        if (action.status !== 200) {
-            return thunkAPI.rejectWithValue(action.data)
-        }
-
-        return action.data
-    },
-)

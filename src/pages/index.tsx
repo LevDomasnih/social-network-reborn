@@ -1,19 +1,20 @@
 import type {NextPage} from 'next'
+import {GetServerSidePropsContext} from "next";
 import Head from 'next/head'
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
-import { useAppDispatch, useAppSelector } from "../store/hooks"
+import {useAppDispatch, useAppSelector} from "../store/hooks"
 import Link from 'next/link'
-import { Button, Form, Checkbox, Input } from '../components/antd';
+import {Button, Checkbox, Form, Input} from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import PhoneSvg from '../../public/svg/phone.svg'
 import EmailSvg from '../../public/svg/email.svg'
 import LockSvg from '../../public/svg/lock.svg'
-import { emailExist, register } from "../store/auth/authThunks"
-import { IRegister } from "../models/IRegister"
-import {GetServerSidePropsContext} from "next";
+import {register} from "../store/auth/authThunks"
+import {IRegister} from "../models/IRegister"
 import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
+import {authAPI} from "../API/authAPI";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -21,7 +22,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     if (!token) {
         return {
-            props: { },
+            props: {},
         };
     }
 
@@ -37,7 +38,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 const Home: NextPage = () => {
 
     const dispatch = useAppDispatch()
-    const {isValidEmail} = useAppSelector(state => state.authSlice)
+    const [form] = Form.useForm();
+    const { loading } = useAppSelector(state => state.authSlice)
 
     //TODO пробрасывать чекаут
     const onFinish = ({ confirmPassword, remember, ...values }: IRegister & { confirmPassword: string, remember: boolean }) => {
@@ -63,6 +65,7 @@ const Home: NextPage = () => {
             </Head>
             <AuthLayout head={'Sign up'}>
                 <Form
+                    form={form}
                     name="SignUp"
                     initialValues={{remember: true}}
                     onFinish={onFinish}
@@ -74,7 +77,7 @@ const Home: NextPage = () => {
                         rules={[{required: true, message: 'Please input your first name!'}]}
                     >
                         <Input
-                            prefix={<UserSvg />}
+                            prefix={<UserSvg/>}
                             placeholder={'First name'}
                         />
                     </Form.Item>
@@ -84,7 +87,7 @@ const Home: NextPage = () => {
                         rules={[{required: true, message: 'Please input your last name!'}]}
                     >
                         <Input
-                            prefix={<UserSvg />}
+                            prefix={<UserSvg/>}
                             placeholder={'Last name'}
                         />
                     </Form.Item>
@@ -94,7 +97,7 @@ const Home: NextPage = () => {
                         rules={[{required: true, message: 'Please input your phone!'}]}
                     >
                         <Input
-                            prefix={<PhoneSvg />}
+                            prefix={<PhoneSvg/>}
                             placeholder={'Phone'}
                         />
                     </Form.Item>
@@ -106,13 +109,13 @@ const Home: NextPage = () => {
                                 required: true,
                                 message: 'Please input your email!'
                             },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    dispatch(emailExist(value))
-                                    console.log(isValidEmail)
-                                    console.log(value)
-                                    if (isValidEmail) {
-                                        return Promise.reject(new Error('User found!'));
+                            () => ({
+                                async validator(_, value) {
+
+                                    const isExistEmail = await authAPI.emailExist(value).then(e => e.data)
+
+                                    if (isExistEmail) {
+                                        return Promise.reject(new Error('Пользователь с таким email существует!'));
                                     }
 
                                     return Promise.resolve();
@@ -122,7 +125,7 @@ const Home: NextPage = () => {
                     >
                         <Input
                             // onChange={(e) => console.log(e.target.value)}
-                            prefix={<EmailSvg />}
+                            prefix={<EmailSvg/>}
                             placeholder={'Email'}
                         />
                     </Form.Item>
@@ -134,7 +137,7 @@ const Home: NextPage = () => {
                         hasFeedback
                     >
                         <Input.Password
-                            prefix={<LockSvg />}
+                            prefix={<LockSvg/>}
                             placeholder={'Password'}
                         />
                     </Form.Item>
@@ -148,18 +151,18 @@ const Home: NextPage = () => {
                                 required: true,
                                 message: 'Please confirm your password!',
                             },
-                            ({ getFieldValue }) => ({
+                            ({getFieldValue}) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    return Promise.reject(new Error('Пароль должен совпадать!'));
                                 },
                             }),
                         ]}
                     >
                         <Input.Password
-                            prefix={<LockSvg />}
+                            prefix={<LockSvg/>}
                             placeholder={'Confirm password'}
                         />
                     </Form.Item>
@@ -168,10 +171,20 @@ const Home: NextPage = () => {
                         <Checkbox>Запомнить меня</Checkbox>
                     </Form.Item>
 
-                    <Form.Item>
-                        <Button type="primary" style={{width: '100%'}} htmlType="submit">
-                            SUGN UP
-                        </Button>
+                    <Form.Item shouldUpdate>
+                        {() => (
+                            <Button
+                                loading={loading}
+                                type="primary"
+                                style={{width: '100%'}}
+                                htmlType="submit"
+                                disabled={
+                                    !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                                }
+                            >
+                                SUGN UP
+                            </Button>
+                        )}
                     </Form.Item>
                 </Form>
 
