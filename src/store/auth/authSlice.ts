@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, register } from "./authThunks"
+import { emailExist, login, register } from "./authThunks"
 import { IToken } from "../../models/IToken"
 
 interface initialState extends IToken {
@@ -9,6 +9,7 @@ interface initialState extends IToken {
         requestId: string | null
     }
     loading: boolean
+    isValidEmail: boolean
 }
 
 const initialState: initialState = {
@@ -18,7 +19,8 @@ const initialState: initialState = {
         message: null,
         requestId: null,
     },
-    loading: false
+    loading: false,
+    isValidEmail: false
 }
 
 const authSlice = createSlice({
@@ -69,6 +71,9 @@ const authSlice = createSlice({
                 message: action.payload!.message,
                 requestId: action.meta.requestId,
             }
+        })
+        builder.addCase(emailExist.fulfilled, (state, { payload }) => {
+            state.isValidEmail = payload
         })
     },
 })

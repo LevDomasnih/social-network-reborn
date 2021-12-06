@@ -2,14 +2,14 @@ import type {NextPage} from 'next'
 import Head from 'next/head'
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
-import {useAppDispatch} from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import Link from 'next/link'
 import { Button, Form, Checkbox, Input } from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import PhoneSvg from '../../public/svg/phone.svg'
 import EmailSvg from '../../public/svg/email.svg'
 import LockSvg from '../../public/svg/lock.svg'
-import { register } from "../store/auth/authThunks"
+import { emailExist, register } from "../store/auth/authThunks"
 import { IRegister } from "../models/IRegister"
 import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
@@ -37,6 +37,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 const Home: NextPage = () => {
 
     const dispatch = useAppDispatch()
+    const {isValidEmail} = useAppSelector(state => state.authSlice)
 
     //TODO пробрасывать чекаут
     const onFinish = ({ confirmPassword, remember, ...values }: IRegister & { confirmPassword: string, remember: boolean }) => {
@@ -100,10 +101,27 @@ const Home: NextPage = () => {
 
                     <Form.Item
                         name="email"
-                        rules={[{required: true, message: 'Please input your email!'}]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your email!'
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    dispatch(emailExist(value))
+                                    console.log(isValidEmail)
+                                    console.log(value)
+                                    if (isValidEmail) {
+                                        return Promise.reject(new Error('User found!'));
+                                    }
+
+                                    return Promise.resolve();
+                                },
+                            }),
+                        ]}
                     >
                         <Input
-                            onChange={(e) => console.log(e.target.value)}
+                            // onChange={(e) => console.log(e.target.value)}
                             prefix={<EmailSvg />}
                             placeholder={'Email'}
                         />
