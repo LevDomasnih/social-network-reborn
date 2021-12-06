@@ -8,6 +8,7 @@ interface initialState extends IToken {
         message: string | null
         requestId: string | null
     }
+    loading: boolean
 }
 
 const initialState: initialState = {
@@ -17,6 +18,7 @@ const initialState: initialState = {
         message: null,
         requestId: null,
     },
+    loading: false
 }
 
 const authSlice = createSlice({
@@ -34,40 +36,38 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, { payload }) => {
             state.access_token = payload.access_token
+            state.loading = false
             state.authError = {
                 message: null,
                 requestId: null,
             }
         })
         builder.addCase(login.pending, (state, { payload }) => {
-
+            state.loading = true
         })
         builder.addCase(login.rejected, (state, action) => {
-            return {
-                ...state,
-                authError: {
-                    message: action.payload!.message,
-                    requestId: action.meta.requestId,
-                },
+            state.loading = false
+            state.authError = {
+                message: action.payload!.message,
+                requestId: action.meta.requestId,
             }
         })
         builder.addCase(register.fulfilled, (state, action) => {
             state.access_token = action.payload.access_token
+            state.loading = false
             state.authError = {
                 message: null,
                 requestId: null,
             }
         })
         builder.addCase(register.pending, (state, { payload }) => {
-
+            state.loading = true
         })
         builder.addCase(register.rejected, (state, action) => {
-            return {
-                ...state,
-                authError: {
-                    message: action.payload!.message,
-                    requestId: action.meta.requestId,
-                },
+            state.loading = false
+            state.authError = {
+                message: action.payload!.message,
+                requestId: action.meta.requestId,
             }
         })
     },

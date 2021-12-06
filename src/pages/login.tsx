@@ -2,7 +2,7 @@ import Head from "next/head";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Link from "next/link";
 import React from "react";
-import {useAppDispatch} from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import {ILogin} from "../models/ILogin";
 import {login} from "../store/auth/authThunks";
 import { Button, Form, Checkbox, Input } from '../components/antd';
@@ -34,6 +34,8 @@ const Login = () => {
 
     const dispatch = useAppDispatch()
 
+    const { loading } = useAppSelector(state => state.authSlice)
+
     const onFinish = ({ remember, ...values }: ILogin & {remember: boolean}) => {
         dispatch(login(values))
     };
@@ -62,15 +64,14 @@ const Login = () => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
-
-
-
                     <Form.Item
                         name="email"
                         rules={[{required: true, message: 'Please input your email!'}]}
                     >
-                        <Input prefix={<UserSvg />
-                        } placeholder={'Email'}/>
+                        <Input
+                            prefix={<UserSvg />}
+                            placeholder={'Email'}
+                        />
                     </Form.Item>
 
 
@@ -79,7 +80,9 @@ const Login = () => {
                         rules={[{required: true, message: 'Please input your password!'}]}
                     >
                         <Input.Password
-                            prefix={<LockSvg />} placeholder={'Password'}/>
+                            prefix={<LockSvg />}
+                            placeholder={'Password'}
+                        />
                     </Form.Item>
 
 
@@ -88,7 +91,7 @@ const Login = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" style={{width: '100%'}} htmlType="submit">
+                        <Button loading={loading} type="primary" style={{width: '100%'}} htmlType="submit">
                             LOGIN
                         </Button>
                     </Form.Item>
