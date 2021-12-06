@@ -7,7 +7,7 @@ import axios from "axios";
 
 export const authAPI = {
     register(authData: IRegister) {
-        return instance.post<IUser>(`auth/register`, authData)
+        return axios.post<IToken>(`/api/register`, authData)
             .then(response => response)
             .catch((error) => error.response)
     },

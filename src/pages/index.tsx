@@ -72,31 +72,41 @@ const Home: NextPage = () => {
                         name="firstName"
                         rules={[{required: true, message: 'Please input your first name!'}]}
                     >
-                        <Input prefix={<UserSvg />} placeholder={'First name'}/>
+                        <Input
+                            prefix={<UserSvg />}
+                            placeholder={'First name'}
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="lastName"
                         rules={[{required: true, message: 'Please input your last name!'}]}
                     >
-                        <Input prefix={<UserSvg />
-                        } placeholder={'Last name'}/>
+                        <Input
+                            prefix={<UserSvg />}
+                            placeholder={'Last name'}
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="phone"
                         rules={[{required: true, message: 'Please input your phone!'}]}
                     >
-                        <Input prefix={<PhoneSvg />
-                        } placeholder={'Phone'}/>
+                        <Input
+                            prefix={<PhoneSvg />}
+                            placeholder={'Phone'}
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="email"
                         rules={[{required: true, message: 'Please input your email!'}]}
                     >
-                        <Input prefix={<EmailSvg />
-                        } placeholder={'Email'}/>
+                        <Input
+                            onChange={(e) => console.log(e.target.value)}
+                            prefix={<EmailSvg />}
+                            placeholder={'Email'}
+                        />
                     </Form.Item>
 
 
@@ -106,7 +116,9 @@ const Home: NextPage = () => {
                         hasFeedback
                     >
                         <Input.Password
-                            prefix={<LockSvg />} placeholder={'Password'}/>
+                            prefix={<LockSvg />}
+                            placeholder={'Password'}
+                        />
                     </Form.Item>
 
                     <Form.Item
@@ -129,7 +141,9 @@ const Home: NextPage = () => {
                         ]}
                     >
                         <Input.Password
-                            prefix={<LockSvg />} placeholder={'Confirm password'}/>
+                            prefix={<LockSvg />}
+                            placeholder={'Confirm password'}
+                        />
                     </Form.Item>
 
                     <Form.Item name="remember" valuePropName='checked'>
