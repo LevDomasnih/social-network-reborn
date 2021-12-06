@@ -1,6 +1,5 @@
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import 'antd/dist/antd.css';
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
 import {useAppDispatch} from "../store/hooks";
