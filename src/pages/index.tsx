@@ -39,10 +39,14 @@ const Home: NextPage = () => {
 
     const dispatch = useAppDispatch()
     const [form] = Form.useForm();
-    const { loading } = useAppSelector(state => state.authSlice)
+    const {loading} = useAppSelector(state => state.authSlice)
 
     //TODO пробрасывать чекаут
-    const onFinish = ({ confirmPassword, remember, ...values }: IRegister & { confirmPassword: string, remember: boolean }) => {
+    const onFinish = ({
+                          confirmPassword,
+                          remember,
+                          ...values
+                      }: IRegister & { confirmPassword: string, remember: boolean }) => {
         if (confirmPassword === values.password) {
             dispatch(register(values))
         }
@@ -124,7 +128,6 @@ const Home: NextPage = () => {
                         ]}
                     >
                         <Input
-                            // onChange={(e) => console.log(e.target.value)}
                             prefix={<EmailSvg/>}
                             placeholder={'Email'}
                         />
@@ -179,10 +182,10 @@ const Home: NextPage = () => {
                                 style={{width: '100%'}}
                                 htmlType="submit"
                                 disabled={
-                                    !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                                    !!form.getFieldsError().filter(({errors}) => errors.length).length
                                 }
                             >
-                                SUGN UP
+                                SIGN UP
                             </Button>
                         )}
                     </Form.Item>

@@ -2,10 +2,10 @@ import Head from "next/head";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Link from "next/link";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks"
+import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {ILogin} from "../models/ILogin";
 import {login} from "../store/auth/authThunks";
-import { Button, Form, Checkbox, Input } from '../components/antd';
+import {Button, Checkbox, Form, Input} from '../components/antd';
 import UserSvg from '../../public/svg/user.svg'
 import LockSvg from '../../public/svg/lock.svg'
 import {GetServerSidePropsContext} from "next";
@@ -18,7 +18,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     if (!token) {
         return {
-            props: { },
+            props: {},
         };
     }
 
@@ -34,10 +34,10 @@ const Login = () => {
 
     const dispatch = useAppDispatch()
 
-    const { loading } = useAppSelector(state => state.authSlice)
+    const {loading} = useAppSelector(state => state.authSlice)
     const [form] = Form.useForm();
 
-    const onFinish = ({ remember, ...values }: ILogin & {remember: boolean}) => {
+    const onFinish = ({remember, ...values}: ILogin & { remember: boolean }) => {
         dispatch(login(values))
     };
 
@@ -71,7 +71,7 @@ const Login = () => {
                         rules={[{required: true, message: 'Please input your email!'}]}
                     >
                         <Input
-                            prefix={<UserSvg />}
+                            prefix={<UserSvg/>}
                             placeholder={'Email'}
                         />
                     </Form.Item>
@@ -82,7 +82,7 @@ const Login = () => {
                         rules={[{required: true, message: 'Please input your password!'}]}
                     >
                         <Input.Password
-                            prefix={<LockSvg />}
+                            prefix={<LockSvg/>}
                             placeholder={'Password'}
                         />
                     </Form.Item>
@@ -99,7 +99,7 @@ const Login = () => {
                                 type="primary"
                                 style={{width: '100%'}}
                                 htmlType="submit"
-                                disabled={!!form.getFieldsError().filter(({ errors }) => errors.length).length}
+                                disabled={!!form.getFieldsError().filter(({errors}) => errors.length).length}
                             >
                                 LOGIN
                             </Button>
@@ -109,7 +109,7 @@ const Login = () => {
 
                 <div>
                     Already have an account?
-                    <Link href={'/'} >
+                    <Link href={'/'}>
                         <a onClick={onLink}>Sign Up</a>
                     </Link>
                 </div>
