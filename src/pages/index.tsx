@@ -107,6 +107,33 @@ const Home: NextPage = () => {
                     </Form.Item>
 
                     <Form.Item
+                        name="login"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your login!'
+                            },
+                            () => ({
+                                async validator(_, value: string) {
+
+                                    const isExistLogin = await authAPI.fieldsExist({login: value}).then(e => e.data)
+
+                                    if (isExistLogin.valid) {
+                                        return Promise.reject(new Error('Пользователь с таким логином существует!'));
+                                    }
+
+                                    return Promise.resolve();
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input
+                            prefix={<UserSvg/>}
+                            placeholder={'Login'}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
                         name="email"
                         rules={[
                             {
@@ -114,11 +141,11 @@ const Home: NextPage = () => {
                                 message: 'Please input your email!'
                             },
                             () => ({
-                                async validator(_, value) {
+                                async validator(_, value: string) {
 
-                                    const isExistEmail = await authAPI.emailExist(value).then(e => e.data)
+                                    const isExistEmail = await authAPI.fieldsExist({email: value}).then(e => e.data)
 
-                                    if (isExistEmail) {
+                                    if (isExistEmail.valid) {
                                         return Promise.reject(new Error('Пользователь с таким email существует!'));
                                     }
 
