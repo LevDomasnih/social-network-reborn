@@ -1,9 +1,7 @@
 import React, {FC, useEffect} from "react";
 import {AuthLayoutProps} from "./AuthLayout.props";
-import {Col, notification, Row} from "antd";
+import {notification} from "antd";
 import Htag from "../../components/Htag/Htag";
-// @ts-ignore
-import styles from './AuthLayout.module.less'
 import {useAppSelector} from "../../store/hooks";
 import {useRouter} from 'next/router'
 import routes from "../../utils/routes";
@@ -36,15 +34,20 @@ const AuthLayout: FC<AuthLayoutProps> = ({children, head, ...props}) => {
 
 
     return (
-        <Row className={styles.authContainer}>
-            <Col xs={20} sm={16} md={16} lg={16} xl={16} style={{backgroundColor: '#F3F3F3'}}/>
-            <Col xs={2} sm={4} md={8} lg={8} xl={8}>
-                <div className={styles.bodyForm}>
-                    <Htag tag={'h1'} className={styles.head}>{head}</Htag>
-                    {children}
+        <div className='flex flex-row h-screen'>
+            <div className='basis-2/5 bg-[#F3F3F3] h-full'>
+            </div>
+            <div className='basis-3/5'>
+                <div className='flex flex-col justify-center h-full'>
+                    <div className='grid justify-items-center'>
+                        <div className='w-[480px]'>
+                            <Htag tag={"h1"}>{head}</Htag>
+                            {children}
+                        </div>
+                    </div>
                 </div>
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 
