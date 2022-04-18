@@ -45,15 +45,10 @@ const Home: NextPage = () => {
 
     const {loading} = useAppSelector(state => state.authSlice)
 
-    //TODO пробрасывать чекаут
     const onFinish = ({ confirmPassword, ...values }: IRegister & { confirmPassword: string, remember: boolean }) => {
         if (confirmPassword === values.password) {
             dispatch(registerThunk(values))
         }
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
     };
 
     const onLink = () => {
@@ -70,33 +65,33 @@ const Home: NextPage = () => {
             <AuthLayout head={'Регистрация'}>
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
-                        <Input {...register("firstName")} prefix={UserSvg} placeholder={'Имя'} />
-                        <Input {...register("secondName")} prefix={UserSvg} placeholder={'Фамилия'} />
-                        <Input {...register("lastName")} prefix={UserSvg} placeholder={'Отчество'} />
-                        <Input {...register("phone")} prefix={PhoneSvg} placeholder={'Номер телефона'} type='number' />
-                        <Input {...register("email")} prefix={EmailSvg} placeholder={'Email'} type='email' />
-                        <Controller
-                            control={control}
-                            render={() => (
-                                <Input {...register("password")} prefix={LockSvg} placeholder={'Пароль'} type='password' />
-                            )}
-                            name='password'
-                            rules={{
-                                minLength: 8,
-                                required: '',
-                            }}
+                        <Input {...register("firstName", { required: 'Введите поле' })} error={errors.firstName} prefix={UserSvg} placeholder={'Имя'} />
+                        <Input {...register("secondName", { required: 'Введите поле' })} error={errors.secondName} prefix={UserSvg} placeholder={'Фамилия'} />
+                        <Input {...register("lastName", { required: 'Введите поле' })} error={errors.lastName} prefix={UserSvg} placeholder={'Отчество'} />
+                        <Input {...register("phone", { required: 'Введите поле' })} error={errors.phone} prefix={PhoneSvg} placeholder={'Номер телефона'} type='number' />
+                        <Input {
+                            ...register("email", {
+                                required: 'Введите поле',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: "Невалидный email адрес"
+                                }
+                            })}
+                               error={errors.email}
+                               prefix={EmailSvg}
+                               placeholder={'Email'}
+                               type='email'
                         />
+                        <Input {...register("password", { minLength: { value: 8, message: 'Пароль должен иметь 8 и больше символов' }, required: 'Введите пароль' })} error={errors.password} prefix={LockSvg} placeholder={'Пароль'} type='password' />
                         <Controller
                             control={control}
                             name='confirmPassword'
                             rules={{
-                                minLength: 8,
-                                required: 'Please input your password confirmation.',
-                                validate: value => value === watch('password') || "Passwords don't match."
+                                minLength: { value: 8, message: 'Пароль должен иметь 8 и больше символов' },
+                                required: 'Введите пароль повторно',
+                                validate: value => value === watch('password') || "Поля не совпадают"
                             }}
-                            render={() => (
-                                <Input {...register("confirmPassword")} prefix={LockSvg} placeholder={'Подтвердите пароль'} type='password' />
-                            )}
+                            render={({fieldState}) => (<Input {...register("confirmPassword")} error={fieldState.error} prefix={LockSvg} placeholder={'Подтвердите пароль'} type='password' />)}
                         />
 
                     </div>

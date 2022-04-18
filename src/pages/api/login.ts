@@ -7,7 +7,7 @@ import {ILogin} from "../../models/ILogin";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = new Cookies(req, res);
     const dataToBeSent = {
-        email: req.body.email,
+        loginOrEmail: req.body.loginOrEmail,
         password: req.body.password,
     };
 
