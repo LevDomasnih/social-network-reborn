@@ -1,17 +1,18 @@
 import React, {FC, useEffect} from "react";
 import {AuthLayoutProps} from "./AuthLayout.props";
-import {notification} from "antd";
 import Htag from "../../components/Htag/Htag";
 import {useAppSelector} from "../../store/hooks";
 import {useRouter} from 'next/router'
 import routes from "../../utils/routes";
 
-const openNotification = (error: string) => {
-    notification.open({
-        message: 'Ошибка',
-        description: error
-    });
-};
+//TODO обработка ошибок
+
+// const openNotification = (error: string) => {
+//     notification.open({
+//         message: 'Ошибка',
+//         description: error
+//     });
+// };
 
 const AuthLayout: FC<AuthLayoutProps> = ({children, head, ...props}) => {
 
@@ -20,11 +21,11 @@ const AuthLayout: FC<AuthLayoutProps> = ({children, head, ...props}) => {
     const {authError} = useAppSelector(state => state.authSlice)
     const {access_token} = useAppSelector(state => state.authSlice)
 
-    useEffect(() => {
-        if (authError.message) {
-            openNotification(authError.message)
-        }
-    }, [authError])
+    // useEffect(() => {
+    //     if (authError.message) {
+    //         openNotification(authError.message)
+    //     }
+    // }, [authError])
 
     useEffect(() => {
         if (access_token !== '') {
