@@ -3,6 +3,7 @@ import React from "react";
 import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
 import axios from "axios";
+import MainLayout from "../layout/MainLayout/MainLayout";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -49,7 +50,9 @@ const Me = (props: any) => {
                 <meta name="description" content="Sign up page"/>
                 <link rel="icon" href='/favicon.ico'/>
             </Head>
-            <div>userPage!!!</div>
+            <MainLayout>
+                userPage!!!
+            </MainLayout>
         </div>
     )
 }

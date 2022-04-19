@@ -1,4 +1,5 @@
 export default {
     unauthorized: '/',
-    me: '/me'
+    me: '/me',
+    forgivePassword: '/forgivePassword'
 }
