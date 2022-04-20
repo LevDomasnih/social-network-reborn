@@ -20,7 +20,8 @@ export const Header: FC<HeaderProps> = ({className, ...props}) => {
                 <div className='flex-initial w-[344px] flex justify-end'>
                     <div className='mr-[40px] items-center flex'>
                         <div className='rounded-full overflow-hidden h-[50px] w-[50px]'>
-                            <Image src={'/svg/img.png'} width={50} height={50} objectFit='cover' />
+                            {/*TODO MOCK PHOTO*/}
+                            <Image src={'/avatar.png'} width={50} height={50} objectFit='cover' />
                         </div>
                     </div>
                     <div className='mr-[30px] items-center flex'>

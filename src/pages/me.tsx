@@ -4,6 +4,8 @@ import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
 import axios from "axios";
 import MainLayout from "../layout/MainLayout/MainLayout";
+import Image from "next/image";
+import {Button} from "../components/Button/Button";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -44,14 +46,62 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 const Me = (props: any) => {
     return (
-        <div>
+        <div >
             <Head>
                 <title>Create Next App</title>
                 <meta name="description" content="Sign up page"/>
                 <link rel="icon" href='/favicon.ico'/>
             </Head>
             <MainLayout>
-                userPage!!!
+                <div>
+                    <div className='mb-[40px]'>
+                        <div className='h-[240px] rounded-b-[3px] overflow-hidden'>
+                            {/*TODO MOCK PHOTO*/}
+                            <Image src={'/meBg.png'} height={240} width={920} objectFit='cover' objectPosition='center' />
+                        </div>
+                        <div className='relative top-[-90px]'>
+                            <div className='mb-[60px]'>
+                                <div className='pl-[30px]'>
+                                    <div className='mb-[30px] flex items-end justify-between'>
+                                        <div className='rounded-full h-[180px] w-[180px] bg-white flex items-center justify-center'>
+                                            <div className='rounded-full overflow-hidden h-[175px] w-[175px]'>
+                                                <Image src={'/avatar.png'} width={175} height={175} objectFit='cover' />
+                                            </div>
+                                        </div>
+                                        <Button className='w-[115px]'>Изменить</Button>
+                                    </div>
+                                    <div>
+                                        <div className='text-2xl text-[#161616] font-medium mb-[10px]'>Сидоров Дмитрий</div>
+                                        <div className='text-sm text-[#AEAEAE] font-medium mb-[20px]'>@sidorovdm</div>
+                                        <div className='text-sm text-[#161616] mb-[15px] flex items-center'>
+                                            <Image src={'/svg/cake.svg'} width={17} height={18} />
+                                            <span className='ml-[8px] mr-[20px]'>15.05.1997</span>
+                                            <Image src={'/svg/geo.svg'} width={17} height={18} />
+                                            <span className='ml-[8px]'>Россия, Москва</span>
+                                        </div>
+                                        <div className='text-sm text-[#161616]'>Найти себя невозможно — себя можно только создать</div>
+                                    </div>
+                                </div>
+                                <div className='inline-grid gap-[16px] grid-flow-col mt-[40px]'>
+                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
+                                    </div>
+                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
+                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
+                                    </div>
+                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
+                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
+                                    </div>
+                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
+                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                Все записи
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </MainLayout>
         </div>
     )
