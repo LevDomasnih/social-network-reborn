@@ -29,7 +29,7 @@ export const Input = forwardRef(({className, error, fontSize, weight, type, ...p
                     ref={ref} {...props}
                     type={inputType}
                     placeholder={props.placeholder}
-                    className={cn('pb-[10px] placeholder-[#B7B7B7] text-[#B7B7B7] relative bg-white text-sm border-0 transition duration-300 ease-in-out focus:ring-0 text-[#000] focus:border-black w-full pl-[24px] border-b border-[#B7B7B7]', {
+                    className={cn('pb-[10px] placeholder-[#B7B7B7] relative bg-white text-base font-medium border-0 transition duration-300 ease-in-out focus:ring-0 text-[#000] focus:border-black w-full pl-[24px] border-b border-[#B7B7B7]', {
                         [styles.errorInput]: error
                     })}
                 />

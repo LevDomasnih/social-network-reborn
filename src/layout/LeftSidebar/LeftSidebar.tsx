@@ -19,7 +19,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({className, ...props}) => {
                         <Link href={e.route}>
                             <a className='flex items-center'>
                                 <Image src={e.img} height={e.height} width={e.width} />
-                                <span className='text-base pl-[16px] font-medium text-[#B7B7B7]'>{e.name}</span>
+                                <span className='text-lg pl-[16px] font-medium text-[#B7B7B7]'>{e.name}</span>
                             </a>
                         </Link>
                     </li>

@@ -6,6 +6,7 @@ import axios from "axios";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import Image from "next/image";
 import {Button} from "../components/Button/Button";
+import {Card} from "../components/Card/Card";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -68,32 +69,25 @@ const Me = (props: any) => {
                                                 <Image src={'/avatar.png'} width={175} height={175} objectFit='cover' />
                                             </div>
                                         </div>
-                                        <Button className='w-[115px]'>Изменить</Button>
+                                        <Button theme={'light'} className='max-w-[115px]'>Изменить</Button>
                                     </div>
                                     <div>
-                                        <div className='text-2xl text-[#161616] font-medium mb-[10px]'>Сидоров Дмитрий</div>
-                                        <div className='text-sm text-[#AEAEAE] font-medium mb-[20px]'>@sidorovdm</div>
-                                        <div className='text-sm text-[#161616] mb-[15px] flex items-center'>
+                                        <div className='text-3xl text-[#161616] font-medium mb-[10px]'>Сидоров Дмитрий</div>
+                                        <div className='text-base text-[#AEAEAE] font-medium mb-[20px]'>@sidorovdm</div>
+                                        <div className='text-base text-[#161616] font-normal mb-[15px] flex items-center'>
                                             <Image src={'/svg/cake.svg'} width={17} height={18} />
                                             <span className='ml-[8px] mr-[20px]'>15.05.1997</span>
                                             <Image src={'/svg/geo.svg'} width={17} height={18} />
                                             <span className='ml-[8px]'>Россия, Москва</span>
                                         </div>
-                                        <div className='text-sm text-[#161616]'>Найти себя невозможно — себя можно только создать</div>
+                                        <div className='text-base font-normal text-[#161616]'>Найти себя невозможно — себя можно только создать</div>
                                     </div>
                                 </div>
                                 <div className='inline-grid gap-[16px] grid-flow-col mt-[40px]'>
-                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
-                                    </div>
-                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
-                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
-                                    </div>
-                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
-                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
-                                    </div>
-                                    <div className='w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden'>
-                                        <Image src={'/card.png'} width={140} height={175} objectFit='cover' objectPosition='center' />
-                                    </div>
+                                    <Card />
+                                    <Card photo={'/card.png'} />
+                                    <Card photo={'/card.png'} />
+                                    <Card photo={'/card.png'} />
                                 </div>
                             </div>
                             <div>

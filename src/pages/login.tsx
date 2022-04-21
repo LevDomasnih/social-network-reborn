@@ -13,6 +13,7 @@ import {defaultError} from "../store/auth/authSlice";
 import {Input} from "../components/Input/Input";
 import {Button} from "../components/Button/Button";
 import {useForm} from "react-hook-form";
+import {Checkbox} from "../components/Checkbox/Checkbox";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -60,24 +61,12 @@ const Login = () => {
                         <Input {...register("loginOrEmail", { required: 'Введите поле' })} error={errors.loginOrEmail} prefix={UserSvg} type='email' placeholder={'Логин или email'} />
                         <Input {...register("password", { required: 'Введите поле' })} error={errors.password} prefix={LockSvg} placeholder={'Пароль'} type="password" />
                     </div>
-                    <div className='mt-[30px] flex justify-between'>
-                        <div>
-                            <input
-                                className="form-check-input appearance-none h-[12px] w-[12px] border rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-[7px] align-top bg-no-repeat bg-center bg-contain float-left mr-[10px] cursor-pointer"
-                                type="checkbox" value="" id="flexCheckDefault" />
-                            <label className="form-check-label inline-block font-normal text-[14px]" htmlFor="flexCheckDefault">
-                                Запомнить меня
-                            </label>
-                        </div>
-                        <div>
-                            <Link href={'/forgivePassword'}>
-                                <a onClick={onLink} className='pl-[8px] text-[#B7B7B7] text-sm'>Забыли пароль?</a>
-                            </Link>
-                        </div>
+                    <div className='mt-[30px]'>
+                        <Checkbox forgivePassword={true} />
                     </div>
                     <Button type="submit" className='mt-[40px]'>Войти в аккаунт</Button>
                 </form>
-                <div className='mt-[30px]'>
+                <div className='mt-[30px] text-lg text-[#161616] font-normal'>
                     У вас нет аккаунта?
                     <Link href={'/'}>
                         <a onClick={onLink} className='pl-[8px] text-[#6962A8]'>Зарегистрироваться</a>

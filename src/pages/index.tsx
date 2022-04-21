@@ -17,6 +17,7 @@ import {authAPI} from "../API/authAPI";
 import {Controller, useForm } from "react-hook-form";
 import {Input} from "../components/Input/Input";
 import {Button} from "../components/Button/Button";
+import {Checkbox} from "../components/Checkbox/Checkbox";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -96,16 +97,11 @@ const Home: NextPage = () => {
 
                     </div>
                     <div className='mt-[30px]'>
-                        <input
-                            className="form-check-input appearance-none h-[12px] w-[12px] border rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-[7px] align-top bg-no-repeat bg-center bg-contain float-left mr-[10px] cursor-pointer"
-                            type="checkbox" value="" id="flexCheckDefault" {...register("remember")} />
-                        <label className="form-check-label inline-block font-normal text-[14px]" htmlFor="flexCheckDefault">
-                            Запомнить меня
-                        </label>
+                        <Checkbox />
                     </div>
                     <Button type="submit" className='mt-[40px]'>Создать аккаунт</Button>
                 </form>
-                <div className='mt-[30px]'>
+                <div className='mt-[30px] text-lg text-[#161616] font-normal'>
                     Уже есть аккаунт?
                     <Link href={'/login'} >
                         <a onClick={onLink} className='pl-[8px] text-[#6962A8]'>Войти</a>

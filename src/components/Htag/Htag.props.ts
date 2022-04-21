@@ -1,6 +1,6 @@
-import {ButtonHTMLAttributes, DetailedHTMLProps, ReactNode} from "react";
+import {ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, ReactNode} from "react";
 
-export interface HtagProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLHeadElement>, HTMLHeadElement>{
+export interface HtagProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
     tag: 'h1' | 'h2' | 'h3'
     children: ReactNode
 }
