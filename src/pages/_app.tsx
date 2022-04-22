@@ -6,6 +6,7 @@ import '../styles/index.css';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
       <Provider store={store}>
+          {/*@ts-ignore*/}
         <Component {...pageProps} />
       </Provider>
   )
