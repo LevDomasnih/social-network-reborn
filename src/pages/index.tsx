@@ -64,6 +64,7 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <AuthLayout head={'Регистрация'}>
+                {/*@ts-ignore*/}
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
                         <Input {...register("firstName", { required: 'Введите поле' })} error={errors.firstName} prefix={UserSvg} placeholder={'Имя'} />

@@ -56,6 +56,7 @@ const Login = () => {
                 <link rel="icon" href='/favicon.ico'/>
             </Head>
             <AuthLayout head={'Вход'}>
+                {/*@ts-ignore*/}
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
                         <Input {...register("loginOrEmail", { required: 'Введите поле' })} error={errors.loginOrEmail} prefix={UserSvg} type='email' placeholder={'Логин или email'} />

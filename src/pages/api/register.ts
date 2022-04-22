@@ -12,7 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phone: req.body.phone,
-        login: req.body.login,
     }
 
     return axios
