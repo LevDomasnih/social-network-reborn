@@ -7,6 +7,9 @@ import MainLayout from "../layout/MainLayout/MainLayout";
 import Image from "next/image";
 import {Button} from "../components/Button/Button";
 import {Card} from "../components/Card/Card";
+import {CakeSvg} from "../shared/svg";
+import {SvgImage} from "../components/SvgImage/SvgImage";
+import {Avatar} from "../components/Avatar/Avatar";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -23,7 +26,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
 
     try {
-        userData = await axios.get(`${process.env.API_URL}/users/me`, {
+        userData = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -65,9 +68,7 @@ const Me = (props: any) => {
                                 <div className='pl-[30px]'>
                                     <div className='mb-[30px] flex items-end justify-between'>
                                         <div className='rounded-full h-[180px] w-[180px] bg-white flex items-center justify-center'>
-                                            <div className='rounded-full overflow-hidden h-[175px] w-[175px]'>
-                                                <Image src={'/avatar.png'} width={175} height={175} objectFit='cover' />
-                                            </div>
+                                            <Avatar img='/avatar.png' width={175} height={175} />
                                         </div>
                                         <Button theme={'light'} className='max-w-[115px]'>Изменить</Button>
                                     </div>
@@ -75,15 +76,16 @@ const Me = (props: any) => {
                                         <div className='text-3xl text-[#161616] font-medium mb-[10px]'>Сидоров Дмитрий</div>
                                         <div className='text-base text-[#AEAEAE] font-medium mb-[20px]'>@sidorovdm</div>
                                         <div className='text-base text-[#161616] font-normal mb-[15px] flex items-center'>
-                                            <Image src={'/svg/cake.svg'} width={17} height={18} />
+                                            <SvgImage svg='cake' color='#161616' />
                                             <span className='ml-[8px] mr-[20px]'>15.05.1997</span>
-                                            <Image src={'/svg/geo.svg'} width={17} height={18} />
+                                            <SvgImage svg='geo' color='#161616' />
                                             <span className='ml-[8px]'>Россия, Москва</span>
                                         </div>
                                         <div className='text-base font-normal text-[#161616]'>Найти себя невозможно — себя можно только создать</div>
                                     </div>
                                 </div>
                                 <div className='inline-grid gap-[16px] grid-flow-col mt-[40px]'>
+                                    {/*TODO MOCK PHOTO*/}
                                     <Card />
                                     <Card photo={'/card.png'} />
                                     <Card photo={'/card.png'} />

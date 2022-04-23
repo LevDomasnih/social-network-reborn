@@ -2,9 +2,21 @@
     background: #FFFFFF;
     color: #161616;
     border: 1px solid #6962A8;
+
+}
+
+.light:hover {
+    background: #6962A8;
+    color: #FFFFFF;
 }
 
 .dark {
     background: #6962A8;
     color: #FFFFFF;
+    border: 1px solid #6962A8;
+}
+
+.dark:hover {
+    background: #FFFFFF;
+    color: #161616;
 }

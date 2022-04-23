@@ -59,8 +59,8 @@ const Login = () => {
                 {/*@ts-ignore*/}
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
-                        <Input {...register("loginOrEmail", { required: 'Введите поле' })} error={errors.loginOrEmail} prefix={UserSvg} type='email' placeholder={'Логин или email'} />
-                        <Input {...register("password", { required: 'Введите поле' })} error={errors.password} prefix={LockSvg} placeholder={'Пароль'} type="password" />
+                        <Input {...register("loginOrEmail", { required: 'Введите поле' })} error={errors.loginOrEmail} prefixImg='email' type='email' placeholder={'Логин или email'} value={watch('loginOrEmail')} />
+                        <Input {...register("password", { required: 'Введите поле' })} error={errors.password} prefixImg='lock' placeholder={'Пароль'} type="password" value={watch('password')} />
                     </div>
                     <div className='mt-[30px]'>
                         <Checkbox forgivePassword={true} />

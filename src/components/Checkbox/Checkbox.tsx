@@ -1,10 +1,10 @@
-import React, {forwardRef} from "react";
+import React, {ForwardedRef, forwardRef} from "react";
 import {CheckboxProps} from "./Checkbox.props";
 import Link from "next/link";
 import {defaultError} from "../../store/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
 
-export const Checkbox = forwardRef(({forgivePassword, ...props}: CheckboxProps) => {
+export const Checkbox = forwardRef(({forgivePassword, ...props}: CheckboxProps, ref: ForwardedRef<HTMLInputElement>) => {
     const dispatch = useAppDispatch()
 
     const onLink = () => {
@@ -15,6 +15,7 @@ export const Checkbox = forwardRef(({forgivePassword, ...props}: CheckboxProps) 
         <div className='flex justify-between'>
             <div>
                 <input
+                    ref={ref}
                     className="form-check-input appearance-none h-[12px] w-[12px] border rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-[7px] align-top bg-no-repeat bg-center bg-contain float-left mr-[10px] cursor-pointer"
                     type="checkbox" value="" id="flexCheckDefault" />
                 <label className="form-check-label inline-block font-normal text-base" htmlFor="flexCheckDefault">
