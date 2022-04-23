@@ -3,7 +3,7 @@ import Color = Property.Color;
 
 export type svgNames = 'cake' | 'email' | 'eye' | 'geo' | 'like' |
     'lock' | 'logo' | 'mail' | 'phone' | 'search' |
-    'setting' | 'showPass' | 'user' | 'plus'
+    'setting' | 'showPass' | 'user' | 'plus' | 'save' | 'comments' | 'reposts' | 'share'
 
 export interface SvgImageProps {
     svg: svgNames

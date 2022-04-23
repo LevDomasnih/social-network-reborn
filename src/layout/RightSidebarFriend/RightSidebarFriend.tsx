@@ -57,7 +57,7 @@ export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...p
                 </div>
                 <div className={cn("grid grid-cols-3 gap-y-[25px]")}>
                     {friend.map(e => (
-                        <a href='' key={e} className='flex flex-col items-center'>
+                        <a onClick={() => {}} key={e} className='flex flex-col items-center cursor-pointer'>
                             <Avatar img='/avatar.png' width={56} height={56} />
                             <div className='text-center font-medium text-sm text-[#161616]'>Емельянова Любовь</div>
                         </a>

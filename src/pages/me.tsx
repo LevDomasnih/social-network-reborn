@@ -10,6 +10,7 @@ import {Card} from "../components/Card/Card";
 import {CakeSvg} from "../shared/svg";
 import {SvgImage} from "../components/SvgImage/SvgImage";
 import {Avatar} from "../components/Avatar/Avatar";
+import {Menu} from "../components/Menu/Menu";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -92,9 +93,7 @@ const Me = (props: any) => {
                                     <Card photo={'/card.png'} />
                                 </div>
                             </div>
-                            <div>
-                                Все записи
-                            </div>
+                            <Menu />
                         </div>
                     </div>
                 </div>

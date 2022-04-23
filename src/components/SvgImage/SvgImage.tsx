@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {SvgImageProps} from "./SvgImage.props";
 import {
-    CakeSvg,
+    CakeSvg, Comments,
     EmailSvg,
     EyeSvg,
     GeoSvg,
@@ -9,9 +9,9 @@ import {
     LockSvg,
     LogoSvg,
     MailSvg,
-    PhoneSvg, Plus,
+    PhoneSvg, Plus, Reposts, Save,
     SearchSvg,
-    SettingsSvg,
+    SettingsSvg, Share,
     ShowPassSvg,
     UserSvg
 } from "../../shared/svg";
@@ -46,6 +46,14 @@ export const SvgImage: FC<SvgImageProps> = ({svg, color, className}) => {
             return <UserSvg color={color} className={className || ''} />
         case "plus":
             return <Plus color={color} className={className || ''} />
+        case "save":
+            return <Save color={color} className={className || ''} />
+        case "comments":
+            return <Comments color={color} className={className || ''} />
+        case "reposts":
+            return <Reposts color={color} className={className || ''} />
+        case "share":
+            return <Share color={color} className={className || ''} />
         default:
             return <></>
     }
