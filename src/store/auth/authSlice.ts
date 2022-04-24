@@ -9,6 +9,8 @@ interface initialState extends IToken {
         requestId: string | null
     }
     loading: boolean
+    login: string | null
+    email: string | null
 }
 
 const initialState: initialState = {
@@ -19,6 +21,8 @@ const initialState: initialState = {
         requestId: null,
     },
     loading: false,
+    login: null,
+    email: null
 }
 
 const authSlice = createSlice({
@@ -32,6 +36,15 @@ const authSlice = createSlice({
                 requestId: null,
             },
         }),
+        setAuth: (state, data) => {
+            return ({
+                ...state,
+                access_token: data.payload.token,
+                userId: data.payload.userId,
+                login: data.payload.login,
+                email: data.payload.email,
+            })
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, { payload }) => {
@@ -73,6 +86,6 @@ const authSlice = createSlice({
     },
 })
 
-export const { defaultError } = authSlice.actions
+export const { defaultError, setAuth } = authSlice.actions
 
 export default authSlice.reducer

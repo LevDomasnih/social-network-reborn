@@ -3,8 +3,11 @@ import {HeaderProps} from "./Header.props";
 import styles from './Header.module.css'
 import cn from "classnames";
 import {Avatar, Button, Search, SvgImage} from "../index";
+import {useAppSelector} from "../../store/hooks";
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
+    const { avatar } = useAppSelector(state => state.profileSlice)
+
     return (
         <header {...props} className={cn('h-[82px] bg-black w-full', styles.header, className)}>
             <div className='max-w-[1720px] h-full m-auto items-center flex'>
@@ -18,7 +21,7 @@ export const Header: FC<HeaderProps> = ({className, ...props}) => {
                 <div className='flex-initial w-[344px] flex justify-end'>
                     <div className='mr-[40px] items-center flex'>
                         {/*TODO MOCK PHOTO*/}
-                        <Avatar img='/avatar.png' width={50} height={50} />
+                        <Avatar img={avatar || '/avatar.png'} width={50} height={50} />
                     </div>
                     <div className='mr-[30px] items-center flex'>
                         <SvgImage svg='mail' color='#161616'/>

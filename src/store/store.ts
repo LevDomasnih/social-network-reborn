@@ -5,9 +5,11 @@ import {
 } from "@reduxjs/toolkit"
 import authSlice from "./auth/authSlice"
 import logger from 'redux-logger'
+import profileSlice from "./profile/profileSlice";
 
 const rootReducer = combineReducers({
-    authSlice
+    authSlice,
+    profileSlice,
 })
 
 export const store = configureStore({
