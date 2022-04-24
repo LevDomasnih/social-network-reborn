@@ -3,43 +3,10 @@ import {FC} from "react";
 import cn from "classnames";
 import styles from './Menu.module.css'
 import {Post} from "../index";
+import {Tag} from "../Tag/Tag";
 
-export const Menu: FC<MenuProps> = () => {
-    const menu = [
-        'Все записи',
-        'Ответы',
-        'Сохраненное',
-        'Нравится'
-    ]
+export const Menu: FC<MenuProps> = ({isTag, posts, menu, className, ...props}) => {
 
-    const posts = [
-        {
-            likes: 82,
-            comments: 6,
-            reposts: 12,
-            theme: 'Здоровье',
-            avatar: '/avatar.png',
-            icon: 'plus',
-            author: 'Зайцев Константин',
-            image: '/meBg.png',
-            time: new Date(),
-            title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
-            text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
-        },
-        {
-            likes: 82,
-            comments: 6,
-            reposts: 12,
-            theme: 'Здоровье',
-            avatar: '/avatar.png',
-            icon: 'plus',
-            author: 'Зайцев Константин',
-            time: new Date(),
-            image: '/meBg.png',
-            title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
-            text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
-        }
-    ]
 
     return (
         <div className='space-y-[30px]'>
@@ -57,6 +24,19 @@ export const Menu: FC<MenuProps> = () => {
                     </div>
                 ))}
             </div>
+            {isTag && (
+                <div className='py-[10px] space-y-[30px] flex flex-col text-lg font-normal'>
+                    <div>Статьи авторов, которые вам могут понравиться</div>
+                    <div className='space-x-[15px]'>
+                        <Tag active={true}>Все</Tag>
+                        <Tag>UX / UI</Tag>
+                        <Tag>Бизнес</Tag>
+                        <Tag>Разработка</Tag>
+                        <Tag>Музыка</Tag>
+                        <Tag>Здоровье</Tag>
+                    </div>
+                </div>
+            )}
             {posts.map((post, i) => <Post key={post.time.toString() + i} {...post} />)}
         </div>
     )

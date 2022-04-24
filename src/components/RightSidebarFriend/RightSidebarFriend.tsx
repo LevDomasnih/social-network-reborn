@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {RightSidebarFriendProps} from "./RightSidebarFriend.props";
 import cn from "classnames";
-import {Avatar, SvgImage, Tag} from "../../components";
+import {Avatar, SvgImage, HashTag} from "../../components";
 
 export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...props}) => {
     const friend = [
@@ -66,7 +66,7 @@ export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...p
                 <div className='mb-[25px] font-medium text-base text-[#161616]'>Популярные хештэги</div>
                 <div className='flex flex-wrap gap-y-[9px]'>
                     {tags.map(e => (
-                        <Tag key={e} className="mr-[9px]">#{e}</Tag>
+                        <HashTag key={e} className="mr-[9px]">#{e}</HashTag>
                     ))}
                 </div>
             </div>

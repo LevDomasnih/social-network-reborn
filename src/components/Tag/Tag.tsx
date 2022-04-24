@@ -1,11 +1,15 @@
 import {FC} from "react";
 import {TagProps} from "./Tag.props";
 import cn from "classnames";
+import styles from './Tag.module.css'
 
-export const Tag: FC<TagProps> = ({children, className, ...props}) => {
+export const Tag: FC<TagProps> = ({children, active, ...props}) => {
     return (
-        <div className={cn('font-medium text-sm px-[15px] py-[7px] w-fit bg-[#F5F7F9] text-[#161616] rounded-full overflow-hidden', className)}>
+        <button className={cn('w-min h-[38px] whitespace-nowrap px-[25px] hover:bg-[#6962A8] hover:text-[#fff] rounded-[20px] duration-300 font-medium text-base bg-white text-[#161616]', {
+            [styles.active]: active,
+            [styles.notActive]: !active
+        })}>
             {children}
-        </div>
+        </button>
     )
 }

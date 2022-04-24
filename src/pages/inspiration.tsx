@@ -1,9 +1,9 @@
 import MainLayout from "../layout/MainLayout/MainLayout";
+import {Menu, RightSidebarInfo, Stories} from "../components";
 import Head from "next/head";
 import React from "react";
-import {Menu, RightSidebarInfo, Stories} from "../components";
 
-const Articles = () => {
+const Inspiration = () => {
     const menu = [
         'Для вас',
         'Подписки',
@@ -44,7 +44,7 @@ const Articles = () => {
             head={
                 <Head>
                     <title>Create Next App</title>
-                    <meta name="description" content="Articles"/>
+                    <meta name="description" content="Inspiration"/>
                     <link rel="icon" href='/favicon.ico'/>
                 </Head>
             }
@@ -55,4 +55,4 @@ const Articles = () => {
     )
 }
 
-export default Articles
+export default Inspiration

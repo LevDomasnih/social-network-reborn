@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {PostProps} from "./Post.props";
 import Image from "next/image";
-import {Avatar, SvgImage, Tag, Htag} from '../index'
+import {Avatar, SvgImage, HashTag, Htag} from '../index'
 import {svgNames} from "../SvgImage/SvgImage.props";
 
 export const Post: FC<PostProps> = ({icon, theme, author, avatar, title, text, image, likes, comments, reposts}) => {
@@ -57,8 +57,8 @@ export const Post: FC<PostProps> = ({icon, theme, author, avatar, title, text, i
                         </div>
                     </div>
                     <div className='space-x-[9px] flex'>
-                        <Tag>#Наука</Tag>
-                        <Tag>#Метаболизм</Tag>
+                        <HashTag>#Наука</HashTag>
+                        <HashTag>#Метаболизм</HashTag>
                     </div>
                 </div>
             </div>
