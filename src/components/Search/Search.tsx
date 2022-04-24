@@ -2,6 +2,7 @@ import {ForwardedRef, forwardRef} from "react";
 import {SearchProps} from "./Search.props";
 import cn from "classnames";
 import Image from "next/image";
+import {SvgImage} from "../SvgImage/SvgImage";
 
 export const Search = forwardRef(({className, type, ...props}: SearchProps, ref: ForwardedRef<HTMLInputElement>) => {
 
@@ -15,7 +16,7 @@ export const Search = forwardRef(({className, type, ...props}: SearchProps, ref:
                 />
                 <div
                     className="z-10 leading-snug font-normal absolute text-center text-[#B7B7B7] absolute bg-transparent rounded text-base items-center justify-center bottom-[10px] right-0 pr-[16px]">
-                    <Image src={'/svg/search.svg'} height={14} width={14}/>
+                    <SvgImage svg='search' color='#B7B7B7' />
                 </div>
             </div>
         </div>
