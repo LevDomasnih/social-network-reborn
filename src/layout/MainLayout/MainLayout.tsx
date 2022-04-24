@@ -1,10 +1,8 @@
 import {FC} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
-import {Header} from "../Header/Header";
-import {LeftSidebar} from "../LeftSidebar/LeftSidebar";
-import {RightSidebarFriend} from "../RightSidebarFriend/RightSidebarFriend";
+import {LeftSidebar, Header} from "../../components";
 
-const MainLayout: FC<MainLayoutProps> = ({children}) => {
+const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar}) => {
     return (
         <div>
             <Header/>
@@ -13,7 +11,9 @@ const MainLayout: FC<MainLayoutProps> = ({children}) => {
                 <main className='flex-initial w-[920px] mx-[100px] flex justify-between flex'>
                     {children}
                 </main>
-                <RightSidebarFriend/>
+                <div className='w-[344px]'>
+                    {rightSidebar}
+                </div>
             </div>
         </div>
     )

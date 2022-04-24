@@ -2,7 +2,7 @@ import {ForwardedRef, forwardRef, useEffect, useState} from "react";
 import {InputProps} from "./Input.props";
 import cn from "classnames";
 import styles from './Input.module.css'
-import {SvgImage} from "../SvgImage/SvgImage";
+import {SvgImage} from "../index";
 
 export const Input = forwardRef(({className, error, fontSize, weight, type, prefixImg, value, ...props}: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
     const [showPassword, setShowPassword] = useState(false)

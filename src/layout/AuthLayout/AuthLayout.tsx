@@ -1,9 +1,9 @@
 import React, {FC, useEffect} from "react";
 import {AuthLayoutProps} from "./AuthLayout.props";
-import Htag from "../../components/Htag/Htag";
 import {useAppSelector} from "../../store/hooks";
 import {useRouter} from 'next/router'
 import routes from "../../utils/routes";
+import {Htag} from "../../components";
 
 //TODO обработка ошибок
 

@@ -1,9 +1,7 @@
 import React, {FC} from "react";
 import {RightSidebarFriendProps} from "./RightSidebarFriend.props";
 import cn from "classnames";
-import {SvgImage} from "../../components/SvgImage/SvgImage";
-import {Avatar} from "../../components/Avatar/Avatar";
-import {Tag} from "../../components/Tag/Tag";
+import {Avatar, SvgImage, Tag} from "../../components";
 
 export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...props}) => {
     const friend = [
@@ -19,7 +17,7 @@ export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...p
     ]
 
     return (
-        <div className={cn('flex-initial w-[344px] flex flex-col space-y-[35px]', className)}>
+        <div className={cn('flex-initial flex flex-col space-y-[35px]', className)}>
             <div className='w-full h-[126px] flex px-[62px] bg-[#F5F7F9] justify-between'>
                 <div className='flex items-center'>
                     <div className='flex flex-col items-center space-y-[6px]'>

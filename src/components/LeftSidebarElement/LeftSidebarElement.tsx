@@ -1,9 +1,9 @@
 import {FC, useState} from "react";
 import Link from "next/link";
-import {SvgImage} from "../../components/SvgImage/SvgImage";
 import cn from "classnames";
 import styles from "../LeftSidebar/LeftSidebar.module.css";
 import {LeftSidebarElementProps} from "./LeftSidebarElement.props";
+import {SvgImage} from "../index";
 
 export const LeftSidebarElement: FC<LeftSidebarElementProps> = ({name, router, route}) => {
     const [isHover, setIsHover] = useState(false)

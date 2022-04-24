@@ -2,10 +2,7 @@ import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
 import styles from './Header.module.css'
 import cn from "classnames";
-import {Button} from "../../components/Button/Button";
-import {Search} from "../../components/Search/Search";
-import {SvgImage} from "../../components/SvgImage/SvgImage";
-import {Avatar} from "../../components/Avatar/Avatar";
+import {Avatar, Button, Search, SvgImage} from "../index";
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
     return (

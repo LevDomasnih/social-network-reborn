@@ -5,12 +5,7 @@ import routes from "../utils/routes";
 import axios from "axios";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import Image from "next/image";
-import {Button} from "../components/Button/Button";
-import {Card} from "../components/Card/Card";
-import {CakeSvg} from "../shared/svg";
-import {SvgImage} from "../components/SvgImage/SvgImage";
-import {Avatar} from "../components/Avatar/Avatar";
-import {Menu} from "../components/Menu/Menu";
+import {Avatar, Button, Card, Menu, RightSidebarFriend, SvgImage} from "../components";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -57,7 +52,9 @@ const Me = (props: any) => {
                 <meta name="description" content="Sign up page"/>
                 <link rel="icon" href='/favicon.ico'/>
             </Head>
-            <MainLayout>
+            <MainLayout
+                rightSidebar={<RightSidebarFriend/>}
+            >
                 <div>
                     <div className='mb-[40px]'>
                         <div className='h-[240px] rounded-b-[3px] overflow-hidden'>

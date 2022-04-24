@@ -2,7 +2,7 @@ import {FC} from "react";
 import {LeftSidebarProps} from "./LeftSidebar.props";
 import cn from "classnames";
 import {useRouter} from "next/router";
-import {LeftSidebarElement} from "../LeftSidebarElement/LeftSidebarElement";
+import {LeftSidebarElement} from "../index";
 
 export const LeftSidebar: FC<LeftSidebarProps> = ({className, ...props}) => {
 

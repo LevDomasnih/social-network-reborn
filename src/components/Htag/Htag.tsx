@@ -3,7 +3,7 @@ import {HtagProps} from "./Htag.props";
 import styles from './Htag.module.css'
 import cn from "classnames";
 
-const Htag: FC<HtagProps> = ({tag, children, className}): JSX.Element => {
+export const Htag: FC<HtagProps> = ({tag, children, className}): JSX.Element => {
    switch (tag) {
        case "h1":
            return <h1 className={cn(className, styles.h1)}>{children}</h1>
@@ -15,5 +15,3 @@ const Htag: FC<HtagProps> = ({tag, children, className}): JSX.Element => {
            return <></>
    }
 }
-
-export default Htag
