@@ -8,7 +8,7 @@ export const Button: FC<ButtonProps> = ({theme , children, className, ...props})
         <button className={cn('w-full h-[38px] rounded-[38px] duration-300 font-medium text-base', className, {
             [styles.light]: theme === 'light',
             [styles.dark]: !theme || theme === 'dark',
-        })}>
+        })} {...props}>
             {children}
         </button>
     )

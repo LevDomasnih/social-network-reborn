@@ -5,6 +5,9 @@ export interface IProfile {
     firstName: string | null
     lastName: string | null
     phone: string | null
+    login: string
+    email: string
+    mainImage?: string | null
     avatar?: string | null
     status?: string | null
     about?: string | null

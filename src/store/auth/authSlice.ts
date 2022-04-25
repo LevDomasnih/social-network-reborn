@@ -1,16 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { login, register } from "./authThunks"
-import { IToken } from "../../models/IToken"
+import {IAuth} from "../../models/IAuth";
 
-interface initialState extends IToken {
+interface initialState extends IAuth {
     userId: string
     authError: {
         message: string | null
         requestId: string | null
     }
     loading: boolean
-    login: string | null
-    email: string | null
 }
 
 const initialState: initialState = {
