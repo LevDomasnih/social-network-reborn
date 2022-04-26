@@ -35,7 +35,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 
 const Home: NextPage = () => {
-    const {register, handleSubmit, watch, formState: {errors, dirtyFields, touchedFields}, control, } = useForm();
+    const {register, handleSubmit, watch, getValues, formState: {errors, dirtyFields, touchedFields}, control, } = useForm();
     const dispatch = useAppDispatch()
 
     const {loading} = useAppSelector(state => state.authSlice)
@@ -61,34 +61,74 @@ const Home: NextPage = () => {
                 {/*@ts-ignore*/}
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
-                        <Input {...register("firstName", {required: 'Введите поле'})} error={errors.firstName}
-                               prefixImg='user' placeholder={'Имя'} value={watch('firstName')} />
-                        <Input {...register("secondName", {required: 'Введите поле'})} error={errors.secondName}
-                               prefixImg='user' placeholder={'Фамилия'} value={watch('secondName')} />
-                        <Input {...register("lastName", {required: 'Введите поле'})} error={errors.lastName}
-                               prefixImg='user' placeholder={'Отчество'} value={watch('lastName')} />
-                        <Input {...register("phone", {required: 'Введите поле'})} error={errors.phone} prefixImg='phone'
-                               placeholder={'Номер телефона'} type='number' value={watch('phone')} />
-                        <Input {
-                                   ...register("email", {
-                                       required: 'Введите поле',
-                                       pattern: {
-                                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                           message: "Невалидный email адрес"
-                                       }
-                                   })}
-                               error={errors.email}
-                               prefixImg='email'
-                               placeholder={'Email'}
-                               type='email'
-                               value={watch('email')}
+                        <Controller
+                            control={control}
+                            name="firstName"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='user' placeholder={'Имя'} {...field} />
+                            )}
                         />
-                        <Input {...register("password", {
-                            minLength: {
-                                value: 8,
-                                message: 'Пароль должен иметь 8 и больше символов'
-                            }, required: 'Введите пароль'
-                        })} error={errors.password} prefixImg='lock' placeholder={'Пароль'} type='password' value={watch('password')} />
+                        <Controller
+                            control={control}
+                            name="secondName"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='user' placeholder={'Фамилия'} {...field} />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="lastName"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='user' placeholder={'Отчество'}  {...field} />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="phone"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='phone' placeholder={'Номер телефона'} type='number' {...field} />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="email"
+                            rules={{
+                                required: 'Введите поле',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: "Невалидный email адрес"
+                                }
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='email' placeholder={'Email'} type='email' {...field} />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="password"
+                            rules={{
+                                minLength: {
+                                    value: 8,
+                                    message: 'Пароль должен иметь 8 и больше символов'
+                                },
+                                required: 'Введите пароль'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='lock' placeholder={'Пароль'} type='password' {...field} />
+                            )}
+                        />
                         <Controller
                             control={control}
                             name='confirmPassword'
@@ -97,9 +137,8 @@ const Home: NextPage = () => {
                                 required: 'Введите пароль повторно',
                                 validate: value => value === watch('password') || "Поля не совпадают"
                             }}
-                            render={({fieldState}) => (
-                                <Input {...register("confirmPassword")} error={fieldState.error} prefixImg='lock'
-                                       placeholder={'Подтвердите пароль'} type='password' value={watch('confirmPassword')}/>)}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='lock' placeholder={'Подтвердите пароль'} type='password' {...field} />)}
                         />
 
                     </div>

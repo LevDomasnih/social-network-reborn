@@ -5,15 +5,11 @@ import React from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {ILogin} from "../models/ILogin";
 import {login} from "../store/auth/authThunks";
-import UserSvg from '../../public/svg/user.svg'
-import LockSvg from '../../public/svg/lock.svg'
 import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
-import {Input} from "../components/Input/Input";
-import {Button} from "../components/Button/Button";
-import {useForm} from "react-hook-form";
-import {Checkbox} from "../components/Checkbox/Checkbox";
+import {Controller, useForm} from "react-hook-form";
+import {Button, Checkbox, Input} from "../components";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -34,7 +30,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 const Login = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const {register, handleSubmit, getValues, watch, formState: {errors}, control} = useForm();
 
     const dispatch = useAppDispatch()
 
@@ -59,11 +55,30 @@ const Login = () => {
                 {/*@ts-ignore*/}
                 <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
                     <div className='space-y-[35px]'>
-                        <Input {...register("loginOrEmail", { required: 'Введите поле' })} error={errors.loginOrEmail} prefixImg='email' type='email' placeholder={'Логин или email'} value={watch('loginOrEmail')} />
-                        <Input {...register("password", { required: 'Введите поле' })} error={errors.password} prefixImg='lock' placeholder={'Пароль'} type="password" value={watch('password')} />
+                        <Controller
+                            control={control}
+                            name="loginOrEmail"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='email' type='email'
+                                       placeholder={'Логин или email'} {...field} />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="password"
+                            rules={{
+                                required: 'Введите поле'
+                            }}
+                            render={({field, fieldState: { error }}) => (
+                                <Input error={error} prefixImg='lock' placeholder={'Пароль'} {...field} />
+                            )}
+                        />
                     </div>
                     <div className='mt-[30px]'>
-                        <Checkbox forgivePassword={true} />
+                        <Checkbox forgivePassword={true}/>
                     </div>
                     <Button type="submit" className='mt-[40px]'>Войти в аккаунт</Button>
                 </form>

@@ -2,25 +2,74 @@ import React, {FC} from "react";
 import {ProfileEditProps} from "./ProfileEdit.props";
 import {Input} from "../Input/Input";
 import cn from "classnames";
-import {useFormContext} from "react-hook-form";
+import {Controller, useFormContext} from "react-hook-form";
 import {IProfile} from "../../models/IProfile";
+import {DayPicker} from "react-day-picker";
+import {InputDate} from "../InputDate/InputDate";
 
 export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className, ...props}) => {
-    const {register, getFieldState} = useFormContext<IProfile>()
-    console.log({...register('firstName')})
-
+    const {control} = useFormContext<IProfile>()
 
     return (
         <div className={cn('grid grid-cols-4 gap-3', className)}>
-            <Input {...register('firstName')} className='col-span-2' value={''} placeholder='Имя'/>
-            <Input {...register('lastName')} className='col-span-2' value={''} placeholder='Фамилия'/>
-            <Input {...register('secondName')} className='col-span-4' value={''} placeholder='Отчество'/>
-            <Input {...register('birthday')} className='col-span-1' value={''} prefixImg='cake'
-                   placeholder='Дата рождения'/>
-            <Input {...register('login')} className='col-span-1' value={''} prefix='@' placeholder='логин'/>
-            <Input {...register('country')} className='col-span-1' value={''} prefixImg='geo' placeholder='Страна'/>
-            <Input {...register('city')} className='col-span-1' value={''} prefixImg='geo' placeholder='Город'/>
-            <Input {...register('status')} className='col-span-4' value={''} placeholder='Статус'/>
+            <Controller
+                control={control}
+                name="firstName"
+                render={({field}) => (
+                    <Input className='col-span-2' placeholder='Имя' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="lastName"
+                render={({field}) => (
+                    <Input className='col-span-2' placeholder='Фамилия' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="secondName"
+                render={({field}) => (
+                    <Input className='col-span-4' placeholder='Отчество' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="birthday"
+                rules={{}}
+                render={({field}) => (
+                    // <input onChange={onChange} onBlur={onBlur} value={value && format(new Date(value), 'hh.MM.yyyy') || ''} />
+                    <InputDate className='col-span-1' prefixImg='cake' placeholder='Дата рождения' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="login"
+                render={({field}) => (
+                    <Input className='col-span-1' prefix='@' placeholder='логин' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="country"
+                render={({field}) => (
+                    <Input className='col-span-1' prefixImg='geo' placeholder='Страна' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="city"
+                render={({field}) => (
+                    <Input className='col-span-1' prefixImg='geo' placeholder='Город' {...field} />
+                )}
+            />
+            <Controller
+                control={control}
+                name="status"
+                render={({field}) => (
+                    <Input className='col-span-4' placeholder='Статус' {...field} />
+                )}
+            />
         </div>
     )
 }
