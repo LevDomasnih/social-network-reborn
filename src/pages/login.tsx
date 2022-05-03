@@ -61,7 +61,7 @@ const Login = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='email' type='email'
                                        placeholder={'Логин или email'} {...field} />
                             )}
@@ -72,7 +72,7 @@ const Login = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='lock' placeholder={'Пароль'} {...field} />
                             )}
                         />

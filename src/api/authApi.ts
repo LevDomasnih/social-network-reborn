@@ -5,9 +5,8 @@ import axios from "axios";
 import { instance } from "./api"
 import {IValid} from "../models/IValid";
 
-export const authAPI = {
+export const authApi = {
     register(authData: IRegister) {
-        console.log(authData)
         return axios.post<IToken>(`/api/register`, authData)
             .then(response => response)
             .catch((error) => error.response)

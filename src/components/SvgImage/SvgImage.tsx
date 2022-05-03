@@ -6,7 +6,7 @@ import {
     CakeSvg,
     Comments,
     EmailSvg,
-    EyeSvg,
+    EyeSvg, Gallery,
     GeoSvg,
     LikesSvg,
     LockSvg,
@@ -68,6 +68,8 @@ export const SvgImage: FC<SvgImageProps> = ({svg, color, className}) => {
             return <Arrow color={color} className={className || ''}/>
         case "addFriend":
             return <AddFriend color={color} className={className || ''}/>
+        case "gallery":
+            return <Gallery color={color} className={className || ''}/>
         default:
             return <></>
     }

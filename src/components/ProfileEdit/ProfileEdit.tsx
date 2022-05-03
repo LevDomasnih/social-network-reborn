@@ -4,7 +4,6 @@ import {Input} from "../Input/Input";
 import cn from "classnames";
 import {Controller, useFormContext} from "react-hook-form";
 import {IProfile} from "../../models/IProfile";
-import {DayPicker} from "react-day-picker";
 import {InputDate} from "../InputDate/InputDate";
 
 export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className, ...props}) => {
@@ -28,7 +27,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className
             />
             <Controller
                 control={control}
-                name="secondName"
+                name="middleName"
                 render={({field}) => (
                     <Input className='col-span-4' placeholder='Отчество' {...field} />
                 )}
@@ -38,7 +37,6 @@ export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className
                 name="birthday"
                 rules={{}}
                 render={({field}) => (
-                    // <input onChange={onChange} onBlur={onBlur} value={value && format(new Date(value), 'hh.MM.yyyy') || ''} />
                     <InputDate className='col-span-1' prefixImg='cake' placeholder='Дата рождения' {...field} />
                 )}
             />

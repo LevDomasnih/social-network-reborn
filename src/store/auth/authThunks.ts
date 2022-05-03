@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { authAPI } from "../../API/authAPI"
+import { authApi } from "../../api/authApi"
 import { ILogin } from "../../models/ILogin"
 import { IRegister } from "../../models/IRegister"
 import { IToken } from "../../models/IToken"
@@ -9,7 +9,7 @@ import sleep from "../../utils/sleep"
 export const register = createAsyncThunk<IToken, IRegister, { rejectValue: IError }>(
     "auth/register",
     async (registerData: IRegister, thunkAPI) => {
-        const action = await authAPI.register(registerData)
+        const action = await authApi.register(registerData)
 
         await sleep(1000)
 
@@ -24,7 +24,7 @@ export const register = createAsyncThunk<IToken, IRegister, { rejectValue: IErro
 export const login = createAsyncThunk<IToken, ILogin, { rejectValue: IError }>(
     "auth/login",
     async (authData: ILogin, thunkAPI) => {
-        const action = await authAPI.login(authData)
+        const action = await authApi.login(authData)
 
         await sleep(1000)
 

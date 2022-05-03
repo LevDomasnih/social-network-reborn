@@ -4,19 +4,17 @@ import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
 import axios from "axios";
 import MainLayout from "../layout/MainLayout/MainLayout";
-import Image from "next/image";
-import {Avatar, Button, Card, Input, Menu, Profile, RightSidebarFriend, SvgImage} from "../components";
+import {Card, Menu, Profile, RightSidebarFriend} from "../components";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {setAuth} from "../store/auth/authSlice";
 import {IMe} from "../models/IMe";
 import {setProfile} from "../store/profile/profileSlice";
-import { format } from 'date-fns'
+import {instance} from "../api/api";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-
     const token = ctx.req.cookies.jwt;
-    let userData;
-
+    let user;
+    let profile;
     if (!token) {
         return {
             redirect: {
@@ -25,15 +23,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             },
         };
     }
-
     try {
-        userData = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-            headers: {Authorization: `Bearer ${token}`},
-        });
-
+        const query = axios.create({
+            baseURL: process.env.NEXT_PUBLIC_API_URL,
+            headers: {Authorization: `Bearer ${token}`}
+        })
+        user = (await query.get(`/users/me`)).data;
+        profile = (await query.get(`/profile/${user.id}`)).data;
     } catch (err) {
         ctx.res.setHeader('set-cookie', 'jwt=; max-age=0')
-
         return {
             redirect: {
                 destination: routes.unauthorized,
@@ -41,22 +39,37 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             },
         };
     }
-
     return {
         props: {
             token,
-            user: userData.data,
-        },
-    };
+            me: {
+                user,
+                profile
+            }
+        }
+    }
 };
 
-const Me: FC<IMe> = ({token, user}) => {
+const Me: FC<IMe> = ({token, me}) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(setAuth({token, userId: user.id, email: user.email, login: user.login}))
-        dispatch(setProfile(user.profile))
-    }, [dispatch, token, user.email, user.id, user.login, user.profile])
+        instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }, [token])
+
+    useEffect(() => {
+        dispatch(setAuth({
+            access_token: token,
+            userId: me.user.id,
+            email: me.user.email,
+            login: me.user.login,
+            avatar: me.profile.avatar,
+            firstName: me.profile.firstName,
+            lastName: me.profile.lastName,
+            notifications: 0
+        }))
+        dispatch(setProfile({...me.profile, email: me.user.email, login: me.user.login}))
+    }, [dispatch, me.profile, me.user.email, me.user.id, me.user.login, token])
 
     const profile = useAppSelector(state => state.profileSlice)
     const {login} = useAppSelector(state => state.authSlice)
@@ -108,7 +121,7 @@ const Me: FC<IMe> = ({token, user}) => {
                 </Head>
             }
         >
-            <Profile className='mb-[-50px]' profile={profile} />
+            <Profile className='mb-[-50px]' profile={profile}/>
             <div>
                 <div className='inline-grid gap-[16px] grid-flow-col mb-[60px]'>
                     {/*TODO MOCK PHOTO*/}

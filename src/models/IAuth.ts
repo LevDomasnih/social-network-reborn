@@ -1,6 +1,10 @@
 import {IToken} from "./IToken";
 
 export interface IAuth extends IToken {
-    login: string | null
-    email: string | null
+    firstName: string;
+    lastName: string;
+    login: string
+    email: string;
+    avatar: string | null;
+    notifications: number | null;
 }

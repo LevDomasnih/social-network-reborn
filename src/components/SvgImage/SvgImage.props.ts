@@ -6,7 +6,7 @@ export type svgNames =
     'lock' | 'logo' | 'mail' | 'phone' | 'search' |
     'setting' | 'showPass' | 'user' | 'plus' | 'save' |
     'comments' | 'reposts' | 'share' | 'play' | 'arrow' |
-    'addFriend'
+    'addFriend' | 'gallery'
 
 export interface SvgImageProps {
     svg: svgNames

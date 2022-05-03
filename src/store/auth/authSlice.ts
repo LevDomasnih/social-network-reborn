@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { login, register } from "./authThunks"
 import {IAuth} from "../../models/IAuth";
 
@@ -18,9 +18,24 @@ const initialState: initialState = {
         message: null,
         requestId: null,
     },
+    login: '',
+    email: '',
+    firstName: '',
+    lastName: '',
     loading: false,
-    login: null,
-    email: null
+    avatar: null,
+    notifications: null,
+}
+
+interface SetAuth {
+    access_token: string;
+    userId: string
+    login: string
+    email: string
+    firstName: string
+    lastName: string
+    avatar: string
+    notifications: number
 }
 
 const authSlice = createSlice({
@@ -34,13 +49,10 @@ const authSlice = createSlice({
                 requestId: null,
             },
         }),
-        setAuth: (state, data) => {
+        setAuth: (state, data: PayloadAction<SetAuth>) => {
             return ({
                 ...state,
-                access_token: data.payload.token,
-                userId: data.payload.userId,
-                login: data.payload.login,
-                email: data.payload.email,
+                ...data.payload
             })
         }
     },

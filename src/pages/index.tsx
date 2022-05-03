@@ -10,9 +10,7 @@ import {IRegister} from "../models/IRegister"
 import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
-import {Input} from "../components/Input/Input";
-import {Button} from "../components/Button/Button";
-import {Checkbox} from "../components/Checkbox/Checkbox";
+import {Button, Checkbox, Input} from "../components";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -35,7 +33,14 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 
 const Home: NextPage = () => {
-    const {register, handleSubmit, watch, getValues, formState: {errors, dirtyFields, touchedFields}, control, } = useForm();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        getValues,
+        formState: {errors, dirtyFields, touchedFields},
+        control,
+    } = useForm();
     const dispatch = useAppDispatch()
 
     const {loading} = useAppSelector(state => state.authSlice)
@@ -67,7 +72,7 @@ const Home: NextPage = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='user' placeholder={'Имя'} {...field} />
                             )}
                         />
@@ -77,7 +82,7 @@ const Home: NextPage = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='user' placeholder={'Фамилия'} {...field} />
                             )}
                         />
@@ -87,7 +92,7 @@ const Home: NextPage = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='user' placeholder={'Отчество'}  {...field} />
                             )}
                         />
@@ -97,8 +102,9 @@ const Home: NextPage = () => {
                             rules={{
                                 required: 'Введите поле'
                             }}
-                            render={({field, fieldState: { error }}) => (
-                                <Input error={error} prefixImg='phone' placeholder={'Номер телефона'} type='number' {...field} />
+                            render={({field, fieldState: {error}}) => (
+                                <Input error={error} prefixImg='phone' placeholder={'Номер телефона'}
+                                       type='number' {...field} />
                             )}
                         />
                         <Controller
@@ -111,7 +117,7 @@ const Home: NextPage = () => {
                                     message: "Невалидный email адрес"
                                 }
                             }}
-                            render={({field, fieldState: { error }}) => (
+                            render={({field, fieldState: {error}}) => (
                                 <Input error={error} prefixImg='email' placeholder={'Email'} type='email' {...field} />
                             )}
                         />
@@ -125,8 +131,9 @@ const Home: NextPage = () => {
                                 },
                                 required: 'Введите пароль'
                             }}
-                            render={({field, fieldState: { error }}) => (
-                                <Input error={error} prefixImg='lock' placeholder={'Пароль'} type='password' {...field} />
+                            render={({field, fieldState: {error}}) => (
+                                <Input error={error} prefixImg='lock' placeholder={'Пароль'}
+                                       type='password' {...field} />
                             )}
                         />
                         <Controller
@@ -137,13 +144,14 @@ const Home: NextPage = () => {
                                 required: 'Введите пароль повторно',
                                 validate: value => value === watch('password') || "Поля не совпадают"
                             }}
-                            render={({field, fieldState: { error }}) => (
-                                <Input error={error} prefixImg='lock' placeholder={'Подтвердите пароль'} type='password' {...field} />)}
+                            render={({field, fieldState: {error}}) => (
+                                <Input error={error} prefixImg='lock' placeholder={'Подтвердите пароль'}
+                                       type='password' {...field} />)}
                         />
 
                     </div>
                     <div className='mt-[30px]'>
-                        <Checkbox />
+                        <Checkbox/>
                     </div>
                     <Button type="submit" className='mt-[40px]'>Создать аккаунт</Button>
                 </form>
