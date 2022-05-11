@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {PostProps} from "./Post.props";
 import Image from "next/image";
-import {Avatar, SvgImage, HashTag, Htag} from '../index'
+import {Avatar, SvgImage, HashTag, Htag, BackgroundImage} from '../index'
 import {svgNames} from "../SvgImage/SvgImage.props";
 
 export const Post: FC<PostProps> = ({icon, theme, author, avatar, title, text, image, likes, comments, reposts}) => {
@@ -29,9 +29,7 @@ export const Post: FC<PostProps> = ({icon, theme, author, avatar, title, text, i
                     <div className='text-[14px] leading-[24px] text-[#161616]'>{text}</div>
                 </div>
             </div>
-            <div className='w-full h-[270px] relative'>
-                <Image src={image} layout='fill' objectFit='cover' objectPosition='center'/>
-            </div>
+            <BackgroundImage src={image} className='w-full h-[270px] relative' />
             <div className='p-[20px]'>
                 <div className='space-y-[25px]'>
                     <div className='flex justify-between'>

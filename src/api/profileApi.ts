@@ -8,12 +8,12 @@ export const profileApi = {
             .catch((error) => error.response)
     },
     editAvatar(formData: FormData) {
-        return instance.post<{fileName: string}>('profile/editAvatar', formData)
+        return instance.post<{fileName: string}>('profile/editImg/avatar', formData)
             .then(response => response)
             .catch((error) => error.response)
     },
     editMainImage(formData: FormData) {
-        return instance.post<{fileName: string}>('profile/editMainImage', formData)
+        return instance.post<{fileName: string}>('profile/editImg/mainImage', formData)
             .then(response => response)
             .catch((error) => error.response)
     }

@@ -1,12 +1,24 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
-import {LeftSidebar, Header} from "../../components";
+import {Header, LeftSidebar} from "../../components";
+import cn from "classnames";
+import {PostModal} from "../../components/PostModal/PostModal";
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
+    const [active, setActive] = useState(false)
+
+    const cretePost = () => {
+        setActive(true)
+    }
+
+    const closePost = () => {
+        setActive(false)
+    }
+
     return (
-        <div className={className}>
+        <div className={cn(className, 'relative')}>
             {head}
-            <Header/>
+            <Header createPost={cretePost}/>
             <div className='max-w-[1720px] h-full m-auto flex'>
                 <LeftSidebar/>
                 <main className='flex-initial w-[920px] mx-[100px] flex justify-between flex-col'>
@@ -16,6 +28,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
                     {rightSidebar}
                 </div>
             </div>
+            <PostModal active={active} closeModal={closePost}/>
         </div>
     )
 }

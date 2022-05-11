@@ -1,6 +1,5 @@
 import React, {FC, FormEvent, useEffect, useMemo, useState} from "react";
 import {ProfileProps} from "./Profile.props";
-import Image from "next/image";
 import {Avatar} from "../Avatar/Avatar";
 import {Button} from "../Button/Button";
 import {SvgImage} from "../SvgImage/SvgImage";
@@ -12,33 +11,36 @@ import {editAvatar, editMainImage, editProfile} from "../../store/profile/profil
 import {IProfile} from "../../models/IProfile";
 import cn from "classnames";
 import styles from './Profile.module.css'
+import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 
 export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
     const {avatar, mainImage, ...otherProfile} = profile
     const [isEdit, setIsEdit] = useState(false)
-    const avatarInput = React.useRef(null);
-    const mainImageInput = React.useRef(null);
+    const avatarInput = React.useRef<HTMLInputElement>(null);
+    const mainImageInput = React.useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch()
     const methods = useForm({
         defaultValues: useMemo(() => profile, [profile])
     });
 
     const mainImageClick = () => {
-        //@ts-ignore
-        mainImageInput.current.click();
+        if (mainImageInput.current) {
+            mainImageInput.current.click();
+        }
     }
 
     const mainImageChange = (event: FormEvent<HTMLInputElement>) => {
         //@ts-ignore
         const fileUploaded: File = event.target.files[0];
         const formData = new FormData();
-        formData.append("mainImage", fileUploaded);
+        formData.append("image", fileUploaded);
         dispatch(editMainImage(formData))
     }
 
     const avatarClick = () => {
-        //@ts-ignore
-        avatarInput.current.click();
+        if (avatarInput.current) {
+            avatarInput.current.click();
+        }
     }
 
 
@@ -46,7 +48,7 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
         // @ts-ignore
         const fileUploaded: File = event.target.files[0];
         const formData = new FormData();
-        formData.append("avatar", fileUploaded);
+        formData.append("image", fileUploaded);
         dispatch(editAvatar(formData))
     }
 
@@ -60,17 +62,14 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
 
     return (
         <div className={className}>
-            <div className={cn('h-[240px] rounded-b-[3px] overflow-hidden flex items-center justify-center relative', {
-                [styles.editedProfile]: isEdit
-            })} onClick={() => isEdit && mainImageClick()} >
-                <input type='file' ref={mainImageInput} onChange={mainImageChange} className='invisible absolute'/>
-                <Image src={mainImage || '/meBg.png'} height={240} width={920} objectFit='cover' objectPosition='center' />
-                {isEdit && (
-                    <div className='h-full w-full bg-opacity-50 bg-black absolute flex items-center justify-center '>
-                        <SvgImage svg='gallery' color='#FFF' className='h-[40px] w-[40px]' />
-                    </div>
-                )}
-            </div>
+            <BackgroundImage
+                className={cn('h-[240px] rounded-b-[3px] overflow-hidden flex items-center justify-center relative', {
+                    [styles.editedProfile]: isEdit
+                })}
+                src={mainImage} isEdit={isEdit}
+                ref={mainImageInput} onChange={mainImageChange}
+                onClick={() => isEdit && mainImageClick()}
+            />
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                     <div className='relative top-[-90px]'>
@@ -99,7 +98,7 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
                                             {methods.getValues('firstName')} {methods.getValues('lastName')} {methods.getValues('middleName')}
                                         </div>
                                         <div
-                                            className='text-base text-[#AEAEAE] font-medium mb-[20px]'>@{methods.getValues('login')}</div>
+                                            className='text-base text-[#AEAEAE] font-medium mb-[20px]'>@{methods.getValues('email')}</div>
                                         <div
                                             className='text-base text-[#161616] font-normal mb-[15px] flex items-center'>
                                             {methods.getValues('birthday') && (
@@ -123,6 +122,5 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
                 </form>
             </FormProvider>
         </div>
-
     )
 }

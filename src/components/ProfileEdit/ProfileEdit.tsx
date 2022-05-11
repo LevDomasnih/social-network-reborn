@@ -42,9 +42,9 @@ export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className
             />
             <Controller
                 control={control}
-                name="login"
+                name="email"
                 render={({field}) => (
-                    <Input className='col-span-1' prefix='@' placeholder='логин' {...field} />
+                    <Input className='col-span-1' prefix='@' placeholder='Email' {...field} />
                 )}
             />
             <Controller
