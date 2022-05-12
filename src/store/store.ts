@@ -6,10 +6,12 @@ import {
 import authSlice from "./auth/authSlice"
 import logger from 'redux-logger'
 import profileSlice from "./profile/profileSlice";
+import postSlice from "./post/postSlice"
 
 const rootReducer = combineReducers({
     authSlice,
     profileSlice,
+    postSlice,
 })
 
 export const store = configureStore({

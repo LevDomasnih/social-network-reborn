@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IProfile} from "../../models/IProfile";
-import {login, register} from "../auth/authThunks";
 import {editAvatar, editMainImage, editProfile} from "./profileThunks";
 
 interface initialState extends IProfile {

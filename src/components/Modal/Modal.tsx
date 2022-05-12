@@ -16,7 +16,7 @@ export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
     }, [active])
 
     const closeModal: MouseEventHandler<HTMLSpanElement> = (e) => {
-        if (e.target.className.includes('modal')) {
+        if (typeof e.target.className === 'string' && e.target.className.includes('modal')) { // FIXME Продумать
             props.closeModal()
         }
     }
