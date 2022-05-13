@@ -26,7 +26,7 @@ export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
     }
 
     return (
-        <div className='w-full h-screen top-0 fixed bg-opacity-50 bg-black z-20 flex justify-center items-center modal' onClick={closeModal}>
+        <div className='w-full h-screen top-0 fixed bg-opacity-50 bg-black z-20 flex justify-center items-center modal' onMouseDown={closeModal}>
             {children}
         </div>
     )

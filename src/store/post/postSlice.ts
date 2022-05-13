@@ -1,31 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { savePostFiles } from "./postThunk"
+import { savePost } from "./postThunk"
 
 interface initialState {
-    mainImage: string | null;
     postUuid: string | null;
 
 }
 
 const initialState: initialState = {
-    mainImage: null,
-    postUuid: null
+    postUuid: null,
 }
 
 const postSlice = createSlice({
-    name: 'post',
+    name: "post",
     initialState,
-    reducers: {
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(savePostFiles.fulfilled, (state, action) => {
-            state.mainImage = action.payload[0]
+        builder.addCase(savePost.fulfilled, (state, action) => {
         })
-        builder.addCase(savePostFiles.pending, (state, { payload }) => {
+        builder.addCase(savePost.pending, (state, { payload }) => {
         })
-        builder.addCase(savePostFiles.rejected, (state, action) => {
+        builder.addCase(savePost.rejected, (state, action) => {
         })
-    }
+    },
 })
 
 // export const {} = postSlice.actions

@@ -2,7 +2,7 @@ import { instance } from "./api"
 
 export const postApi = {
     savePostFiles(formData: FormData) {
-        return instance.post<{fileName: string}>('posts/saveTempImage', formData)
+        return instance.post<unknown>('posts', formData)
             .then(response => response)
             .catch((error) => error.response)
     }

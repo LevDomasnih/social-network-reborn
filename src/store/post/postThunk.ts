@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { IError } from "../../models/IError"
 import { postApi } from "../../api"
 
-export const savePostFiles = createAsyncThunk<Array<string>, FormData, { rejectValue: IError }>(
-    'post/savePostFiles',
+export const savePost = createAsyncThunk<unknown, FormData, { rejectValue: IError }>(
+    "post/savePost",
     async (data: FormData, thunkAPI) => {
         const action = await postApi.savePostFiles(data)
 

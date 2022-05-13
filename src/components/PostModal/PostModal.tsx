@@ -1,52 +1,59 @@
-import React, { FC, FormEvent, useState } from "react"
-import {PostModalProps} from "./PostModal.props";
-import {Modal} from "../Modal/Modal";
-import cn from "classnames";
-import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
-import {RichEditor} from "../RichEditor/RichEditor";
-import {EditorState, RawDraftContentState} from "draft-js";
-import { editMainImage } from "../../store/profile/profileThunks"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { savePostFiles } from "../../store/post/postThunk"
+import React, { FC, FormEvent, useEffect, useRef, useState } from "react"
+import { EditorState, RawDraftContentState } from "draft-js"
+import cn from "classnames"
+import { PostModalProps } from "./PostModal.props"
+import { Modal } from "../Modal/Modal"
+import { BackgroundImage } from "../BackgroundImage/BackgroundImage"
+import { RichEditor } from "../RichEditor/RichEditor"
+import { useFileReader } from "../../hooks"
+import { useAppDispatch } from "../../store/hooks"
+import { savePost } from "../../store/post/postThunk"
 
-export const PostModal: FC<PostModalProps> = ({active, closeModal, className, ...props}) => {
-    const [state, setState] = useState(EditorState.createEmpty());
-    const dispatch = useAppDispatch();
-    const { mainImage } = useAppSelector(state => state.postSlice)
+export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, ...props }) => {
+    const [editor, setEditor] = useState(EditorState.createEmpty())
+    const [mainImage, setMainImage] = useFileReader(null)
+    const mainImageInput = useRef<HTMLInputElement>(null)
+    const dispatch = useAppDispatch()
 
-    const mainImageInput = React.useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        setMainImage(null)
+        setEditor(EditorState.createEmpty())
+    }, [active])
 
     const postCreated = (state: RawDraftContentState) => {
-        console.log(state)
+        let data = new FormData()
+        if (mainImage) {
+            const file = new File([mainImage], "image");
+            data.append('files', file)
+        }
+        data.append('textBlocks', JSON.stringify(state.blocks))
+        data.append('entityMap', JSON.stringify(state.entityMap))
+        dispatch(savePost(data))
     }
 
     const saveMainImage = () => {
         if (mainImageInput.current) {
-            mainImageInput.current.click();
+            mainImageInput.current.click()
         }
     }
 
     const mainImageChange = (event: FormEvent<HTMLInputElement>) => {
-        //@ts-ignore
-        const fileUploaded: File = event.target.files[0];
-        const formData = new FormData();
-        formData.append("files", fileUploaded);
-        dispatch(savePostFiles(formData))
+        setMainImage((event.target as HTMLInputElement).files![0])
     }
 
     return (
-        <Modal active={active} closeModal={closeModal} className={cn('', className)} {...props}>
-            <div className='w-[80%] h-[90%] bg-white rounded-md overflow-auto'>
-                <div className='h-[500px] w-full flex'>
+        <Modal active={active} closeModal={closeModal} className={cn("", className)} {...props}>
+            <div className="w-[80%] h-[90%] bg-white rounded-md overflow-auto">
+                <div className="h-[500px] w-full flex">
                     <BackgroundImage
                         src={mainImage}
-                        className='w-full h-full relative'
+                        className="w-full h-full relative"
                         onClick={saveMainImage}
                         ref={mainImageInput}
                         onChange={mainImageChange}
                     />
                 </div>
-                <RichEditor editorState={state} saveText={postCreated} onChange={setState}/>
+                <RichEditor editorState={editor} saveText={postCreated} onChange={setEditor}/>
             </div>
         </Modal>
     )
