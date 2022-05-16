@@ -10,11 +10,13 @@ import {setAuth} from "../store/auth/authSlice";
 import {IMe} from "../models/IMe";
 import {setProfile} from "../store/profile/profileSlice";
 import {instance} from "../api/api";
+import {setAllPosts} from "../store/post/postSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const token = ctx.req.cookies.jwt;
     let user;
     let profile;
+    let allPosts;
     if (!token) {
         return {
             redirect: {
@@ -30,6 +32,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         })
         user = (await query.get(`/users/me`)).data;
         profile = (await query.get(`/profile/${user.id}`)).data;
+        allPosts = (await query.get(`/posts/user/${user.id}`)).data;
     } catch (err) {
         ctx.res.setHeader('set-cookie', 'jwt=; max-age=0')
         return {
@@ -44,7 +47,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             token,
             me: {
                 user,
-                profile
+                profile,
+                allPosts,
             }
         }
     }
@@ -69,10 +73,12 @@ const Me: FC<IMe> = ({token, me}) => {
             notifications: 0
         }))
         dispatch(setProfile({...me.profile, email: me.user.email, login: me.user.login}))
-    }, [dispatch, me.profile, me.user.email, me.user.id, me.user.login, token])
+        dispatch(setAllPosts(me.allPosts))
+    }, [dispatch, me.allPosts, me.profile, me.user.email, me.user.id, me.user.login, token])
 
     const profile = useAppSelector(state => state.profileSlice)
     const {login} = useAppSelector(state => state.authSlice)
+    const {allPosts} = useAppSelector(state => state.postSlice)
 
     const menu = [
         'Все записи',
@@ -81,34 +87,34 @@ const Me: FC<IMe> = ({token, me}) => {
         'Нравится'
     ]
 
-    const posts = [
-        {
-            likes: 82,
-            comments: 6,
-            reposts: 12,
-            theme: 'Здоровье',
-            avatar: '/avatar.png',
-            icon: 'plus',
-            author: 'Зайцев Константин',
-            image: '/meBg.png',
-            time: new Date(),
-            title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
-            text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
-        },
-        {
-            likes: 82,
-            comments: 6,
-            reposts: 12,
-            theme: 'Здоровье',
-            avatar: '/avatar.png',
-            icon: 'plus',
-            author: 'Зайцев Константин',
-            time: new Date(),
-            image: '/meBg.png',
-            title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
-            text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
-        }
-    ]
+    // const posts = [
+    //     {
+    //         likes: 82,
+    //         comments: 6,
+    //         reposts: 12,
+    //         theme: 'Здоровье',
+    //         avatar: '/avatar.png',
+    //         icon: 'plus',
+    //         author: 'Зайцев Константин',
+    //         image: '/meBg.png',
+    //         time: new Date(),
+    //         title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
+    //         text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
+    //     },
+    //     {
+    //         likes: 82,
+    //         comments: 6,
+    //         reposts: 12,
+    //         theme: 'Здоровье',
+    //         avatar: '/avatar.png',
+    //         icon: 'plus',
+    //         author: 'Зайцев Константин',
+    //         time: new Date(),
+    //         image: '/meBg.png',
+    //         title: 'Ничего не делать и худеть — что думает наука про способы разгона метаболизма',
+    //         text: 'Можно ли заставить тело по умолчанию сжигать или сохранять больше калорий и какие добавки этому помогут. Тема веса и физической формы есть в каждом списке дел по личной продуктивности. Сегодня обсудим всё, что поможет (и не поможет) поменять метаболизм и проще добиться нужного веса.'
+    //     }
+    // ]
 
     return (
         <MainLayout
@@ -130,7 +136,7 @@ const Me: FC<IMe> = ({token, me}) => {
                     <Card photo={'/card.png'}/>
                     <Card photo={'/card.png'}/>
                 </div>
-                <Menu menu={menu} posts={posts}/>
+                <Menu menu={menu} posts={allPosts}/>
             </div>
         </MainLayout>
     )

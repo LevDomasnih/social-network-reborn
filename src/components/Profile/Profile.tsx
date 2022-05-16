@@ -30,8 +30,7 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
     }
 
     const mainImageChange = (event: FormEvent<HTMLInputElement>) => {
-        //@ts-ignore
-        const fileUploaded: File = event.target.files[0];
+        const fileUploaded: File = (event.target as HTMLInputElement).files![0];
         const formData = new FormData();
         formData.append("image", fileUploaded);
         dispatch(editMainImage(formData))
@@ -45,8 +44,7 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
 
 
     const avatarChange = (event: FormEvent<HTMLInputElement>) => {
-        // @ts-ignore
-        const fileUploaded: File = event.target.files[0];
+        const fileUploaded: File = (event.target as HTMLInputElement).files![0];
         const formData = new FormData();
         formData.append("image", fileUploaded);
         dispatch(editAvatar(formData))

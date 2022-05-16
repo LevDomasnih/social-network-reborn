@@ -37,7 +37,7 @@ export const Menu: FC<MenuProps> = ({isTag, posts, menu, className, ...props}) =
                     </div>
                 </div>
             )}
-            {posts.map((post, i) => <Post key={post.time.toString() + i} {...post} />)}
+            {posts && posts.map((post) => <Post key={post.id} {...post} />)}
         </div>
     )
 }

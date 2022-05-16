@@ -1,15 +1,5 @@
 import {DetailedHTMLProps, HTMLAttributes} from "react";
+import {IPost} from "../../models/IPost";
 
-export interface PostProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
-    icon: string
-    theme: string
-    avatar: string
-    author: string
-    title: string
-    text: string
-    likes: number
-    comments: number
-    reposts: number
-    image: string
-    time: Date
+export interface PostProps extends Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, 'id'>, IPost{
 }

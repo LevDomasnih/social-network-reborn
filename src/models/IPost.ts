@@ -1,12 +1,12 @@
-import {IUser} from "./IUser";
-import {ITimeStamps} from "./ITimeStamps";
 import {IBase} from "./IBase";
+import {ITextBlock} from "./ITextBlock";
 
-export interface IPost extends ITimeStamps, IBase {
-    "owner": string | IUser
-    "text": string,
-    "image": string,
-    "likes": number,
-    "views": number,
-    "comments": string[] | IPost[]
+export interface IPost extends IBase {
+    headers: string[],
+    entityMap: Record<string, any>,
+    likes: number,
+    views: number,
+    textBlocks: ITextBlock[]
+    mainImage: string,
+    //TODO comments
 }

@@ -1,4 +1,5 @@
 import {IProfile} from "./IProfile";
+import {IPost} from "./IPost";
 
 export interface IMe {
     token: string
@@ -8,6 +9,7 @@ export interface IMe {
             id: string
             login: string
         },
-        profile: IProfile
+        profile: IProfile,
+        allPosts: IPost[]
     }
 }
