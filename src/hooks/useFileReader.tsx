@@ -22,5 +22,5 @@ export const useFileReader = (initialState: null | File) => {
         setFile(action);
     }
 
-    return [fileIntoBase64, dispatch] as const;
+    return [fileIntoBase64, dispatch, file] as const;
 }

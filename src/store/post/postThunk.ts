@@ -3,7 +3,7 @@ import { IError } from "../../models/IError"
 import { postApi } from "../../api"
 import {IPost} from "../../models/IPost";
 
-export const savePost = createAsyncThunk<IPost, FormData, { rejectValue: IError }>(
+export const savePost = createAsyncThunk<IPost[], FormData, { rejectValue: IError }>(
     "post/savePost",
     async (data: FormData, thunkAPI) => {
         const action = await postApi.savePostFiles(data)

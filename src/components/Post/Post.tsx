@@ -5,7 +5,7 @@ import {Avatar, SvgImage, HashTag, Htag, BackgroundImage} from '../index'
 import {svgNames} from "../SvgImage/SvgImage.props";
 import {format} from "date-fns";
 
-export const Post: FC<PostProps> = ({createdAt, mainImage, likes}) => {
+export const Post: FC<PostProps> = ({createdAt, mainImage, likes, profile: { firstName, lastName, middleName, avatar }}) => {
     console.log('asdasd')
     console.log(likes)
 
@@ -20,19 +20,19 @@ export const Post: FC<PostProps> = ({createdAt, mainImage, likes}) => {
                             <div className='text-base font-medium text-[#4EB000]'>{'theme'}</div>
                         </div>
                         <div className='mr-[25px] flex items-center space-x-[7px]'>
-                            {/*<Avatar img={'/avatar'} width={22} height={22}/>*/}
-                            <div className='text-base font-medium text-[#161616]'>{'author'}</div>
+                            {avatar && <Avatar img={avatar} width={22} height={22}/>}
+                            <div className='text-base font-medium text-[#161616]'>{`${firstName} ${lastName}`}</div>
                         </div>
                         <div className='text-base font-medium text-[#B7B7B7]'>{format(new Date(createdAt), 'HH:mm').toString()}</div>
                     </div>
-                    {/*<SvgImage svg='save' color='#161616'/>*/}
+                    <SvgImage svg='save' color='#161616'/>
                 </div>
                 <div className='space-y-[20px]'>
                     <Htag tag='h2'>{"title"}</Htag>
                     <div className='text-[14px] leading-[24px] text-[#161616]'>{"text"}</div>
                 </div>
             </div>
-            {/*<BackgroundImage src={mainImage} className='w-full h-[270px] relative' />*/}
+            <BackgroundImage src={mainImage} className='w-full h-[270px] relative' />
             <div className='p-[20px]'>
                 <div className='space-y-[25px]'>
                     <div className='flex justify-between'>

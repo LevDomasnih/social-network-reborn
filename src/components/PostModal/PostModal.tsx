@@ -11,7 +11,7 @@ import { savePost } from "../../store/post/postThunk"
 
 export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, ...props }) => {
     const [editor, setEditor] = useState(EditorState.createEmpty())
-    const [mainImage, setMainImage] = useFileReader(null)
+    const [mainImage, setMainImage, mainImageFile] = useFileReader(null)
     const mainImageInput = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
 
@@ -22,9 +22,8 @@ export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, .
 
     const postCreated = (state: RawDraftContentState) => {
         let data = new FormData()
-        if (mainImage) {
-            const file = new File([mainImage], "image");
-            data.append('files', file)
+        if (mainImageFile) {
+            data.append('files', mainImageFile)
         }
         data.append('textBlocks', JSON.stringify(state.blocks))
         data.append('entityMap', JSON.stringify(state.entityMap))

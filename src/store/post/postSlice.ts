@@ -27,7 +27,7 @@ const postSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(savePost.fulfilled, (state, action) => {
-            state.allPosts = [...state.allPosts, action.payload]
+            state.allPosts = action.payload
         })
         builder.addCase(savePost.pending, (state, { payload }) => {
         })
