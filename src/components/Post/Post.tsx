@@ -1,14 +1,16 @@
-import {FC} from "react";
+import React, { FC, useState } from "react"
 import {PostProps} from "./Post.props";
 import Image from "next/image";
-import {Avatar, SvgImage, HashTag, Htag, BackgroundImage} from '../index'
+import { Avatar, SvgImage, HashTag, Htag, BackgroundImage, RichEditor } from "../index"
 import {svgNames} from "../SvgImage/SvgImage.props";
 import {format} from "date-fns";
+import { convertFromRaw, EditorState, RawDraftContentBlock } from "draft-js"
 
-export const Post: FC<PostProps> = ({createdAt, mainImage, likes, profile: { firstName, lastName, middleName, avatar }}) => {
-    console.log('asdasd')
-    console.log(likes)
-
+export const Post: FC<PostProps> = ({textBlocks, createdAt, mainImage, likes, profile: { firstName, lastName, middleName, avatar }, ...props}) => {
+    const editor = EditorState.createWithContent(convertFromRaw({
+        blocks: textBlocks as RawDraftContentBlock[],
+        entityMap: props.entityMap
+    }))
     return (
         <div className='rounded border border-[#E4E4E4]'>
             <div className='p-[20px]'>
@@ -27,10 +29,7 @@ export const Post: FC<PostProps> = ({createdAt, mainImage, likes, profile: { fir
                     </div>
                     <SvgImage svg='save' color='#161616'/>
                 </div>
-                <div className='space-y-[20px]'>
-                    <Htag tag='h2'>{"title"}</Htag>
-                    <div className='text-[14px] leading-[24px] text-[#161616]'>{"text"}</div>
-                </div>
+                <RichEditor editorState={editor} className='' readonly={true}/>
             </div>
             <BackgroundImage src={mainImage} className='w-full h-[270px] relative' />
             <div className='p-[20px]'>

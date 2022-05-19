@@ -76,7 +76,7 @@ const blockRenderMap = Immutable.Map({
 
 const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
-export const RichEditor: FC<RichEditorProps> = ({editorState, saveText, ...props}) => {
+export const RichEditor: FC<RichEditorProps> = ({className, editorState, saveText, readonly, ...props}) => {
     const contentState = editorState.getCurrentContent();
     const focusPoint = useRef<Editor>(null)
     const [focus, setFocus] = useState<(() => void)>(() => {})
@@ -94,11 +94,15 @@ export const RichEditor: FC<RichEditorProps> = ({editorState, saveText, ...props
     }, [focusPoint])
 
     const onChange = (change: EditorState) => {
-        props.onChange(change);
+        if (props.onChange) {
+            props.onChange(change);
+        }
     };
 
     const handleSaveText = () => {
-        saveText(convertToRaw(editorState.getCurrentContent()))
+        if (saveText) {
+            saveText(convertToRaw(editorState.getCurrentContent()))
+        }
     }
 
     const handleKeyCommand = (command: EditorCommand) => {
@@ -121,31 +125,53 @@ export const RichEditor: FC<RichEditorProps> = ({editorState, saveText, ...props
         onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
     }
 
-    return (
-        <div className="RichEditor-root">
-            <div className='flex justify-between'>
-                <div>
-                    <BlockStyleControls
-                        editorState={editorState}
-                        onToggle={toggleBlockType}
-                    />
-                    <InlineStyleControls
-                        editorState={editorState}
-                        onToggle={toggleInlineStyle}
-                    />
-                </div>
-                <Button className='w-[150px]' onClick={handleSaveText}>Создать пост</Button>
-            </div>
-            <div className={cn('RichEditor-editor', {
-                ['RichEditor-hidePlaceholder']: !contentState.hasText() && contentState.getBlockMap().first().getType() !== 'unstyled'
-            })} onClick={focus}>
+    if (readonly) {
+        return (
+            <div className={cn('RichEditor-editor', 'RichEditor-editor-watch', className)}>
                 <Editor
+                    readOnly={true}
                     blockStyleFn={getBlockStyle}
                     customStyleMap={styleMap}
                     editorState={editorState}
                     onChange={onChange}
                     onTab={onTab}
-                    placeholder="Tell a story..."
+                    ref={focusPoint}
+                    spellCheck={true}
+                    handleKeyCommand={handleKeyCommand}
+                    blockRenderMap={extendedBlockRenderMap}
+                />
+            </div>
+        )
+    }
+
+    return (
+        <div className={cn("RichEditor-root", className)}>
+            {!readonly && (
+                <div className='flex justify-between RichEditor-pick'>
+                    <div>
+                        <BlockStyleControls
+                            editorState={editorState}
+                            onToggle={toggleBlockType}
+                        />
+                        <InlineStyleControls
+                            editorState={editorState}
+                            onToggle={toggleInlineStyle}
+                        />
+                    </div>
+                    <Button className='w-[150px]' onClick={handleSaveText}>Создать пост</Button>
+                </div>
+            )}
+            <div className={cn('RichEditor-editor', {
+                ['RichEditor-hidePlaceholder']: !contentState.hasText() && contentState.getBlockMap().first().getType() !== 'unstyled'
+            })} onClick={focus}>
+                <Editor
+                    readOnly={readonly || false}
+                    blockStyleFn={getBlockStyle}
+                    customStyleMap={styleMap}
+                    editorState={editorState}
+                    onChange={onChange}
+                    onTab={onTab}
+                    placeholder="Напишите что-то умное..."
                     ref={focusPoint}
                     spellCheck={true}
                     handleKeyCommand={handleKeyCommand}

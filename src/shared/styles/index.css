@@ -11,11 +11,19 @@
     padding: 15px;
 }
 
+.RichEditor-pick {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
 .RichEditor-editor {
-    border-top: 1px solid #ddd;
     cursor: text;
     font-size: 16px;
-    margin-top: 10px;
+}
+
+.RichEditor-editor-watch {
+    max-height: 200px;
+    overflow: hidden;
 }
 
 .RichEditor-editor .public-DraftEditorPlaceholder-root,
