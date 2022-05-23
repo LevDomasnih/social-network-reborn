@@ -1,37 +1,37 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import { savePost } from "./postThunk"
-import {IPost} from "../../models/IPost";
+import { saveBlog } from "./postThunk"
+import {IBlog} from "../../models/IBlog";
 
 interface initialState {
-    allPosts: IPost[],
-    postsAnswer: IPost[],
-    postsSaved: IPost[],
-    postsLiked: IPost[],
+    blogs: IBlog[],
+    postsAnswer: IBlog[],
+    postsSaved: IBlog[],
+    postsLiked: IBlog[],
 }
 
 const initialState: initialState = { // ARRAY!!!
-    allPosts: [],
+    blogs: [],
     postsAnswer: [],
     postsSaved: [],
     postsLiked: [],
 }
 
 const postSlice = createSlice({
-    name: "post",
+    name: "blogs",
     initialState,
     reducers: {
-        setAllPosts: (state, data: PayloadAction<IPost[]>) => ({
+        setAllPosts: (state, data: PayloadAction<IBlog[]>): initialState => ({
             ...state,
-            allPosts: data.payload
+            blogs: data.payload
         })
     },
     extraReducers: (builder) => {
-        builder.addCase(savePost.fulfilled, (state, action) => {
-            state.allPosts = action.payload
+        builder.addCase(saveBlog.fulfilled, (state, action) => {
+            state.blogs = action.payload
         })
-        builder.addCase(savePost.pending, (state, { payload }) => {
+        builder.addCase(saveBlog.pending, (state, { payload }) => {
         })
-        builder.addCase(savePost.rejected, (state, action) => {
+        builder.addCase(saveBlog.rejected, (state, action) => {
         })
     },
 })

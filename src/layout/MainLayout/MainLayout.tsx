@@ -2,7 +2,7 @@ import {FC, useState} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
 import {Header, LeftSidebar} from "../../components";
 import cn from "classnames";
-import {PostModal} from "../../components/PostModal/PostModal";
+import {BlogModal} from "../../components/BlogModal/BlogModal";
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
     const [active, setActive] = useState(false)
@@ -28,7 +28,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
                     {rightSidebar}
                 </div>
             </div>
-            <PostModal active={active} closeModal={closePost}/>
+            <BlogModal active={active} closeModal={closePost}/>
         </div>
     )
 }

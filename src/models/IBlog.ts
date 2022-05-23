@@ -1,7 +1,7 @@
 import {IBase} from "./IBase";
 import {ITextBlock} from "./ITextBlock";
 
-export interface IPost extends IBase {
+export interface IBlog extends IBase {
     entityMap: Record<string, any>
     likes: number
     views: number

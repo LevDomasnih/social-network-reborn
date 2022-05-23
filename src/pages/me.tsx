@@ -4,19 +4,23 @@ import {GetServerSidePropsContext} from "next";
 import routes from "../utils/routes";
 import axios from "axios";
 import MainLayout from "../layout/MainLayout/MainLayout";
-import {Card, Menu, Profile, RightSidebarFriend} from "../components";
+import {Blog, Card, Menu, Post, Profile, RightSidebarFriend} from "../components";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {setAuth} from "../store/auth/authSlice";
 import {IMe} from "../models/IMe";
 import {setProfile} from "../store/profile/profileSlice";
 import {instance} from "../api/api";
 import {setAllPosts} from "../store/post/postSlice";
+import {MenuItem} from "../components/Menu/Menu.props";
+import {IBlog} from "../models/IBlog";
+import {BlogProps} from "../components/Blog/Blog.props";
+import {PostsProps} from "../components/Post/Posts.props";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const token = ctx.req.cookies.jwt;
     let user;
     let profile;
-    let allPosts;
+    let blogs;
     if (!token) {
         return {
             redirect: {
@@ -32,7 +36,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         })
         user = (await query.get(`/users/me`)).data;
         profile = (await query.get(`/profile/${user.id}`)).data;
-        allPosts = (await query.get(`/posts/user/${user.id}`)).data;
+        blogs = (await query.get(`/blogs/user/${user.id}`)).data;
     } catch (err) {
         ctx.res.setHeader('set-cookie', 'jwt=; max-age=0')
         return {
@@ -48,7 +52,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             me: {
                 user,
                 profile,
-                allPosts,
+                blogs,
             }
         }
     }
@@ -73,18 +77,33 @@ const Me: FC<IMe> = ({token, me}) => {
             notifications: 0
         }))
         dispatch(setProfile({...me.profile, email: me.user.email, login: me.user.login}))
-        dispatch(setAllPosts(me.allPosts))
-    }, [dispatch, me.allPosts, me.profile, me.user.email, me.user.id, me.user.login, token])
+        dispatch(setAllPosts(me.blogs))
+    }, [dispatch, me.blogs, me.profile, me.user.email, me.user.id, me.user.login, token])
 
     const profile = useAppSelector(state => state.profileSlice)
     const {login} = useAppSelector(state => state.authSlice)
-    const {allPosts} = useAppSelector(state => state.postSlice)
+    const {blogs} = useAppSelector(state => state.postSlice)
 
     const menu = [
         'Все записи',
+        'Блоги',
+        'Посты',
         'Ответы',
         'Сохраненное',
         'Нравится'
+    ]
+
+    const menuItems: MenuItem<IBlog>[] = [
+        {
+            name: 'Блоги',
+            data: blogs,
+            component: Blog
+        },
+        {
+            name: 'Посты',
+            data: blogs,
+            component: Post
+        },
     ]
 
     // const posts = [
@@ -136,7 +155,8 @@ const Me: FC<IMe> = ({token, me}) => {
                     <Card photo={'/card.png'}/>
                     <Card photo={'/card.png'}/>
                 </div>
-                <Menu menu={menu} posts={allPosts}/>
+                {/*<Menu menu={menu} posts={blogs}/>*/}
+                <Menu menuItems={menuItems} />
             </div>
         </MainLayout>
     )

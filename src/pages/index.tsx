@@ -11,13 +11,62 @@ import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "../components";
+import axios, {AxiosResponse} from "axios";
+import {IToken} from "../models/IToken";
+import {ILogin} from "../models/ILogin";
+import Cookies from "cookies";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+    let cookiesToken = ctx.req.cookies.jwt;
 
-    const token = ctx.req.cookies.jwt;
+    // DEV AUTH
+    if (process.env.AUTH_DONE && process.env.AUTH_LOGIN && process.env.AUTH_PASSWORD && !cookiesToken) {
+        const cookies = new Cookies(ctx.req, ctx.res);
+        let token = await axios
+            .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+                loginOrEmail: process.env.AUTH_LOGIN,
+                password: process.env.AUTH_PASSWORD,
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.data.access_token
+                }
+                return null
+            })
+            .catch((err) => null);
 
-    if (!token) {
+        if (!token) {
+            const dataToBeSent: IRegister = {
+                email: 'tested@tested.com',
+                password: 'tested_password',
+                firstName: 'test',
+                lastName: 'tester',
+                phone: '+7 950 453 10 12',
+            }
+
+            token = await axios
+                .post<IToken, AxiosResponse<IToken>, IRegister>(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, dataToBeSent)
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.data.access_token
+                    }
+                    return null
+                })
+                .catch((err) => null);
+        }
+
+        if (token) {
+            cookies.set('jwt', token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                sameSite: 'lax',
+            });
+            cookiesToken = token
+        }
+    }
+
+    if (!cookiesToken) {
         return {
             props: {},
         };

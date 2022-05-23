@@ -1,15 +1,15 @@
 import React, { FC, FormEvent, useEffect, useRef, useState } from "react"
 import { EditorState, RawDraftContentState } from "draft-js"
 import cn from "classnames"
-import { PostModalProps } from "./PostModal.props"
+import { BlogModalProps } from "./BlogModal.props"
 import { Modal } from "../Modal/Modal"
 import { BackgroundImage } from "../BackgroundImage/BackgroundImage"
 import { RichEditor } from "../RichEditor/RichEditor"
 import { useFileReader } from "../../hooks"
 import { useAppDispatch } from "../../store/hooks"
-import { savePost } from "../../store/post/postThunk"
+import { saveBlog } from "../../store/post/postThunk"
 
-export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, ...props }) => {
+export const BlogModal: FC<BlogModalProps> = ({ active, closeModal, className, ...props }) => {
     const [editor, setEditor] = useState(EditorState.createEmpty())
     const [mainImage, setMainImage, mainImageFile] = useFileReader(null)
     const mainImageInput = useRef<HTMLInputElement>(null)
@@ -20,14 +20,15 @@ export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, .
         setEditor(EditorState.createEmpty())
     }, [active])
 
-    const postCreated = (state: RawDraftContentState) => {
+    const createBlog = (state: RawDraftContentState) => {
         let data = new FormData()
         if (mainImageFile) {
             data.append('files', mainImageFile)
         }
         data.append('textBlocks', JSON.stringify(state.blocks))
         data.append('entityMap', JSON.stringify(state.entityMap))
-        dispatch(savePost(data))
+        dispatch(saveBlog(data))
+        closeModal()
     }
 
     const saveMainImage = () => {
@@ -52,7 +53,7 @@ export const PostModal: FC<PostModalProps> = ({ active, closeModal, className, .
                         onChange={mainImageChange}
                     />
                 </div>
-                <RichEditor editorState={editor} saveText={postCreated} onChange={setEditor}/>
+                <RichEditor editorState={editor} saveText={createBlog} onChange={setEditor}/>
             </div>
         </Modal>
     )

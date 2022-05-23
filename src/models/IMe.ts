@@ -1,5 +1,5 @@
 import {IProfile} from "./IProfile";
-import {IPost} from "./IPost";
+import {IBlog} from "./IBlog";
 
 export interface IMe {
     token: string
@@ -10,6 +10,6 @@ export interface IMe {
             login: string
         },
         profile: IProfile,
-        allPosts: IPost[]
+        blogs: IBlog[]
     }
 }
