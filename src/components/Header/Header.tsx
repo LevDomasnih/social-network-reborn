@@ -3,10 +3,16 @@ import {HeaderProps} from "./Header.props";
 import styles from './Header.module.css'
 import cn from "classnames";
 import {Avatar, Button, Search, SvgImage} from "../index";
-import {useAppSelector} from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { setBlogModalActive } from "../../store/records/recordsSlice"
 
-export const Header: FC<HeaderProps> = ({className, createPost, ...props}) => {
+export const Header: FC<HeaderProps> = ({className, ...props}) => {
+    const dispatch = useAppDispatch()
     const {avatar} = useAppSelector(state => state.profileSlice)
+
+    const openModal = () => {
+        dispatch(setBlogModalActive(true))
+    }
 
     return (
         <header {...props} className={cn('h-[82px] bg-black w-full', styles.header, className)}>
@@ -16,7 +22,7 @@ export const Header: FC<HeaderProps> = ({className, createPost, ...props}) => {
                 </div>
                 <div className='flex-initial w-[920px] mx-[100px] flex justify-between items-center flex'>
                     <Search placeholder='Поиск' className='w-[400px]'/>
-                    <Button className='w-[134px]' onClick={createPost}>Создать</Button>
+                    <Button className='w-[134px]' onClick={openModal}>Создать</Button>
                 </div>
                 <div className='flex-initial w-[344px] flex justify-end'>
                     <div className='mr-[40px] items-center flex'>

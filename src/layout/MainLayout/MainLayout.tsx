@@ -3,22 +3,16 @@ import {MainLayoutProps} from "./MainLayout.props";
 import {Header, LeftSidebar} from "../../components";
 import cn from "classnames";
 import {BlogModal} from "../../components/BlogModal/BlogModal";
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { setBlogModalActive } from "../../store/records/recordsSlice"
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
-    const [active, setActive] = useState(false)
-
-    const cretePost = () => {
-        setActive(true)
-    }
-
-    const closePost = () => {
-        setActive(false)
-    }
+    const {blogModalIsActive} = useAppSelector(state => state.recordsSlice)
 
     return (
         <div className={cn(className, 'relative')}>
             {head}
-            <Header createPost={cretePost}/>
+            <Header />
             <div className='max-w-[1720px] h-full m-auto flex'>
                 <LeftSidebar/>
                 <main className='flex-initial w-[920px] mx-[100px] flex justify-between flex-col'>
@@ -28,7 +22,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
                     {rightSidebar}
                 </div>
             </div>
-            <BlogModal active={active} closeModal={closePost}/>
+            <BlogModal active={blogModalIsActive} />
         </div>
     )
 }

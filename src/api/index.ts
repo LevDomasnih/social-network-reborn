@@ -1,4 +1,5 @@
 export * from './api'
 export * from './authApi'
+export * from './blogApi'
 export * from './postApi'
 export * from './profileApi'

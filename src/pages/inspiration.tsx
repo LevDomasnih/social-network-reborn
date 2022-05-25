@@ -50,7 +50,7 @@ const Inspiration = () => {
             }
         >
             <Stories className='mt-[40px] mb-[60px]' />
-            <Menu menu={menu} posts={posts} isTag={true} />
+            {/*<Menu menu={menu} posts={posts} isTag={true} />*/}
         </MainLayout>
     )
 }

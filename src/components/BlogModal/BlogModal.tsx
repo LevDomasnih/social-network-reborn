@@ -6,28 +6,35 @@ import { Modal } from "../Modal/Modal"
 import { BackgroundImage } from "../BackgroundImage/BackgroundImage"
 import { RichEditor } from "../RichEditor/RichEditor"
 import { useFileReader } from "../../hooks"
-import { useAppDispatch } from "../../store/hooks"
-import { saveBlog } from "../../store/post/postThunk"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { createBlog } from "../../store/records/recordsThunk"
+import { setBlogModalActive } from "../../store/records/recordsSlice"
 
-export const BlogModal: FC<BlogModalProps> = ({ active, closeModal, className, ...props }) => {
+export const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
     const [editor, setEditor] = useState(EditorState.createEmpty())
     const [mainImage, setMainImage, mainImageFile] = useFileReader(null)
     const mainImageInput = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
+
+    const { userId } = useAppSelector(state => state.authSlice)
 
     useEffect(() => {
         setMainImage(null)
         setEditor(EditorState.createEmpty())
     }, [active])
 
-    const createBlog = (state: RawDraftContentState) => {
+    const closeModal = () => {
+        dispatch(setBlogModalActive(false))
+    }
+
+    const handleCreateBlog = (state: RawDraftContentState) => {
         let data = new FormData()
         if (mainImageFile) {
-            data.append('files', mainImageFile)
+            data.append("files", mainImageFile)
         }
-        data.append('textBlocks', JSON.stringify(state.blocks))
-        data.append('entityMap', JSON.stringify(state.entityMap))
-        dispatch(saveBlog(data))
+        data.append("textBlocks", JSON.stringify(state.blocks))
+        data.append("entityMap", JSON.stringify(state.entityMap))
+        dispatch(createBlog({ formData: data, userId }))
         closeModal()
     }
 
@@ -53,7 +60,7 @@ export const BlogModal: FC<BlogModalProps> = ({ active, closeModal, className, .
                         onChange={mainImageChange}
                     />
                 </div>
-                <RichEditor editorState={editor} saveText={createBlog} onChange={setEditor}/>
+                <RichEditor editorState={editor} saveText={handleCreateBlog} onChange={setEditor}/>
             </div>
         </Modal>
     )
