@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { createBlog } from "../../store/records/recordsThunk"
 import { setBlogModalActive } from "../../store/records/recordsSlice"
 
-export const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
+const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
     const [editor, setEditor] = useState(EditorState.createEmpty())
     const [mainImage, setMainImage, mainImageFile] = useFileReader(null)
     const mainImageInput = useRef<HTMLInputElement>(null)
@@ -65,3 +65,5 @@ export const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) =
         </Modal>
     )
 }
+
+export default BlogModal

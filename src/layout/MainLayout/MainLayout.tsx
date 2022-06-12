@@ -1,10 +1,14 @@
-import {FC, useState} from "react";
+import React, {FC} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
 import {Header, LeftSidebar} from "../../components";
 import cn from "classnames";
-import {BlogModal} from "../../components/BlogModal/BlogModal";
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { setBlogModalActive } from "../../store/records/recordsSlice"
+import {useAppSelector} from "../../store/hooks"
+import dynamic from "next/dynamic";
+
+const BlogModal = dynamic(
+    () => import('../../components/BlogModal/BlogModal'),
+    // { loading: () => <div style={{backgroundColor: 'red', height: 500, width: 500}}></div>, ssr: false } // FIXME ПРОВЕРИТЬ ЛЕНИВУЮ ЗАГРУЗКУ
+)
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
     const {blogModalIsActive} = useAppSelector(state => state.recordsSlice)
@@ -12,7 +16,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
     return (
         <div className={cn(className, 'relative')}>
             {head}
-            <Header />
+            <Header/>
             <div className='max-w-[1720px] h-full m-auto flex'>
                 <LeftSidebar/>
                 <main className='flex-initial w-[920px] mx-[100px] flex justify-between flex-col'>
@@ -22,7 +26,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
                     {rightSidebar}
                 </div>
             </div>
-            <BlogModal active={blogModalIsActive} />
+            {blogModalIsActive && <BlogModal active={blogModalIsActive}/>}
         </div>
     )
 }

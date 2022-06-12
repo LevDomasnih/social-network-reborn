@@ -59,3 +59,16 @@ export const getPosts = createAsyncThunk<IPost[], string, { rejectValue: IError 
         return action.data
     },
 )
+
+export const changeLike = createAsyncThunk<unknown, string, { rejectValue: IError }>(
+    "records/posts/changeLike",
+    async (postId: string, thunkAPI) => {
+        const action = await postApi.changeLike(postId)
+
+        if (action.status < 200 && 300 <= action.status) {
+            return thunkAPI.rejectWithValue(action.data)
+        }
+
+        return action.data
+    },
+)

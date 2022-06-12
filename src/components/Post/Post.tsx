@@ -3,8 +3,15 @@ import { PostsProps } from "./Posts.props"
 import { SvgImage } from "../SvgImage/SvgImage"
 import { Avatar } from ".."
 import { format } from 'date-fns';
+import {useAppDispatch} from "../../store/hooks";
+import {changeLike} from "../../store/records/recordsThunk";
 
-export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName }, text, createdAt, ...props }) => {
+export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName }, text, createdAt, id, likes, ...props }) => {
+    const dispatch = useAppDispatch()
+    const handleLike = () => {
+        dispatch(changeLike(id))
+    }
+
     return (
         <div className="rounded border border-[#E4E4E4]">
             <div className="p-[20px]">
@@ -25,10 +32,10 @@ export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName },
                 <div className="space-y-[25px]">
                     <div className="flex justify-between">
                         <div className="space-x-[20px] flex items-center">
-                            <div className="space-x-[7px] flex items-center">
+                            <button className="space-x-[7px] flex items-center" onClick={handleLike}>
                                 <SvgImage svg="like" color="#161616"/>
-                                <span className="text-sm font-medium text-[#161616]">{0}</span>
-                            </div>
+                                <span className="text-sm font-medium text-[#161616]">{likes}</span>
+                            </button>
                             <div className="space-x-[7px] flex items-center">
                                 <SvgImage svg="comments" color="#161616"/>
                                 <span className="text-sm font-medium text-[#161616]">{"comments"}</span>
