@@ -10,4 +10,5 @@ export interface IPost {
     updatedAt: string,
     likes: number,
     views: number,
+    isLiked: boolean,
 }

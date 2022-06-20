@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import {useAppDispatch} from "../../store/hooks";
 import {changeLike} from "../../store/records/recordsThunk";
 
-export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName }, text, createdAt, id, likes, ...props }) => {
+export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName, }, text, createdAt, id, likes, isLiked, ...props }) => {
     const dispatch = useAppDispatch()
     const handleLike = () => {
         dispatch(changeLike(id))
@@ -33,7 +33,7 @@ export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName },
                     <div className="flex justify-between">
                         <div className="space-x-[20px] flex items-center">
                             <button className="space-x-[7px] flex items-center" onClick={handleLike}>
-                                <SvgImage svg="like" color="#161616"/>
+                                <SvgImage svg="like" color={isLiked ? 'red' : '#161616'}/>
                                 <span className="text-sm font-medium text-[#161616]">{likes}</span>
                             </button>
                             <div className="space-x-[7px] flex items-center">
