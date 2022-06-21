@@ -1,10 +1,45 @@
 import React, { FC, useState } from "react"
 import {BlogProps} from "./Blog.props";
-import Image from "next/image";
 import { Avatar, SvgImage, HashTag, Htag, BackgroundImage, RichEditor } from "../index"
-import {svgNames} from "../SvgImage/SvgImage.props";
 import {format} from "date-fns";
 import { convertFromRaw, EditorState, RawDraftContentBlock } from "draft-js"
+import styled from "styled-components"
+
+const Container = styled.div`
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: #E4E4E4;
+`;
+
+const ContainerUp = styled.div`
+  padding: 20px;
+`;
+
+const ContainerInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
+const Info = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+  > * {
+    margin-right: 7px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+
+const Theme = styled.div`
+`;
 
 export const Blog: FC<BlogProps> = ({textBlocks, createdAt, mainImage, likes, profile: { firstName, lastName, middleName, avatar }, ...props}) => {
     const editor = EditorState.createWithContent(convertFromRaw({
@@ -12,25 +47,25 @@ export const Blog: FC<BlogProps> = ({textBlocks, createdAt, mainImage, likes, pr
         entityMap: props.entityMap
     }))
     return (
-        <div className='rounded border border-[#E4E4E4]'>
-            <div className='p-[20px]'>
-                <div className='mb-[30px] flex justify-between'>
-                    <div className='flex items-center'>
-                        <div className='mr-[25px] flex items-center space-x-[7px]'>
+        <Container>
+            <ContainerUp>
+                <ContainerInfo>
+                    <Info>
+                        <InfoItem>
                             {/*TODO должна быть пнг или загружаемая свг*/}
                             {/*<SvgImage svg={icon as svgNames} color='#4EB000'/>*/}
                             <div className='text-base font-medium text-[#4EB000]'>{'theme'}</div>
-                        </div>
-                        <div className='mr-[25px] flex items-center space-x-[7px]'>
+                        </InfoItem>
+                        <InfoItem>
                             {avatar && <Avatar img={avatar} width={22} height={22}/>}
                             <div className='text-base font-medium text-[#161616]'>{`${firstName} ${lastName}`}</div>
-                        </div>
+                        </InfoItem>
                         <div className='text-base font-medium text-[#B7B7B7]'>{format(new Date(createdAt), 'HH:mm').toString()}</div>
-                    </div>
+                    </Info>
                     <SvgImage svg='save' color='#161616'/>
-                </div>
+                </ContainerInfo>
                 <RichEditor editorState={editor} className='' readonly={true}/>
-            </div>
+            </ContainerUp>
             <BackgroundImage src={mainImage} className='w-full h-[270px] relative' />
             <div className='p-[20px]'>
                 <div className='space-y-[25px]'>
@@ -62,7 +97,6 @@ export const Blog: FC<BlogProps> = ({textBlocks, createdAt, mainImage, likes, pr
                     </div>
                 </div>
             </div>
-        </div>
-
+        </Container>
     )
 }
