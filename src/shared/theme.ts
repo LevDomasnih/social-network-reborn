@@ -9,6 +9,9 @@ export const theme: DefaultTheme = {
     colors: {
         dark: hex('#161616'),
         grey: hex('#B7B7B7'),
+        white: hex('#FFFFFF'),
+        purple: hex('#6962A8'),
+        violet: hex('#F3F1FF'),
     },
     fontFamily: ['"TT Norms"', 'sans-serif'],
     fontSize: {

@@ -2,13 +2,18 @@ import { MenuItem, MenuProps } from "./Menu.props"
 import React, { FC, useState } from "react"
 import cn from "classnames"
 import styles from "./Menu.module.css"
-import { Avatar, Button } from "../index"
+import { Avatar, Button as DefaultButton } from "../index"
 import { Tag } from "../Tag/Tag"
 import { IBlog } from "../../models/IBlog"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { setBlogModalActive } from "../../store/records/recordsSlice"
 import { createPost } from "../../store/records/recordsThunk"
 import { IPost } from "../../models/IPost"
+import styled from "styled-components";
+
+const Button = styled(DefaultButton)`
+  width: 134px;
+`;
 
 export const Menu: FC<MenuProps> = ({ isTag, className, menuItems, ...props }) => {
     const [activeMenu, setActiveMenu] = useState(0)
@@ -84,8 +89,8 @@ export const Menu: FC<MenuProps> = ({ isTag, className, menuItems, ...props }) =
                             </div>
                         </div>
                         <div className="space-x-[15px]">
-                            <Button className="w-[134px]" theme="light" onClick={openBlogModal}>Написать блог</Button>
-                            <Button className="w-[134px]" onClick={handleCreatePost}>Создать пост</Button>
+                            <Button color="light" onClick={openBlogModal}>Написать блог</Button>
+                            <Button onClick={handleCreatePost}>Создать пост</Button>
                         </div>
                     </div>
                     <div>

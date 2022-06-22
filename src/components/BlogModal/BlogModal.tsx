@@ -1,22 +1,42 @@
-import React, { FC, FormEvent, useEffect, useRef, useState } from "react"
-import { EditorState, RawDraftContentState } from "draft-js"
-import cn from "classnames"
-import { BlogModalProps } from "./BlogModal.props"
-import { Modal } from "../Modal/Modal"
-import { BackgroundImage } from "../BackgroundImage/BackgroundImage"
-import { RichEditor } from "../RichEditor/RichEditor"
-import { useFileReader } from "../../hooks"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { createBlog } from "../../store/records/recordsThunk"
-import { setBlogModalActive } from "../../store/records/recordsSlice"
+import React, {FC, FormEvent, useEffect, useRef, useState} from "react"
+import {EditorState, RawDraftContentState} from "draft-js"
+import {BlogModalProps} from "./BlogModal.props"
+import {Modal} from "../Modal/Modal"
+import {BackgroundImage} from "../BackgroundImage/BackgroundImage"
+import {RichEditor} from "../RichEditor/RichEditor"
+import {useFileReader} from "../../hooks"
+import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {createBlog} from "../../store/records/recordsThunk"
+import {setBlogModalActive} from "../../store/records/recordsSlice"
+import styled from "styled-components";
 
-const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
+const ContainerEditor = styled.div`
+  overflow: auto;
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: 0.375rem;
+  width: 80%;
+  height: 90%;
+`;
+
+const ContainerBackground = styled.div`
+  display: flex;
+  width: 100%;
+  height: 500px;
+`;
+
+const Background = styled(props => <BackgroundImage {...props} />)`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
     const [editor, setEditor] = useState(EditorState.createEmpty())
     const [mainImage, setMainImage, mainImageFile] = useFileReader(null)
     const mainImageInput = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
 
-    const { userId } = useAppSelector(state => state.authSlice)
+    const {userId} = useAppSelector(state => state.authSlice)
 
     useEffect(() => {
         setMainImage(null)
@@ -34,7 +54,7 @@ const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
         }
         data.append("textBlocks", JSON.stringify(state.blocks))
         data.append("entityMap", JSON.stringify(state.entityMap))
-        dispatch(createBlog({ formData: data, userId }))
+        dispatch(createBlog({formData: data, userId}))
         closeModal()
     }
 
@@ -49,19 +69,18 @@ const BlogModal: FC<BlogModalProps> = ({ active, className, ...props }) => {
     }
 
     return (
-        <Modal active={active} closeModal={closeModal} className={cn("", className)} {...props}>
-            <div className="w-[80%] h-[90%] bg-white rounded-md overflow-auto">
-                <div className="h-[500px] w-full flex">
-                    <BackgroundImage
+        <Modal active={active} closeModal={closeModal} {...props}>
+            <ContainerEditor>
+                <ContainerBackground>
+                    <Background
                         src={mainImage}
-                        className="w-full h-full relative"
                         onClick={saveMainImage}
                         ref={mainImageInput}
                         onChange={mainImageChange}
                     />
-                </div>
+                </ContainerBackground>
                 <RichEditor editorState={editor} saveText={handleCreateBlog} onChange={setEditor}/>
-            </div>
+            </ContainerEditor>
         </Modal>
     )
 }

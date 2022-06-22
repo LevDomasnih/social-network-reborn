@@ -2,9 +2,14 @@ import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
 import styles from './Header.module.css'
 import cn from "classnames";
-import {Avatar, Button, Search, SvgImage} from "../index";
+import {Avatar, Button as DefaultButton, Search, SvgImage} from "../index";
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { setBlogModalActive } from "../../store/records/recordsSlice"
+import styled from "styled-components";
+
+const Button = styled(DefaultButton)`
+  width: 134px;
+`;
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
     const dispatch = useAppDispatch()
@@ -22,7 +27,7 @@ export const Header: FC<HeaderProps> = ({className, ...props}) => {
                 </div>
                 <div className='flex-initial w-[920px] mx-[100px] flex justify-between items-center flex'>
                     <Search placeholder='Поиск' className='w-[400px]'/>
-                    <Button className='w-[134px]' onClick={openModal}>Создать</Button>
+                    <Button onClick={openModal}>Создать</Button>
                 </div>
                 <div className='flex-initial w-[344px] flex justify-end'>
                     <div className='mr-[40px] items-center flex'>

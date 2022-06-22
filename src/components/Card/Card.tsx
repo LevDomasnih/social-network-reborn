@@ -2,8 +2,60 @@ import React, {FC} from "react";
 import {CardProps} from "./Card.props";
 import Image from "next/image";
 import {SvgImage} from "../index";
-import cn from "classnames";
-import styles from './Card.module.css'
+import styled, {css} from "styled-components";
+
+const Container = styled.div<{ photo?: string }>`
+  overflow: hidden;
+  position: relative;
+  width: 140px;
+  height: 175px;
+  background: ${(props) => props.theme.colors.violet};
+  border-radius: 3px;
+
+  ${(props) => {
+    if (!props.photo) {
+      return css`
+        &:hover {
+          cursor: pointer;
+        }
+      `;
+    }
+  }}
+`;
+
+const ContainerEmpty = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  --transform-translate-x: -50%;
+  --transform-translate-y: -50%;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Rounded = styled.div`
+  position: relative;
+  border-radius: 9999px;
+  background: ${(props) => props.theme.colors.purple};
+  width: 46px;
+  height: 46px;
+`;
+
+const PlusSvg = styled(SvgImage)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  --transform-translate-x: -50%;
+  --transform-translate-y: -50%;
+`;
+
+const Text = styled.span`
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 6px;
+  color: ${(props) => props.theme.colors.dark};
+`;
 
 export const Card: FC<CardProps> = ({photo, ...props}) => {
     const handleClick = () => {
@@ -11,21 +63,17 @@ export const Card: FC<CardProps> = ({photo, ...props}) => {
     }
 
     return (
-        <div className={cn('w-[140px] h-[175px] bg-[#F3F1FF] rounded-[3px] overflow-hidden relative', {
-            [styles.card]: !photo
-        })} onClick={handleClick}>
+        <Container photo={photo} onClick={handleClick}>
             {photo ? (
                 <Image src={photo} width={140} height={175} objectFit='cover' objectPosition='center'/>
             ) : (
-                <div
-                    className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
-                    <div className='rounded-full bg-[#6962A8] w-[46px] h-[46px] relative'>
-                        <SvgImage svg='plus' color='white'
-                                  className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'/>
-                    </div>
-                    <span className='mt-[6px] text-[#161616] text-sm'>Добавить</span>
-                </div>
+                <ContainerEmpty>
+                    <Rounded>
+                        <PlusSvg svg='plus' color='white'/>
+                    </Rounded>
+                    <Text>Добавить</Text>
+                </ContainerEmpty>
             )}
-        </div>
+        </Container>
     )
 }

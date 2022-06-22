@@ -84,7 +84,7 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
                                         </div>
                                     )}
                                 </div>
-                                <Button theme={'light'} className='max-w-[115px]' type={isEdit ? 'button' : 'submit'}
+                                <Button color={'light'} className='max-w-[115px]' type={isEdit ? 'button' : 'submit'}
                                         onClick={() => setIsEdit(prev => !prev)}>{isEdit ? 'Сохранить' : 'Изменить'}</Button>
                             </div>
                             <div className='pr-[30px]'>
