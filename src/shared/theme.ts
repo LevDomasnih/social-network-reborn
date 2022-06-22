@@ -1,10 +1,14 @@
-import { createGlobalStyle } from "styled-components"
-import { ThemeProps } from "./theme.props"
+import { createGlobalStyle, DefaultTheme } from "styled-components"
+import { HexColor } from "../styled"
 
-export const theme = {
+function hex<T extends string>(s: HexColor<T>): T {
+    return s;
+}
+
+export const theme: DefaultTheme = {
     colors: {
-        dark: '#161616',
-        grey: '#B7B7B7',
+        dark: hex('#161616'),
+        grey: hex('#B7B7B7'),
     },
     fontFamily: ['"TT Norms"', 'sans-serif'],
     fontSize: {
@@ -27,7 +31,7 @@ export const theme = {
     },
 };
 
-const GlobalStyle = createGlobalStyle<ThemeProps>`
+const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.fontFamily.toString()};
   }
