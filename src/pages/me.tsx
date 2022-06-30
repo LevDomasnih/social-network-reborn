@@ -4,14 +4,14 @@ import { GetServerSidePropsContext } from "next"
 import routes from "../utils/routes"
 import axios from "axios"
 import MainLayout from "../layout/MainLayout/MainLayout"
-import { Blog, Card, Menu, Post, Profile, RightSidebarFriend } from "../components"
+import { Post, Card, Menu, Profile, RightSidebarFriend } from "../components"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { setAuth } from "../store/auth/authSlice"
 import { IMe } from "../models/IMe"
 import { setProfile } from "../store/profile/profileSlice"
 import { instance } from "../api"
 import { setBlogs } from "../store/records/recordsSlice"
-import { MenuItem } from "../components/Menu/Menu.props"
+import { IMenuItem } from "../components/Menu/Menu.props"
 import { IBlog } from "../models/IBlog"
 import { getBlogs, getPosts } from "../store/records/recordsThunk"
 import { IPost } from "../models/IPost"
@@ -93,11 +93,11 @@ const Me: FC<IMe> = ({ token, me }) => {
         "Нравится",
     ]
 
-    const menuItems: MenuItem<IBlog | IPost>[] = [
+    const menuItems: IMenuItem<IBlog | IPost>[] = [
         {
             name: "Блоги",
             data: blogs,
-            component: Blog,
+            component: Post,
             onSelect: () => dispatch(getBlogs(userId))
         },
         {

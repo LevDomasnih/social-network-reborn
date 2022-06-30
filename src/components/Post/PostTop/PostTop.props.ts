@@ -1,9 +1,10 @@
 import {EditorState} from "draft-js";
 
-export interface BlogTopProps {
+export interface PostTopProps {
     avatar: null | string;
     firstName: null | string;
     lastName: null | string;
     createdAt: string;
-    editor: EditorState
+    text: EditorState | string;
+    theme?: string
 }

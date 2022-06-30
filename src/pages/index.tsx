@@ -21,7 +21,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let cookiesToken = ctx.req.cookies.jwt;
 
     // DEV AUTH
-    if (process.env.AUTH_DONE && process.env.AUTH_LOGIN && process.env.AUTH_PASSWORD && !cookiesToken) {
+    if (process.env.AUTH_DONE === 'true' && process.env.AUTH_LOGIN && process.env.AUTH_PASSWORD && !cookiesToken) {
         const cookies = new Cookies(ctx.req, ctx.res);
         let token = await axios
             .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {

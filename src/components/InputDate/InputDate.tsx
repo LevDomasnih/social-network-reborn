@@ -4,6 +4,22 @@ import {Input} from "../Input/Input";
 import {DayPicker} from "react-day-picker";
 import {format} from "date-fns";
 import FocusTrap from 'focus-trap-react';
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: relative;
+`;
+
+const FocusTrapWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+`;
+
+const DayPickerStyled = styled(props => <DayPicker {...props} />)`
+  color: ${(props) => props.theme.colors.white};
+  background: ${(props) => props.theme.colors.dark};
+  border-radius: 0.25rem;
+`;
 
 export const InputDate = forwardRef(({ value, onChange, ...props }: InputDateProps, ref: ForwardedRef<HTMLInputElement>) => {
     const [selected, setSelected] = useState<Date>();
@@ -26,10 +42,15 @@ export const InputDate = forwardRef(({ value, onChange, ...props }: InputDatePro
     };
 
     return (
-        <div className='relative'>
-            <Input {...props} readOnly={true} onClick={() => setIsPopperOpen(true)}
-                   value={selected && format(selected, 'dd.MM.yyyy') || ''} ref={ref}/>
-            <div className='absolute z-10'>
+        <Container>
+            <Input
+                {...props}
+                readOnly={true}
+                onClick={() => setIsPopperOpen(true)}
+                value={selected && format(selected, 'dd.MM.yyyy') || ''}
+                ref={ref}
+            />
+            <FocusTrapWrapper>
                 {isPopperOpen && (
                     <FocusTrap
                         active
@@ -41,7 +62,7 @@ export const InputDate = forwardRef(({ value, onChange, ...props }: InputDatePro
                         }}
                     >
                         <div>
-                            <DayPicker
+                            <DayPickerStyled
                                 initialFocus={isPopperOpen}
                                 className='bg-[#161616] text-white rounded'
                                 mode="single"
@@ -51,7 +72,7 @@ export const InputDate = forwardRef(({ value, onChange, ...props }: InputDatePro
                         </div>
                     </FocusTrap>
                 )}
-            </div>
-        </div>
+            </FocusTrapWrapper>
+        </Container>
     )
 })

@@ -3,11 +3,11 @@ import {Provider} from "react-redux";
 import {store} from "../store/store";
 import '../shared/styles/index.css';
 import { ThemeProvider } from "styled-components"
-import GlobalStyle, { theme } from "../shared/theme"
+import GlobalStyle, { defaultTheme } from "../shared/defaultTheme"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={defaultTheme}>
           <GlobalStyle />
           <Provider store={store}>
             <Component {...pageProps} />

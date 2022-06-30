@@ -4,10 +4,10 @@ import { IPost } from "../../models/IPost"
 
 export interface MenuProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     isTag?: boolean
-    menuItems: MenuItem<IBlog | IPost>[]
+    menuItems: IMenuItem<IBlog | IPost>[]
 }
 
-export interface MenuItem<DataModel> {
+export interface IMenuItem<DataModel> {
     name: string,
     data: DataModel[],
     component: FC<any>,

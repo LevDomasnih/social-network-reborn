@@ -3,6 +3,45 @@ import {CheckboxProps} from "./Checkbox.props";
 import Link from "next/link";
 import {defaultError} from "../../store/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Input = styled.input`
+  float: left;
+  background-color: ${(props) => props.theme.colors.white};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  vertical-align: top;
+  border-radius: 0.125rem;
+  border-width: 1px;
+  appearance: none;
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin-top: 7px;
+  margin-right: 10px;
+`;
+
+const Label = styled.label`
+  display: inline-block;
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 400;
+`;
+
+const LinkText = styled.a`
+  padding-left: 8px;
+  color: ${(props) => props.theme.colors.grey};
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.sm};
+`;
 
 export const Checkbox = forwardRef(({forgivePassword, ...props}: CheckboxProps, ref: ForwardedRef<HTMLInputElement>) => {
     const dispatch = useAppDispatch()
@@ -12,23 +51,27 @@ export const Checkbox = forwardRef(({forgivePassword, ...props}: CheckboxProps, 
     }
 
     return (
-        <div className='flex justify-between'>
+        <Container>
             <div>
-                <input
+                <Input
                     ref={ref}
-                    className="form-check-input appearance-none h-[12px] w-[12px] border rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-[7px] align-top bg-no-repeat bg-center bg-contain float-left mr-[10px] cursor-pointer"
-                    type="checkbox" value="" id="flexCheckDefault" />
-                <label className="form-check-label inline-block font-normal text-base" htmlFor="flexCheckDefault">
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                />
+                <Label htmlFor="flexCheckDefault">
                     Запомнить меня
-                </label>
+                </Label>
             </div>
             {forgivePassword && (
                 <div>
                     <Link href={'/forgivePassword'}>
-                        <a onClick={onLink} className='pl-[8px] text-[#B7B7B7] text-sm'>Забыли пароль?</a>
+                        <LinkText onClick={onLink}>
+                            Забыли пароль?
+                        </LinkText>
                     </Link>
                 </div>
             )}
-        </div>
+        </Container>
     )
 })

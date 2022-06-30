@@ -1,5 +1,18 @@
 import {FC, MouseEventHandler, useEffect} from "react";
 import {ModalEventType, ModalProps} from "./Modal.props";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  position: fixed;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+`;
 
 export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
 
@@ -26,8 +39,8 @@ export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
     }
 
     return (
-        <div className='w-full h-screen top-0 fixed bg-opacity-50 bg-black z-20 flex justify-center items-center modal' onMouseDown={closeModal}>
+        <Container className='modal' onMouseDown={closeModal}>
             {children}
-        </div>
+        </Container>
     )
 }

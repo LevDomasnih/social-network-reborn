@@ -28,8 +28,7 @@ const ContainerEmpty = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  --transform-translate-x: -50%;
-  --transform-translate-y: -50%;
+  transform: translate(-50%, -50%);
   flex-direction: column;
   align-items: center;
 `;
@@ -46,13 +45,12 @@ const PlusSvg = styled(SvgImage)`
   position: absolute;
   top: 50%;
   left: 50%;
-  --transform-translate-x: -50%;
-  --transform-translate-y: -50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Text = styled.span`
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.sm};
   margin-top: 6px;
   color: ${(props) => props.theme.colors.dark};
 `;

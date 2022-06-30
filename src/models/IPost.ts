@@ -1,14 +1,16 @@
-export interface IPost {
-    id: string,
-    profile: {
-        avatar: string | null,
-        firstName: string,
-        lastName: string,
-    },
+import {IBase} from "./IBase";
+
+export interface IPost extends IBase {
     text: string,
-    createdAt: string,
-    updatedAt: string,
     likes: number,
     views: number,
     isLiked: boolean,
+    mainImage: string | null
+    comments: unknown[]
+    profile: {
+        avatar: string | null
+        firstName: string | null
+        lastName: string | null
+        middleName: string | null
+    },
 }

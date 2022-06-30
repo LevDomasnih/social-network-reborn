@@ -1,14 +1,66 @@
 import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
-import styles from './Header.module.css'
-import cn from "classnames";
-import {Avatar, Button as DefaultButton, Search, SvgImage} from "../index";
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { setBlogModalActive } from "../../store/records/recordsSlice"
+import {Avatar, Button as DefaultButton, Search as DefaultSearch, SvgImage} from "../index";
+import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {setBlogModalActive} from "../../store/records/recordsSlice"
 import styled from "styled-components";
 
 const Button = styled(DefaultButton)`
   width: 134px;
+`;
+
+const Container = styled.header`
+  height: 82px;
+  background: ${(props) => props.theme.colors.white};
+  box-shadow: 2px 2px 4px rgba(22, 22, 22, 0.09);
+  width: 100%;
+`;
+
+const Wrapper = styled.div`
+  max-width: 1720px;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+`;
+
+const LogoWrapper = styled.div`
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+`;
+
+const SearchWrapper = styled.div`
+  display: flex;
+  flex: 0 1 auto;
+  justify-content: space-between;
+  align-items: center;
+  width: 920px;
+  margin: 0 100px;
+`;
+
+const Search = styled(DefaultSearch)`
+  width: 400px;
+`;
+
+const SettingsWrapper = styled.div`
+  display: flex;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+  width: 344px;
+
+  div:nth-child(1) div {
+    margin-right: 40px;
+  }
+
+  div:nth-child(2) svg {
+    margin-right: 30px;
+  }
+`;
+
+const SettingItem = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
@@ -20,27 +72,27 @@ export const Header: FC<HeaderProps> = ({className, ...props}) => {
     }
 
     return (
-        <header {...props} className={cn('h-[82px] bg-black w-full', styles.header, className)}>
-            <div className='max-w-[1720px] h-full m-auto items-center flex'>
-                <div className='flex-1 items-center flex'>
+        <Container {...props} className={className}>
+            <Wrapper>
+                <LogoWrapper>
                     <SvgImage svg='logo' color='#161616'/>
-                </div>
-                <div className='flex-initial w-[920px] mx-[100px] flex justify-between items-center flex'>
-                    <Search placeholder='Поиск' className='w-[400px]'/>
+                </LogoWrapper>
+                <SearchWrapper>
+                    <Search placeholder='Поиск'/>
                     <Button onClick={openModal}>Создать</Button>
-                </div>
-                <div className='flex-initial w-[344px] flex justify-end'>
-                    <div className='mr-[40px] items-center flex'>
+                </SearchWrapper>
+                <SettingsWrapper>
+                    <SettingItem>
                         <Avatar img={avatar || '/avatar.png'} width={50} height={50}/>
-                    </div>
-                    <div className='mr-[30px] items-center flex'>
+                    </SettingItem>
+                    <SettingItem>
                         <SvgImage svg='mail' color='#161616'/>
-                    </div>
-                    <div className='items-center flex'>
+                    </SettingItem>
+                    <SettingItem>
                         <SvgImage svg='setting' color='#161616'/>
-                    </div>
-                </div>
-            </div>
-        </header>
+                    </SettingItem>
+                </SettingsWrapper>
+            </Wrapper>
+        </Container>
     )
 }

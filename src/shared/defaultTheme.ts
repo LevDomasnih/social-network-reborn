@@ -5,13 +5,15 @@ function hex<T extends string>(s: HexColor<T>): T {
     return s;
 }
 
-export const theme: DefaultTheme = {
+export const defaultTheme: DefaultTheme = {
     colors: {
         dark: hex('#161616'),
         grey: hex('#B7B7B7'),
         white: hex('#FFFFFF'),
         purple: hex('#6962A8'),
         violet: hex('#F3F1FF'),
+        whiteGrey: hex('#F5F7F9'),
+        black: hex('#000000'),
     },
     fontFamily: ['"TT Norms"', 'sans-serif'],
     fontSize: {

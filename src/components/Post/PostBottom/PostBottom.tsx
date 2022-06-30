@@ -1,8 +1,10 @@
 import React, {FC} from "react";
-import {BlogBottomProps} from "./BlogBottom.props";
+import {PostBottomProps} from "./PostBottom.props";
 import {SvgImage} from "../../SvgImage/SvgImage";
 import styled from "styled-components";
 import {HashTag} from "../../HashTag/HashTag";
+import {useAppDispatch} from "../../../store/hooks";
+import {changeLike} from "../../../store/records/recordsThunk";
 
 const ContainerBottom = styled.div`
   > * {
@@ -66,14 +68,19 @@ const ActionText = styled.div`
   color: ${(props) => props.theme.colors.dark};
 `;
 
-export const BlogBottom: FC<BlogBottomProps> = ({likes, views}) => {
+export const PostBottom: FC<PostBottomProps> = ({likes, views, tags, id, isLiked}) => {
+    const dispatch = useAppDispatch()
+    const handleLike = () => {
+        dispatch(changeLike(id)) // TODO сделать общий эндпоинт
+    }
+
     return (
         <>
             <ContainerBottom>
                 <ContainerActions>
                     <ActionsLeft>
-                        <Action>
-                            <SvgImage svg='like' color='#161616'/>
+                        <Action onClick={handleLike}>
+                            <SvgImage svg='like' color={isLiked ? 'red' : '#161616'}/>
                             <ActionText>{likes}</ActionText>
                         </Action>
                         <Action>
@@ -92,10 +99,11 @@ export const BlogBottom: FC<BlogBottomProps> = ({likes, views}) => {
                         </Action>
                     </ActionsRight>
                 </ContainerActions>
-                <ContainerTags>
-                    <HashTag>#Наука</HashTag>
-                    <HashTag>#Метаболизм</HashTag>
-                </ContainerTags>
+                {tags && (
+                    <ContainerTags>
+                        {tags.map(tag => <HashTag key={tag}>{tag}</HashTag>)}
+                    </ContainerTags>
+                )}
             </ContainerBottom>
         </>
     )

@@ -2,10 +2,11 @@ import {IBase} from "./IBase";
 import {ITextBlock} from "./ITextBlock";
 
 export interface IBlog extends IBase {
-    entityMap: Record<string, any>
-    likes: number
-    views: number
-    textBlocks: ITextBlock[]
+    entityMap: Record<string, any>;
+    likes: number;
+    views: number;
+    isLiked: boolean;
+    text: ITextBlock[];
     mainImage: string | null
     comments: unknown[]
     profile: {

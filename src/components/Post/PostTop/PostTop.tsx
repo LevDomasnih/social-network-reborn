@@ -1,11 +1,11 @@
 import React, {FC} from "react";
 import {Avatar} from "../../Avatar/Avatar";
-import {theme} from "../../../shared/theme";
+import {defaultTheme} from "../../../shared/defaultTheme";
 import {format} from "date-fns";
 import {SvgImage} from "../../SvgImage/SvgImage";
 import {RichEditor} from "../../RichEditor/RichEditor";
 import styled from "styled-components";
-import {BlogTopProps} from "./BlogTop.props";
+import {PostTopProps} from "./PostTop.props";
 
 const ContainerInfo = styled.div`
   display: flex;
@@ -39,31 +39,34 @@ const InfoText = styled.div<{ color?: string }>`
   color: ${(props) => props.color || props.theme.colors.dark};
 `;
 
-export const BlogTop: FC<BlogTopProps> = ({avatar, firstName, lastName, createdAt, editor}) => {
+export const PostTop: FC<PostTopProps> = ({avatar, firstName, lastName, createdAt, text, theme}) => {
     return (
         <>
             <ContainerInfo>
                 <Info>
-                    <InfoItem>
-                        {/*TODO должна быть пнг или загружаемая свг*/}
-                        {/*<SvgImage svg={icon as svgNames} color='#4EB000'/>*/}
-                        <InfoText color='#4EB000'>
-                            {'theme'}
-                        </InfoText>
-                    </InfoItem>
+                    {theme && (
+                        <InfoItem>
+                            {/*TODO должна быть пнг или загружаемая свг*/}
+                            {/*<SvgImage svg={icon as svgNames} color='#4EB000'/>*/}
+
+                            <InfoText color='#4EB000'>
+                                {theme}
+                            </InfoText>
+                        </InfoItem>
+                    )}
                     <InfoItem>
                         {avatar && <Avatar img={avatar} width={22} height={22}/>}
                         <InfoText>
                             {`${firstName} ${lastName}`}
                         </InfoText>
                     </InfoItem>
-                    <InfoText color={theme.colors.grey}>
+                    <InfoText color={defaultTheme.colors.grey}>
                         {format(new Date(createdAt), 'HH:mm').toString()}
                     </InfoText>
                 </Info>
                 <SvgImage svg='save' color='#161616'/>
             </ContainerInfo>
-            <RichEditor editorState={editor} readonly={true}/>
+            {typeof text === 'string' ? text : <RichEditor editorState={text} readonly={true}/>}
         </>
     )
 }

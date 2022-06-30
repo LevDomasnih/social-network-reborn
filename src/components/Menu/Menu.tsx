@@ -1,30 +1,175 @@
-import { MenuItem, MenuProps } from "./Menu.props"
-import React, { FC, useState } from "react"
-import cn from "classnames"
-import styles from "./Menu.module.css"
-import { Avatar, Button as DefaultButton } from "../index"
-import { Tag } from "../Tag/Tag"
-import { IBlog } from "../../models/IBlog"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { setBlogModalActive } from "../../store/records/recordsSlice"
-import { createPost } from "../../store/records/recordsThunk"
-import { IPost } from "../../models/IPost"
-import styled from "styled-components";
+import {IMenuItem, MenuProps} from "./Menu.props"
+import React, {FC, useState} from "react"
+import {Avatar, Button as DefaultButton} from "../index"
+import {Tag} from "../Tag/Tag"
+import {IBlog} from "../../models/IBlog"
+import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {setBlogModalActive} from "../../store/records/recordsSlice"
+import {createPost} from "../../store/records/recordsThunk"
+import {IPost} from "../../models/IPost"
+import styled, {css} from "styled-components";
 
 const Button = styled(DefaultButton)`
   width: 134px;
 `;
 
-export const Menu: FC<MenuProps> = ({ isTag, className, menuItems, ...props }) => {
+const Container = styled.div`
+  position: relative;
+
+  > * {
+    margin-bottom: 30px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const MenuTitles = styled.div`
+  display: flex;
+  width: 100%;
+  padding-bottom: 21px;
+  border-bottom-width: 1px;
+  border-bottom-color: #E4E4E4;
+`;
+
+const MenuTitle = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const MenuLink = styled.a<{ active: boolean }>`
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: ${(props) => props.theme.fontSize.lg};
+  line-height: ${(props) => props.theme.lineHeight.lg};
+  font-weight: 500;
+  cursor: pointer;
+  color: #E4E4E4;
+
+  &:hover {
+    color: ${(props) => props.theme.colors.dark};
+  }
+
+  ${(props) => {
+    if (props.active) {
+      return css`
+        color: #161616;
+        position: relative;
+
+        &:before {
+          content: '';
+          width: 100%;
+          height: 2px;
+          background: #6962A8;
+          position: absolute;
+          bottom: -22px;
+        }
+      `;
+    }
+  }}
+`;
+
+const MenuDivider = styled.div`
+  width: 1px;
+  height: 12px;
+  background: #E4E4E4;
+  margin: 0 25px;
+`;
+
+const TagsWrapper = styled.div`
+  display: flex;
+  font-size: ${(props) => props.theme.fontSize.lg};
+  line-height: ${(props) => props.theme.lineHeight.lg};
+  font-weight: 400;
+  flex-direction: column;
+  padding: 0 10px;
+
+  > * {
+    margin-bottom: 30px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const TagsText = styled.div``;
+
+const Tags = styled.div`
+  > * {
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const MenuCreate = styled.div`
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: #E4E4E4;
+  padding: 20px;
+`;
+
+const MenuCreateTextarea = styled.textarea`
+  padding: 0.5rem 0.75rem;
+  color: ${(props) => props.theme.colors.dark};
+  width: 100%;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  resize: none;
+`;
+
+const MenuCreateTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
+const MenuCreateAvatarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+
+  > * {
+    margin-right: 7px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const MenuCreateUsername = styled.div`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 500;
+  color: ${(props) => props.theme.colors.dark};
+`;
+
+const MenuCreateButtons = styled.div`
+  > * {
+    margin-right: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => {
     const [activeMenu, setActiveMenu] = useState(0)
     const [postValue, setPostValue] = useState("")
 
     const dispatch = useAppDispatch()
 
-    const { avatar, firstName, lastName } = useAppSelector(state => state.profileSlice)
-    const { userId } = useAppSelector(state => state.authSlice)
+    const {avatar, firstName, lastName} = useAppSelector(state => state.profileSlice)
+    const {userId} = useAppSelector(state => state.authSlice)
 
-    const items = (menuItems: MenuItem<IBlog | IPost>[]) => {
+    const items = (menuItems: IMenuItem<IBlog | IPost>[]) => {
         const activeItem = menuItems.find((item, i) => i === activeMenu)
         if (!activeItem) {
             return <></>
@@ -47,64 +192,56 @@ export const Menu: FC<MenuProps> = ({ isTag, className, menuItems, ...props }) =
     const handleCreatePost = () => {
         let data = new FormData()
         data.append("text", postValue)
-        dispatch(createPost({ formData: data, userId }))
+        dispatch(createPost({formData: data, userId}))
         setPostValue("")
     }
 
     return (
-        <div className="space-y-[30px] relative">
-            <div className="w-full pb-[21px] border-b-[#E4E4E4] border-b-[1px] flex">
+        <Container>
+            <MenuTitles>
                 {menuItems.map((e, i, arr) => (
-                    <div key={e.name} className="flex items-center">
-                        <a onClick={() => handleChangeTab(i, e.onSelect)}
-                           className={cn("text-lg font-medium text-[#E4E4E4] hover:text-[#161616] cursor-pointer transition duration-300 ease-in-out", {
-                               [styles.active]: i === activeMenu,
-                           })}>{e.name}</a>
-                        {arr.length - 1 !== i && (
-                            <div className="w-[1px] h-[12px] mx-[25px] bg-[#E4E4E4]"></div>
-                        )}
-                    </div>
+                    <MenuTitle key={e.name}>
+                        <MenuLink onClick={() => handleChangeTab(i, e.onSelect)} active={i === activeMenu}>
+                            {e.name}
+                        </MenuLink>
+                        {arr.length - 1 !== i && <MenuDivider/>}
+                    </MenuTitle>
                 ))}
-            </div>
+            </MenuTitles>
             {isTag && (
-                <div className="py-[10px] space-y-[30px] flex flex-col text-lg font-normal">
-                    <div>Статьи авторов, которые вам могут понравиться</div>
-                    <div className="space-x-[15px]">
+                <TagsWrapper>
+                    <TagsText>Статьи авторов, которые вам могут понравиться</TagsText>
+                    <Tags>
                         <Tag active={true}>Все</Tag>
                         <Tag>UX / UI</Tag>
                         <Tag>Бизнес</Tag>
                         <Tag>Разработка</Tag>
                         <Tag>Музыка</Tag>
                         <Tag>Здоровье</Tag>
-                    </div>
-                </div>
+                    </Tags>
+                </TagsWrapper>
             )}
-            <div className="rounded border border-[#E4E4E4]">
-                <div className="p-[20px]">
-                    <div className="mb-[30px] flex justify-between">
-                        <div className="flex items-center">
-                            <div className="mr-[25px] flex items-center space-x-[7px]">
-                                {avatar && <Avatar img={avatar} width={22} height={22}/>}
-                                <div className="text-base font-medium text-[#161616]">{`${firstName} ${lastName}`}</div>
-                            </div>
-                        </div>
-                        <div className="space-x-[15px]">
-                            <Button color="light" onClick={openBlogModal}>Написать блог</Button>
-                            <Button onClick={handleCreatePost}>Создать пост</Button>
-                        </div>
-                    </div>
-                    <div>
-                        <textarea
-                            className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none resize-none"
-                            rows={4}
-                            placeholder="Что нового?"
-                            value={postValue}
-                            onChange={(e) => setPostValue(e.target.value)}
-                        />
-                    </div>
-                </div>
-            </div>
+            <MenuCreate>
+                <MenuCreateTop>
+                    <MenuCreateAvatarWrapper>
+                        {avatar && <Avatar img={avatar} width={22} height={22}/>}
+                        <MenuCreateUsername>
+                            {`${firstName} ${lastName}`}
+                        </MenuCreateUsername>
+                    </MenuCreateAvatarWrapper>
+                    <MenuCreateButtons>
+                        <Button color="light" onClick={openBlogModal}>Написать блог</Button>
+                        <Button onClick={handleCreatePost}>Создать пост</Button>
+                    </MenuCreateButtons>
+                </MenuCreateTop>
+                <MenuCreateTextarea
+                    rows={4}
+                    placeholder="Что нового?"
+                    value={postValue}
+                    onChange={(e) => setPostValue(e.target.value)}
+                />
+            </MenuCreate>
             {menuItems && items(menuItems)}
-        </div>
+        </Container>
     )
 }

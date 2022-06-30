@@ -15,7 +15,7 @@ export type HexColor<T extends string> =
 
 
 type Sizes = 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
-type Colors = 'dark' | 'grey' | 'white' | 'purple' | 'violet'
+type Colors = 'dark' | 'grey' | 'white' | 'purple' | 'violet' | 'whiteGrey' | 'black'
 
 declare module 'styled-components' {
     export interface DefaultTheme  {

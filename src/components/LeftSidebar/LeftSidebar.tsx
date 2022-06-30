@@ -1,8 +1,24 @@
 import {FC} from "react";
 import {LeftSidebarProps} from "./LeftSidebar.props";
-import cn from "classnames";
 import {useRouter} from "next/router";
-import {LeftSidebarElement} from "../index";
+import {SidebarLi} from "../index";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex: 1 1 0;
+  margin-top: 40px;
+`;
+
+const SidebarUl = styled.ul`
+  > * {
+    margin-bottom: 30px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
 
 export const LeftSidebar: FC<LeftSidebarProps> = ({className, ...props}) => {
 
@@ -15,11 +31,18 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({className, ...props}) => {
         {route: '/tutorial', name: 'Туториалы', img: '/svg/user.svg', height: 15, width: 15},
     ]
     return (
-        <div className={cn('flex-1 flex mt-[40px]', className)}>
-            <ul className='space-y-[30px]'>
-                {temp.map(element => <LeftSidebarElement key={element.route} route={element.route} name={element.name} router={router}/>)}
-            </ul>
-        </div>
+        <Container>
+            <SidebarUl>
+                {temp.map(element => (
+                    <SidebarLi
+                        key={element.route}
+                        route={element.route}
+                        name={element.name}
+                        router={router}
+                    />
+                ))}
+            </SidebarUl>
+        </Container>
     )
 }
 

@@ -1,59 +1,71 @@
-import React, { FC } from "react"
-import { PostsProps } from "./Posts.props"
-import { SvgImage } from "../SvgImage/SvgImage"
-import { Avatar } from ".."
-import { format } from 'date-fns';
-import {useAppDispatch} from "../../store/hooks";
-import {changeLike} from "../../store/records/recordsThunk";
+import React, {FC} from "react"
+import {PostProps} from "./Post.props";
+import {BackgroundImage} from "../index"
+import {convertFromRaw, EditorState, RawDraftContentBlock} from "draft-js"
+import styled from "styled-components"
+import {PostTop} from "./PostTop/PostTop";
+import {PostBottom} from "./PostBottom/PostBottom";
 
-export const Post: FC<PostsProps> = ({ profile: { avatar, firstName, lastName, }, text, createdAt, id, likes, isLiked, ...props }) => {
-    const dispatch = useAppDispatch()
-    const handleLike = () => {
-        dispatch(changeLike(id))
-    }
+const Container = styled.div`
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: #E4E4E4;
+`;
 
+const ContainerItem = styled.div`
+  padding: 20px;
+`;
+
+
+const Background = styled(props => <BackgroundImage {...props} />)`
+  width: 100%;
+  height: 270px;
+  position: relative;
+`;
+
+export const Post: FC<PostProps> = (props) => {
+    const {
+        id,
+        text,
+        createdAt,
+        mainImage,
+        likes,
+        views,
+        isLiked,
+        profile: {
+            firstName,
+            lastName,
+            middleName,
+            avatar
+        },
+    } = props;
+
+    const userText = typeof text === 'string'
+        ? text
+        : EditorState.createWithContent(convertFromRaw({
+            blocks: text as RawDraftContentBlock[],
+            entityMap: props.entityMap || {}
+        }))
     return (
-        <div className="rounded border border-[#E4E4E4]">
-            <div className="p-[20px]">
-                <div className="mb-[30px] flex justify-between">
-                    <div className="flex items-center">
-                        <div className="mr-[25px] flex items-center space-x-[7px]">
-                            {avatar && <Avatar img={avatar} width={22} height={22}/>}
-                            <div className='text-base font-medium text-[#161616]'>{`${firstName} ${lastName}`}</div>
-                        </div>
-                        <div className='text-base font-medium text-[#B7B7B7]'>{format(new Date(createdAt), 'HH:mm').toString()}</div>
-                    </div>
-                    <SvgImage svg="save" color="#161616"/>
-                </div>
-                <div>{text}</div>
-            </div>
-            {/*<BackgroundImage src={mainImage} className='w-full h-[270px] relative' />*/}
-            <div className="p-[20px]">
-                <div className="space-y-[25px]">
-                    <div className="flex justify-between">
-                        <div className="space-x-[20px] flex items-center">
-                            <button className="space-x-[7px] flex items-center" onClick={handleLike}>
-                                <SvgImage svg="like" color={isLiked ? 'red' : '#161616'}/>
-                                <span className="text-sm font-medium text-[#161616]">{likes}</span>
-                            </button>
-                            <div className="space-x-[7px] flex items-center">
-                                <SvgImage svg="comments" color="#161616"/>
-                                <span className="text-sm font-medium text-[#161616]">{"comments"}</span>
-                            </div>
-                            <div className="space-x-[7px] flex items-center">
-                                <SvgImage svg="reposts" color="#161616"/>
-                                <span className="text-sm font-medium text-[#161616]">{"reposts"}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="space-x-[7px] flex items-center">
-                                <SvgImage svg="share" color="#161616"/>
-                                <span className="text-sm font-medium text-[#161616]">Поделиться</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Container>
+            <ContainerItem>
+                <PostTop
+                    firstName={firstName}
+                    lastName={lastName}
+                    avatar={avatar}
+                    createdAt={createdAt}
+                    text={userText}
+                />
+            </ContainerItem>
+            {mainImage && <Background src={mainImage}/>}
+            <ContainerItem>
+                <PostBottom
+                    id={id}
+                    likes={likes}
+                    views={views}
+                    isLiked={isLiked}
+                />
+            </ContainerItem>
+        </Container>
     )
 }
