@@ -24,7 +24,7 @@ const ContainerBackground = styled.div`
   height: 500px;
 `;
 
-const Background = styled(props => <BackgroundImage {...props} />)`
+const Background = styled(BackgroundImage)`
   position: relative;
   width: 100%;
   height: 100%;

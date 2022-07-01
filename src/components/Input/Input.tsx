@@ -119,6 +119,7 @@ const Button = styled.button`
 export const Input = forwardRef((props: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
     const {
         className,
+        style,
         error,
         fontSize,
         weight,
@@ -161,7 +162,7 @@ export const Input = forwardRef((props: InputProps, ref: ForwardedRef<HTMLInputE
     }
 
     return (
-        <Container>
+        <Container className={className} style={style}>
             <InputWrapper>
                 {(prefixImg || prefix) && (
                     <PrefixWrapper>

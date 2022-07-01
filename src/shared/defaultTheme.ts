@@ -88,19 +88,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 20px;
   }
 
-  .RichEditor-controls {
-    margin-bottom: 5px;
-    user-select: none;
-  }
-
-  .RichEditor-styleButton {
-    color: #999;
-    cursor: pointer;
-    margin-right: 16px;
-    padding: 2px 0;
-    display: inline-block;
-  }
-
   .RichEditor-activeButton {
     color: #5890ff;
   }

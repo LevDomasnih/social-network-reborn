@@ -9,9 +9,135 @@ import {FormProvider, useForm} from "react-hook-form";
 import {useAppDispatch} from "../../store/hooks";
 import {editAvatar, editMainImage, editProfile} from "../../store/profile/profileThunks";
 import {IProfile} from "../../models/IProfile";
-import cn from "classnames";
-import styles from './Profile.module.css'
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
+import styled, {css} from "styled-components";
+
+const Container = styled.div``;
+
+const Background = styled(BackgroundImage)<{ isEdit: boolean }>`
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 240px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+
+  ${(props) => {
+    if (props.isEdit) {
+      return css`
+        &:hover {
+          cursor: pointer;
+        }
+      `;
+    }
+  }}
+`;
+
+const Form = styled.form`
+  position: relative;
+  top: -90px;
+  padding-left: 30px;
+`;
+
+const FormTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+`;
+
+const FormBottom = styled.div`
+  padding-right: 30px;
+`;
+
+const AvatarWrapper = styled.div<{ isEdit: boolean }>`
+  display: flex;
+  position: relative;
+  background-color: ${(props) => props.theme.colors.white};
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  height: 180px;
+  width: 180px;
+
+  ${(props) => {
+    if (props.isEdit) {
+      return css`
+        &:hover {
+          cursor: pointer;
+        }
+      `;
+    }
+  }}
+`;
+
+const Input = styled.input`
+  position: absolute;
+  visibility: hidden;
+`;
+
+const AvatarEdit = styled.div`
+  display: flex;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  height: 175px;
+  width: 175px;
+`;
+
+const AvatarImage = styled(SvgImage)`
+  height: 40px;
+  width: 40px;
+`;
+
+const ButtonSaveEdit = styled(Button)`
+  max-width: 115px;
+`;
+
+const FullName = styled.div`
+  font-size: ${(props) => props.theme.fontSize["3xl"]};
+  line-height: ${(props) => props.theme.lineHeight["3xl"]};
+  font-weight: 500;
+  color: ${(props) => props.theme.colors.dark};
+  margin-bottom: 10px;
+`;
+
+const Email = styled.div`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 500;
+  color: #AEAEAE;
+  margin-bottom: 20px;
+`;
+
+const Birthday = styled.div`
+  display: flex;
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 400;
+  align-items: center;
+  color: ${(props) => props.theme.colors.dark};
+  margin-bottom: 15px;
+`;
+
+const BirthdayDate = styled.span`
+  margin-left: 8px;
+  margin-right: 20px;
+`;
+
+const BirthdayFrom = styled.span`
+  margin-left: 8px;
+`;
+
+const Status = styled.div`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 400;
+  color: ${(props) => props.theme.colors.dark};`;
 
 export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
     const {avatar, mainImage, ...otherProfile} = profile
@@ -59,66 +185,81 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
     }
 
     return (
-        <div className={className}>
-            <BackgroundImage
-                className={cn('h-[240px] rounded-b-[3px] overflow-hidden flex items-center justify-center relative', {
-                    [styles.editedProfile]: isEdit
-                })}
-                src={mainImage} isEdit={isEdit}
-                ref={mainImageInput} onChange={mainImageChange}
+        <Container className={className}>
+            <Background
+                src={mainImage}
+                isEdit={isEdit}
+                ref={mainImageInput}
+                onChange={mainImageChange}
                 onClick={() => isEdit && mainImageClick()}
             />
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <div className='relative top-[-90px]'>
-                        <div className='pl-[30px]'>
-                            <div className='mb-[30px] flex items-end justify-between'>
-                                <div className={cn('rounded-full h-[180px] w-[180px] bg-white flex items-center justify-center relative', {
-                                    [styles.editedProfile]: isEdit
-                                })} onClick={() => isEdit && avatarClick()}>
-                                    <input type='file' ref={avatarInput} onChange={avatarChange} className='invisible absolute'/>
-                                    <Avatar img={avatar || '/avatar.png'} width={175} height={175} />
-                                    {isEdit && (
-                                        <div className='h-[175px] w-[175px] bg-opacity-50 bg-black absolute rounded-full flex items-center justify-center '>
-                                            <SvgImage svg='gallery' color='#FFF' className='h-[40px] w-[40px]' />
-                                        </div>
+                <Form onSubmit={methods.handleSubmit(onSubmit)}>
+                    <FormTop>
+                        <AvatarWrapper
+                            isEdit={isEdit}
+                            onClick={() => isEdit && avatarClick()}
+                        >
+                            <Input
+                                type='file'
+                                ref={avatarInput}
+                                onChange={avatarChange}
+                            />
+                            <Avatar
+                                img={avatar || '/avatar.png'}
+                                width={175}
+                                height={175}
+                            />
+                            {isEdit && (
+                                <AvatarEdit>
+                                    <AvatarImage svg='gallery' color='#FFF'/>
+                                </AvatarEdit>
+                            )}
+                        </AvatarWrapper>
+                        <ButtonSaveEdit
+                            color={'light'}
+                            type={isEdit ? 'button' : 'submit'}
+                            onClick={() => setIsEdit(prev => !prev)}
+                        >
+                            {isEdit ? 'Сохранить' : 'Изменить'}
+                        </ButtonSaveEdit>
+                    </FormTop>
+                    <FormBottom>
+                        {isEdit ? (
+                            <ProfileEdit
+                                profile={profile}
+                                setIsEdit={setIsEdit}
+                            />
+                        ) : (
+                            <>
+                                <FullName>
+                                    {methods.getValues('firstName')} {methods.getValues('lastName')} {methods.getValues('middleName')}
+                                </FullName>
+                                <Email>
+                                    @{methods.getValues('email')}
+                                </Email>
+                                <Birthday>
+                                    {methods.getValues('birthday') && (
+                                        <>
+                                            <SvgImage svg='cake' color='#161616'/>
+                                            <BirthdayDate>
+                                                {format(new Date(methods.getValues('birthday') as unknown as string), 'dd.MM.yyyy')}
+                                            </BirthdayDate>
+                                        </>
                                     )}
-                                </div>
-                                <Button color={'light'} className='max-w-[115px]' type={isEdit ? 'button' : 'submit'}
-                                        onClick={() => setIsEdit(prev => !prev)}>{isEdit ? 'Сохранить' : 'Изменить'}</Button>
-                            </div>
-                            <div className='pr-[30px]'>
-                                {isEdit ? (
-                                    <ProfileEdit profile={profile} setIsEdit={setIsEdit}/>
-                                ) : (
-                                    <>
-                                        <div className='text-3xl text-[#161616] font-medium mb-[10px]'>
-                                            {methods.getValues('firstName')} {methods.getValues('lastName')} {methods.getValues('middleName')}
-                                        </div>
-                                        <div
-                                            className='text-base text-[#AEAEAE] font-medium mb-[20px]'>@{methods.getValues('email')}</div>
-                                        <div
-                                            className='text-base text-[#161616] font-normal mb-[15px] flex items-center'>
-                                            {methods.getValues('birthday') && (
-                                                <>
-                                                    <SvgImage svg='cake' color='#161616'/>
-                                                    <span
-                                                        className='ml-[8px] mr-[20px]'>{format(new Date(methods.getValues('birthday') as unknown as string), 'dd.MM.yyyy')}</span>
-                                                </>
-                                            )}
-                                            <SvgImage svg='geo' color='#161616'/>
-                                            <span
-                                                className='ml-[8px]'>{methods.getValues('country')}, {methods.getValues('city')}</span>
-                                        </div>
-                                        {methods.getValues('status') && <div
-                                            className='text-base font-normal text-[#161616]'>{methods.getValues('status')}</div>}
-                                    </>
+                                    <SvgImage svg='geo' color='#161616'/>
+                                    <BirthdayFrom>
+                                        {methods.getValues('country')}, {methods.getValues('city')}
+                                    </BirthdayFrom>
+                                </Birthday>
+                                {methods.getValues('status') && (
+                                    <Status>{methods.getValues('status')}</Status>
                                 )}
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                            </>
+                        )}
+                    </FormBottom>
+                </Form>
             </FormProvider>
-        </div>
+        </Container>
     )
 }

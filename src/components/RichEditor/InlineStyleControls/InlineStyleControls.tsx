@@ -1,17 +1,26 @@
 import React, {FC} from "react";
 import {StyleButton} from "../StyleButton/StyleButton";
 import {InlineStyleControlsProps} from "./InlineStyleControls.props";
+import styled from "styled-components";
 
 const INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
-    { label: 'Monospace', style: 'CODE' },
+    {label: 'Bold', style: 'BOLD'},
+    {label: 'Italic', style: 'ITALIC'},
+    {label: 'Underline', style: 'UNDERLINE'},
+    {label: 'Monospace', style: 'CODE'},
 ];
-export const InlineStyleControls: FC<InlineStyleControlsProps> = ({editorState, onToggle, ...props}) => {
+
+const Container = styled.div`
+  margin-bottom: 5px;
+  user-select: none;
+`;
+
+export const InlineStyleControls: FC<InlineStyleControlsProps> = ({className, editorState, onToggle, ...props}) => {
     const currentStyle = editorState.getCurrentInlineStyle();
     return (
-        <div className="RichEditor-controls">
+        <Container
+            className={className}
+        >
             {INLINE_STYLES.map(type =>
                 <StyleButton
                     key={type.label}
@@ -21,6 +30,6 @@ export const InlineStyleControls: FC<InlineStyleControlsProps> = ({editorState, 
                     style={type.style}
                 />
             )}
-        </div>
+        </Container>
     );
 };

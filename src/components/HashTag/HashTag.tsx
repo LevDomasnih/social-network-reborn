@@ -16,7 +16,7 @@ const Container = styled.div`
 
 export const HashTag: FC<HashTagProps> = ({children, className, ...props}) => {
     return (
-        <Container>
+        <Container className={className}>
             {children}
         </Container>
     )

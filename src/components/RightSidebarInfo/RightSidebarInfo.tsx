@@ -1,12 +1,136 @@
 import React, {FC} from "react";
 import {RightSidebarInfoProps} from "./RightSidebarInfo.props";
-import cn from "classnames";
-import styles from './RightSidebarInfo.module.css'
 import {SvgImage} from "../SvgImage/SvgImage";
 import {HashTag} from "../HashTag/HashTag";
 import {Avatar} from "../Avatar/Avatar";
+import styled from "styled-components";
 
-export const RightSidebarInfo: FC<RightSidebarInfoProps> = ({...props}) => {
+const Container = styled.div`
+  margin-top: 40px;
+
+  > * {
+    margin-bottom: 60px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const FillProfileWrapper = styled.div`
+  background: ${(props) => props.theme.colors.purple};
+  padding: 20px;
+  border-radius: 3px;
+`;
+
+const MaybeInsertingWrapper = styled.div``;
+
+const HashTagsWrapper = styled.div``;
+
+const FillProfileTitleBold = styled.div`
+  color: ${(props) => props.theme.colors.white};
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 700;
+`;
+
+const FillProfileTasks = styled.div`
+  margin-top: 25px;
+
+  > * {
+    border-bottom-width: 1px;
+    border-bottom-color: #8E86D5;
+
+    &:last-child {
+      border-bottom-width: 0;
+    }
+  }
+`;
+
+const FillProfileTask = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  padding-top: 15px;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+`;
+
+const FillProfileTaskTitle = styled.div`
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.sm};
+  color: ${(props) => props.theme.colors.white};
+  font-weight: 700;
+`;
+
+const TitleAboveBlock = styled.div`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  color: ${(props) => props.theme.colors.dark};
+  font-weight: 500;
+  margin-bottom: 25px;
+`;
+
+const MaybeInsertingUsers = styled.div`
+  > * {
+    margin-bottom: 25px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const MaybeInsertingUserWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MaybeInsertingUser = styled.div`
+  display: flex;
+
+  > * {
+    margin-right: 12px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+
+const MaybeInsertingUserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const MaybeInsertingUserName = styled.div`
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+`;
+
+const MaybeInsertingUserLogin = styled(MaybeInsertingUserName)`
+  color: #AEAEAE;
+`;
+
+const HashTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 9px;
+`;
+
+const HashTagStyled = styled(HashTag)`
+  margin-right: 9px;
+`;
+
+export const RightSidebarInfo: FC<RightSidebarInfoProps> = ({className, ...props}) => {
     const tags = [
         'Вирус',
         'Программирование',
@@ -16,71 +140,71 @@ export const RightSidebarInfo: FC<RightSidebarInfoProps> = ({...props}) => {
     ]
 
     return (
-        <div className='space-y-[60px] mt-[40px]'>
-            <div className='bg-[#6962A8] p-[20px] rounded-[3px]'>
-                <div className='text-base font-bold text-white'>Заполните свой профиль</div>
-                <div className={cn('divide-y mt-[25px] divide-[#8E86D5]')}>
-                    <div className={cn('flex justify-between', styles.info)}>
-                        <div className={cn('text-sm font-bold text-white')}>Добавить фото профиля</div>
-                        <SvgImage svg='arrow' color='white' />
-                    </div>
-                    <div className={cn('flex justify-between', styles.info)}>
-                        <div className={cn('text-sm font-bold text-white')}>Добавить фон профиля</div>
-                        <SvgImage svg='arrow' color='white' />
-                    </div>
-                    <div className={cn('flex justify-between', styles.info)}>
-                        <div className={cn('text-sm font-bold text-white')}>Изменение доступности</div>
-                        <SvgImage svg='arrow' color='white' />
-                    </div>
-                    <div className={cn('flex justify-between', styles.info)}>
-                        <div className={cn('text-sm font-bold text-white')}>Создайте первый проект</div>
-                        <SvgImage svg='arrow' color='white' />
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div className='mb-[25px] font-medium text-base text-[#161616]'>Может быть интересно</div>
-                <div className='space-y-[25px]'>
-                    <div className='flex justify-between items-center'>
-                        <div className='space-x-[12px] flex'>
-                            <Avatar img='/avatar.png' width={40} height={40} />
-                            <div className='flex flex-col'>
-                                <div className='text-[12px] font-medium leading-[20px]'>Сергеев Матвей</div>
-                                <div className='text-[12px] font-medium leading-[20px] text-[#AEAEAE]'>@matveyserg</div>
-                            </div>
-                        </div>
-                        <SvgImage svg='addFriend' color='#161616' />
-                    </div>
-                    <div className='flex justify-between items-center'>
-                        <div className='space-x-[12px] flex'>
-                            <Avatar img='/avatar.png' width={40} height={40} />
-                            <div className='flex flex-col'>
-                                <div className='text-[12px] font-medium leading-[20px]'>Сергеев Матвей</div>
-                                <div className='text-[12px] font-medium leading-[20px] text-[#AEAEAE]'>@matveyserg</div>
-                            </div>
-                        </div>
-                        <SvgImage svg='addFriend' color='#161616' />
-                    </div>
-                    <div className='flex justify-between items-center'>
-                        <div className='space-x-[12px] flex'>
-                            <Avatar img='/avatar.png' width={40} height={40} />
-                            <div className='flex flex-col'>
-                                <div className='text-[12px] font-medium leading-[20px]'>Сергеев Матвей</div>
-                                <div className='text-[12px] font-medium leading-[20px] text-[#AEAEAE]'>@matveyserg</div>
-                            </div>
-                        </div>
-                        <SvgImage svg='addFriend' color='#161616' />
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div className='mb-[25px] font-medium text-base text-[#161616]'>Популярные хештэги</div>
-                <div className='flex flex-wrap gap-y-[9px]'>
+        <Container className={className}>
+            <FillProfileWrapper>
+                <FillProfileTitleBold>Заполните свой профиль</FillProfileTitleBold>
+                <FillProfileTasks>
+                    <FillProfileTask>
+                        <FillProfileTaskTitle>Добавить фото профиля</FillProfileTaskTitle>
+                        <SvgImage svg='arrow' color='white'/>
+                    </FillProfileTask>
+                    <FillProfileTask>
+                        <FillProfileTaskTitle>Добавить фон профиля</FillProfileTaskTitle>
+                        <SvgImage svg='arrow' color='white'/>
+                    </FillProfileTask>
+                    <FillProfileTask>
+                        <FillProfileTaskTitle>Изменение доступности</FillProfileTaskTitle>
+                        <SvgImage svg='arrow' color='white'/>
+                    </FillProfileTask>
+                    <FillProfileTask>
+                        <FillProfileTaskTitle>Создайте первый проект</FillProfileTaskTitle>
+                        <SvgImage svg='arrow' color='white'/>
+                    </FillProfileTask>
+                </FillProfileTasks>
+            </FillProfileWrapper>
+            <MaybeInsertingWrapper>
+                <TitleAboveBlock>Может быть интересно</TitleAboveBlock>
+                <MaybeInsertingUsers>
+                    <MaybeInsertingUserWrapper>
+                        <MaybeInsertingUser>
+                            <Avatar img='/avatar.png' width={40} height={40}/>
+                            <MaybeInsertingUserInfo>
+                                <MaybeInsertingUserName>Сергеев Матвей</MaybeInsertingUserName>
+                                <MaybeInsertingUserLogin>@matveyserg</MaybeInsertingUserLogin>
+                            </MaybeInsertingUserInfo>
+                        </MaybeInsertingUser>
+                        <SvgImage svg='addFriend' color='#161616'/>
+                    </MaybeInsertingUserWrapper>
+                    <MaybeInsertingUserWrapper>
+                        <MaybeInsertingUser>
+                            <Avatar img='/avatar.png' width={40} height={40}/>
+                            <MaybeInsertingUserInfo>
+                                <MaybeInsertingUserName>Сергеев Матвей</MaybeInsertingUserName>
+                                <MaybeInsertingUserLogin>@matveyserg</MaybeInsertingUserLogin>
+                            </MaybeInsertingUserInfo>
+                        </MaybeInsertingUser>
+                        <SvgImage svg='addFriend' color='#161616'/>
+                    </MaybeInsertingUserWrapper>
+                    <MaybeInsertingUserWrapper>
+                        <MaybeInsertingUser>
+                            <Avatar img='/avatar.png' width={40} height={40}/>
+                            <MaybeInsertingUserInfo>
+                                <MaybeInsertingUserName>Сергеев Матвей</MaybeInsertingUserName>
+                                <MaybeInsertingUserLogin>@matveyserg</MaybeInsertingUserLogin>
+                            </MaybeInsertingUserInfo>
+                        </MaybeInsertingUser>
+                        <SvgImage svg='addFriend' color='#161616'/>
+                    </MaybeInsertingUserWrapper>
+                </MaybeInsertingUsers>
+            </MaybeInsertingWrapper>
+            <HashTagsWrapper>
+                <TitleAboveBlock>Популярные хештэги</TitleAboveBlock>
+                <HashTags>
                     {tags.map(e => (
-                        <HashTag key={e} className="mr-[9px]">#{e}</HashTag>
+                        <HashTagStyled key={e}>#{e}</HashTagStyled>
                     ))}
-                </div>
-            </div>
-        </div>
+                </HashTags>
+            </HashTagsWrapper>
+        </Container>
     )
 }

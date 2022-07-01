@@ -21,7 +21,7 @@ const DayPickerStyled = styled(props => <DayPicker {...props} />)`
   border-radius: 0.25rem;
 `;
 
-export const InputDate = forwardRef(({ value, onChange, ...props }: InputDateProps, ref: ForwardedRef<HTMLInputElement>) => {
+export const InputDate = forwardRef(({ value, onChange, className, style, ...props }: InputDateProps, ref: ForwardedRef<HTMLInputElement>) => {
     const [selected, setSelected] = useState<Date>();
     const [isPopperOpen, setIsPopperOpen] = useState(false);
 
@@ -42,7 +42,7 @@ export const InputDate = forwardRef(({ value, onChange, ...props }: InputDatePro
     };
 
     return (
-        <Container>
+        <Container className={className} style={style}>
             <Input
                 {...props}
                 readOnly={true}

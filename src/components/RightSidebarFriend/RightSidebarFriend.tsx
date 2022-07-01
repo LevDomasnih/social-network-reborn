@@ -1,11 +1,115 @@
 import React, {FC} from "react";
 import {RightSidebarFriendProps} from "./RightSidebarFriend.props";
-import cn from "classnames";
-import {Avatar, SvgImage, HashTag} from "../../components";
+import {Avatar, HashTag, SvgImage} from "../../components";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+
+  > * {
+    margin-bottom: 35px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const Info = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 126px;
+  background: ${(props) => props.theme.colors.whiteGrey};
+  padding: 0 62px;
+`;
+
+const InfoItemWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InfoItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > * {
+    margin-right: 6px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+
+const InfoItemValue = styled.div`
+  font-size: ${(props) => props.theme.fontSize["3xl"]};
+  line-height: ${(props) => props.theme.lineHeight["3xl"]};
+  font-weight: 500;
+`;
+
+const InfoItemTitle = styled.div`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 400;
+`;
+
+const TitleWrapper = styled.div`
+  margin-bottom: 25px;
+`;
+
+const Title = styled.span`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: ${(props) => props.theme.lineHeight.base};
+  font-weight: 500;
+  color: ${(props) => props.theme.colors.dark}
+`;
+
+const TitleValue = styled.span`
+  font-size: ${(props) => props.theme.fontSize.base};
+  line-height: 24px;
+  font-weight: 500;
+  color: #AEAEAE;
+  margin-left: 10px;
+`;
+
+const UsersWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: 25px;
+`;
+
+const User = styled.a`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const UserName = styled.div`
+  text-align: center;
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.sm};
+  font-weight: 500;
+  color: ${(props) => props.theme.colors.dark}
+`;
+
+const HashTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 9px;
+`;
+
+const HashTagStyled = styled(HashTag)`
+  margin-right: 9px;
+`;
 
 export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...props}) => {
     const friend = [
-        1,2,3,4,5,6,7,8,9
+        1, 2, 3, 4, 5, 6, 7, 8, 9
     ]
 
     const tags = [
@@ -17,59 +121,62 @@ export const RightSidebarFriend: FC<RightSidebarFriendProps> = ({className, ...p
     ]
 
     return (
-        <div className={cn('flex-initial flex flex-col space-y-[35px]', className)}>
-            <div className='w-full h-[126px] flex px-[62px] bg-[#F5F7F9] justify-between'>
-                <div className='flex items-center'>
-                    <div className='flex flex-col items-center space-y-[6px]'>
-                        <SvgImage svg='like' color='#161616' />
-                        <div className='text-3xl font-medium'>2.6K</div>
-                        <div className='text-base font-normal'>лайков</div>
-                    </div>
-                </div>
-                <div className='flex items-center'>
-                    <div className='flex flex-col items-center space-y-[6px]'>
-                        <SvgImage svg='eye' color='#161616' />
-                        <div className='text-3xl font-medium'>10K</div>
-                        <div className='text-base font-normal'>просмотров</div>
-                    </div>
-                </div>
-            </div>
+        <Container className={className}>
+            <Info>
+                <InfoItemWrapper>
+                    <InfoItem>
+                        <SvgImage svg='like' color='#161616'/>
+                        <InfoItemValue>2.6K</InfoItemValue>
+                        <InfoItemTitle>лайков</InfoItemTitle>
+                    </InfoItem>
+                </InfoItemWrapper>
+                <InfoItemWrapper>
+                    <InfoItem>
+                        <SvgImage svg='eye' color='#161616'/>
+                        <InfoItemValue>10K</InfoItemValue>
+                        <InfoItemTitle>просмотров</InfoItemTitle>
+                    </InfoItem>
+                </InfoItemWrapper>
+            </Info>
             <div>
-                <div className='mb-[25px]'>
-                    <span className='font-medium text-base text-[#161616]'>Подписчики</span>
-                    <span className='font-medium text-[14px] leading-[24px] text-[#AEAEAE] ml-[10px]'>10.2K</span>
-                </div>
-                <div className={cn("grid grid-cols-3 gap-y-[25px]")}>
+                <TitleWrapper>
+                    <Title>Подписчики</Title>
+                    <TitleValue>10.2K</TitleValue>
+                </TitleWrapper>
+                <UsersWrapper>
                     {friend.map(e => (
-                        <a href='' key={e} className='flex flex-col items-center'>
-                            <Avatar img='/avatar.png' width={56} height={56} />
-                            <div className='text-center font-medium text-sm text-[#161616]'>Емельянова Любовь</div>
-                        </a>
+                        <User href='' key={e}>
+                            <Avatar img='/avatar.png' width={56} height={56}/>
+                            <UserName>Емельянова Любовь</UserName>
+                        </User>
                     ))}
-                </div>
+                </UsersWrapper>
             </div>
             <div>
-                <div className='mb-[25px]'>
-                    <span className='font-medium text-base text-[#161616]'>Подписки</span>
-                    <span className='font-medium text-[14px] leading-[24px] text-[#AEAEAE] ml-[10px]'>200</span>
-                </div>
-                <div className={cn("grid grid-cols-3 gap-y-[25px]")}>
+                <TitleWrapper>
+                    <Title>Подписки</Title>
+                    <TitleValue>200</TitleValue>
+                </TitleWrapper>
+                <UsersWrapper>
                     {friend.map(e => (
-                        <a onClick={() => {}} key={e} className='flex flex-col items-center cursor-pointer'>
-                            <Avatar img='/avatar.png' width={56} height={56} />
-                            <div className='text-center font-medium text-sm text-[#161616]'>Емельянова Любовь</div>
-                        </a>
+                        <User onClick={() => {
+                        }} key={e}>
+                            <Avatar img='/avatar.png' width={56} height={56}/>
+                            <UserName>Емельянова Любовь</UserName>
+                        </User>
                     ))}
-                </div>
+                </UsersWrapper>
             </div>
             <div>
-                <div className='mb-[25px] font-medium text-base text-[#161616]'>Популярные хештэги</div>
-                <div className='flex flex-wrap gap-y-[9px]'>
+                <TitleWrapper>
+                    <Title>Популярные хештэги</Title>
+                </TitleWrapper>
+                <HashTags>
                     {tags.map(e => (
-                        <HashTag key={e} className="mr-[9px]">#{e}</HashTag>
+                        <HashTagStyled key={e}>#{e}</HashTagStyled>
                     ))}
-                </div>
+                </HashTags>
             </div>
-        </div>
+        </Container>
     )
 }

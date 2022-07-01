@@ -1,35 +1,41 @@
 import React, {FC} from "react";
 import {ProfileEditProps} from "./ProfileEdit.props";
 import {Input} from "../Input/Input";
-import cn from "classnames";
 import {Controller, useFormContext} from "react-hook-form";
 import {IProfile} from "../../models/IProfile";
 import {InputDate} from "../InputDate/InputDate";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+`;
 
 export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className, ...props}) => {
     const {control} = useFormContext<IProfile>()
 
     return (
-        <div className={cn('grid grid-cols-4 gap-3', className)}>
+        <Container className={className}>
             <Controller
                 control={control}
                 name="firstName"
                 render={({field}) => (
-                    <Input className='col-span-2' placeholder='Имя' {...field} />
+                    <Input placeholder='Имя' {...field} style={{gridColumn: 'span 2 / span 2'}} />
                 )}
             />
             <Controller
                 control={control}
                 name="lastName"
                 render={({field}) => (
-                    <Input className='col-span-2' placeholder='Фамилия' {...field} />
+                    <Input placeholder='Фамилия' {...field} style={{gridColumn: 'span 2 / span 2'}} />
                 )}
             />
             <Controller
                 control={control}
                 name="middleName"
                 render={({field}) => (
-                    <Input className='col-span-4' placeholder='Отчество' {...field} />
+                    <Input style={{gridColumn: 'span 4 / span 4'}} placeholder='Отчество' {...field} />
                 )}
             />
             <Controller
@@ -37,37 +43,37 @@ export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className
                 name="birthday"
                 rules={{}}
                 render={({field}) => (
-                    <InputDate className='col-span-1' prefixImg='cake' placeholder='Дата рождения' {...field} />
+                    <InputDate style={{gridColumn: 'span 1 / span 1'}} prefixImg='cake' placeholder='Дата рождения' {...field} />
                 )}
             />
             <Controller
                 control={control}
                 name="email"
                 render={({field}) => (
-                    <Input className='col-span-1' prefix='@' placeholder='Email' {...field} />
+                    <Input style={{gridColumn: 'span 1 / span 1'}} prefix='@' placeholder='Email' {...field} />
                 )}
             />
             <Controller
                 control={control}
                 name="country"
                 render={({field}) => (
-                    <Input className='col-span-1' prefixImg='geo' placeholder='Страна' {...field} />
+                    <Input style={{gridColumn: 'span 1 / span 1'}} prefixImg='geo' placeholder='Страна' {...field} />
                 )}
             />
             <Controller
                 control={control}
                 name="city"
                 render={({field}) => (
-                    <Input className='col-span-1' prefixImg='geo' placeholder='Город' {...field} />
+                    <Input style={{gridColumn: 'span 1 / span 1'}} prefixImg='geo' placeholder='Город' {...field} />
                 )}
             />
             <Controller
                 control={control}
                 name="status"
                 render={({field}) => (
-                    <Input className='col-span-4' placeholder='Статус' {...field} />
+                    <Input style={{gridColumn: 'span 4 / span 4'}} placeholder='Статус' {...field} />
                 )}
             />
-        </div>
+        </Container>
     )
 }
