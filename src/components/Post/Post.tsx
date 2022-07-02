@@ -8,8 +8,7 @@ import {PostBottom} from "./PostBottom/PostBottom";
 
 const Container = styled.div`
   border-radius: 0.25rem;
-  border-width: 1px;
-  border-color: #E4E4E4;
+  border: 1px solid #E4E4E4;
 `;
 
 const ContainerItem = styled.div`

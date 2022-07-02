@@ -29,8 +29,7 @@ const MenuTitles = styled.div`
   display: flex;
   width: 100%;
   padding-bottom: 21px;
-  border-bottom-width: 1px;
-  border-bottom-color: #E4E4E4;
+  border-bottom: 1px solid #E4E4E4;
 `;
 
 const MenuTitle = styled.div`
@@ -109,9 +108,8 @@ const Tags = styled.div`
 
 const MenuCreate = styled.div`
   border-radius: 0.25rem;
-  border-width: 1px;
-  border-color: #E4E4E4;
   padding: 20px;
+  border: 1px solid #E4E4E4;
 `;
 
 const MenuCreateTextarea = styled.textarea`

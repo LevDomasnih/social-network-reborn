@@ -40,56 +40,84 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.fontFamily.toString()};
   }
-  .RichEditor-root {
-    background: #fff;
-    border: 1px solid #ddd;
 
-    padding: 15px;
+  /* Указываем box sizing */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
-  .RichEditor-pick {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
+  /* Убираем внутренние отступы */
+  ul[class],
+  ol[class] {
+    padding: 0;
   }
 
-  .RichEditor-editor {
-    cursor: text;
-    font-size: 16px;
+  /* Убираем внешние отступы */
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  ul[class],
+  ol[class],
+  li,
+  figure,
+  figcaption,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
   }
 
-  .RichEditor-editor-watch {
-    max-height: 200px;
-    overflow: hidden;
+  /* Выставляем основные настройки по-умолчанию для body */
+  body {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
   }
 
-  .RichEditor-editor .public-DraftEditorPlaceholder-root,
-  .RichEditor-editor .public-DraftEditor-content {
-    margin: 0 -15px -15px;
-    padding: 15px;
+  /* Удаляем стандартную стилизацию для всех ul и il, у которых есть атрибут class*/
+  ul[class],
+  ol[class] {
+    list-style: none;
   }
 
-  .RichEditor-editor .public-DraftEditor-content {
-    min-height: 100px;
+  /* Элементы a, у которых нет класса, сбрасываем до дефолтных стилей */
+  a:not([class]) {
+    text-decoration-skip-ink: auto;
   }
 
-  .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
-    display: none;
+  /* Упрощаем работу с изображениями */
+  img {
+    max-width: 100%;
+    display: block;
   }
 
-  .RichEditor-editor .RichEditor-blockquote {
-    border-left: 5px solid #eee;
-    color: #666;
-    margin: 16px 0;
-    padding: 10px 20px;
+  /* Указываем понятную периодичность в потоке данных у article*/
+  article > * + * {
+    margin-top: 1em;
   }
 
-  .RichEditor-editor .public-DraftStyleDefault-pre {
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 20px;
+  /* Наследуем шрифты для инпутов и кнопок */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
   }
 
-  .RichEditor-activeButton {
-    color: #5890ff;
+  /* Удаляем все анимации и переходы для людей, которые предпочитай их не использовать */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 `;
 

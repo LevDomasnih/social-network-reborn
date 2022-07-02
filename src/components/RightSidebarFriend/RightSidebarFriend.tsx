@@ -20,7 +20,6 @@ const Container = styled.div`
 const Info = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
   height: 126px;
   background: ${(props) => props.theme.colors.whiteGrey};
   padding: 0 62px;
@@ -37,10 +36,10 @@ const InfoItem = styled.div`
   align-items: center;
 
   > * {
-    margin-right: 6px;
+    margin-bottom: 6px;
 
     &:last-child {
-      margin-right: 0;
+      margin-bottom: 0;
     }
   }
 `;
@@ -87,6 +86,7 @@ const User = styled.a`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  text-decoration: none;
 `;
 
 const UserName = styled.div`

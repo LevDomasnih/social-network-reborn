@@ -21,10 +21,10 @@ const Input = styled.input`
   line-height: ${(props) => props.theme.lineHeight.sm};
   width: 100%;
   border-radius: 9999px;
-  border-width: 2px;
   padding: 10px 0 10px 16px;
   color: ${(props) => props.theme.colors.dark};
   background: #FAFAFA;
+  border: 1px solid #E4E4E4;
 `;
 
 const SuffixWrapper = styled.div`

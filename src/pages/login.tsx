@@ -10,6 +10,7 @@ import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "../components";
+import styled from "styled-components";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -28,6 +29,41 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         }
     };
 };
+
+const Form = styled.div`
+  margin-top: 60px;
+`;
+
+const Fields = styled.div`
+  > * {
+    margin-bottom: 35px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const CheckboxWrapper = styled.div`
+  margin-top: 30px;
+`;
+
+const SignInButton = styled(Button)`
+  margin-top: 40px;
+`;
+
+const AccountNotExists = styled.div`
+  font-size: ${(props) => props.theme.fontSize.lg};
+  line-height: ${(props) => props.theme.lineHeight.lg};
+  font-weight: 400;
+  margin-top: 30px;
+  color: ${(props) => props.theme.colors.dark};
+`;
+
+const SignUp = styled.a`
+  padding-left: 8px;
+  color: ${(props) => props.theme.colors.purple};
+`;
 
 const Login = () => {
     const {register, handleSubmit, getValues, watch, formState: {errors}, control} = useForm();
@@ -53,8 +89,8 @@ const Login = () => {
             </Head>
             <AuthLayout head={'Вход'}>
                 {/*@ts-ignore*/}
-                <form onSubmit={handleSubmit(onFinish)} className='mt-[60px]'>
-                    <div className='space-y-[35px]'>
+                <Form onSubmit={handleSubmit(onFinish)}>
+                    <Fields>
                         <Controller
                             control={control}
                             name="loginOrEmail"
@@ -76,18 +112,18 @@ const Login = () => {
                                 <Input error={error} prefixImg='lock' placeholder={'Пароль'} {...field} />
                             )}
                         />
-                    </div>
-                    <div className='mt-[30px]'>
+                    </Fields>
+                    <CheckboxWrapper>
                         <Checkbox forgivePassword={true}/>
-                    </div>
-                    <Button type="submit" className='mt-[40px]'>Войти в аккаунт</Button>
-                </form>
-                <div className='mt-[30px] text-lg text-[#161616] font-normal'>
+                    </CheckboxWrapper>
+                    <SignInButton type="submit">Войти в аккаунт</SignInButton>
+                </Form>
+                <AccountNotExists>
                     У вас нет аккаунта?
                     <Link href={'/'}>
-                        <a onClick={onLink} className='pl-[8px] text-[#6962A8]'>Зарегистрироваться</a>
+                        <SignUp onClick={onLink}>Зарегистрироваться</SignUp>
                     </Link>
-                </div>
+                </AccountNotExists>
             </AuthLayout>
         </div>
 

@@ -1,20 +1,21 @@
 import Head from "next/head"
-import React, { FC, useEffect } from "react"
-import { GetServerSidePropsContext } from "next"
+import React, {FC, useEffect} from "react"
+import {GetServerSidePropsContext} from "next"
 import routes from "../utils/routes"
 import axios from "axios"
 import MainLayout from "../layout/MainLayout/MainLayout"
-import { Post, Card, Menu, Profile, RightSidebarFriend } from "../components"
-import { useAppDispatch, useAppSelector } from "../store/hooks"
-import { setAuth } from "../store/auth/authSlice"
-import { IMe } from "../models/IMe"
-import { setProfile } from "../store/profile/profileSlice"
-import { instance } from "../api"
-import { setBlogs } from "../store/records/recordsSlice"
-import { IMenuItem } from "../components/Menu/Menu.props"
-import { IBlog } from "../models/IBlog"
-import { getBlogs, getPosts } from "../store/records/recordsThunk"
-import { IPost } from "../models/IPost"
+import {Card, Menu, Post, Profile, RightSidebarFriend} from "../components"
+import {useAppDispatch, useAppSelector} from "../store/hooks"
+import {setAuth} from "../store/auth/authSlice"
+import {IMe} from "../models/IMe"
+import {setProfile} from "../store/profile/profileSlice"
+import {instance} from "../api"
+import {setBlogs} from "../store/records/recordsSlice"
+import {IMenuItem} from "../components/Menu/Menu.props"
+import {IBlog} from "../models/IBlog"
+import {getBlogs, getPosts} from "../store/records/recordsThunk"
+import {IPost} from "../models/IPost"
+import styled from "styled-components";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const token = ctx.req.cookies.jwt
@@ -32,7 +33,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     try {
         const query = axios.create({
             baseURL: process.env.NEXT_PUBLIC_API_URL,
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {Authorization: `Bearer ${token}`},
         })
         user = (await query.get(`/users/me`)).data
         profile = (await query.get(`/profile/${user.id}`)).data
@@ -58,7 +59,22 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
 }
 
-const Me: FC<IMe> = ({ token, me }) => {
+const ProfileStyled = styled(Profile)`
+  margin-bottom: -50px;
+`;
+
+const Body = styled.div`
+  flex: 1 1 0;
+`;
+
+const Cards = styled.div`
+  display: inline-grid;
+  grid-auto-flow: column;
+  margin-bottom: 60px;
+  gap: 16px;
+`;
+
+const Me: FC<IMe> = ({token, me}) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -76,13 +92,13 @@ const Me: FC<IMe> = ({ token, me }) => {
             lastName: me.profile.lastName,
             notifications: 0,
         }))
-        dispatch(setProfile({ ...me.profile, email: me.user.email, login: me.user.login }))
+        dispatch(setProfile({...me.profile, email: me.user.email, login: me.user.login}))
         dispatch(setBlogs(me.blogs))
     }, [dispatch, me.blogs, me.profile, me.user.email, me.user.id, me.user.login, token])
 
     const profile = useAppSelector(state => state.profileSlice)
-    const { login, userId } = useAppSelector(state => state.authSlice)
-    const { blogs, posts } = useAppSelector(state => state.recordsSlice)
+    const {login, userId} = useAppSelector(state => state.authSlice)
+    const {blogs, posts} = useAppSelector(state => state.recordsSlice)
 
     const menu = [
         "Все записи",
@@ -119,17 +135,17 @@ const Me: FC<IMe> = ({ token, me }) => {
                 </Head>
             }
         >
-            <Profile className="mb-[-50px]" profile={profile}/>
-            <div className="flex-1">
-                <div className="inline-grid gap-[16px] grid-flow-col mb-[60px]">
+            <ProfileStyled profile={profile}/>
+            <Body>
+                <Cards>
                     {/*TODO MOCK PHOTO*/}
                     <Card/>
                     <Card photo={"/card.png"}/>
                     <Card photo={"/card.png"}/>
                     <Card photo={"/card.png"}/>
-                </div>
+                </Cards>
                 <Menu menuItems={menuItems}/>
-            </div>
+            </Body>
         </MainLayout>
     )
 }
