@@ -1,9 +1,10 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import { login, register } from "./authThunks"
+import {login, register} from "./authThunks"
 import {IAuth} from "../../models/IAuth";
+import {IToken} from "../../models/IToken";
+import {instance} from "../../api";
 
-interface initialState extends IAuth {
-    userId: string
+interface initialState extends IAuth, IToken {
     authError: {
         message: string | null
         requestId: string | null
@@ -12,8 +13,8 @@ interface initialState extends IAuth {
 }
 
 const initialState: initialState = {
-    access_token: "",
-    userId: "",
+    access_token: '',
+    id: '',
     authError: {
         message: null,
         requestId: null,
@@ -27,15 +28,8 @@ const initialState: initialState = {
     notifications: null,
 }
 
-interface SetAuth {
-    access_token: string;
-    userId: string
-    login: string
-    email: string
-    firstName: string
-    lastName: string
-    avatar: string
-    notifications: number
+interface SetAuth extends IAuth, IToken {
+
 }
 
 const authSlice = createSlice({
@@ -50,6 +44,8 @@ const authSlice = createSlice({
             },
         }),
         setAuth: (state, data: PayloadAction<SetAuth>) => {
+            instance.defaults.headers.common["Authorization"] = `Bearer ${(data.payload.access_token)}`
+
             return ({
                 ...state,
                 ...data.payload
@@ -57,7 +53,7 @@ const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(login.fulfilled, (state, { payload }) => {
+        builder.addCase(login.fulfilled, (state, {payload}) => {
             state.access_token = payload.access_token
             state.loading = false
             state.authError = {
@@ -65,7 +61,7 @@ const authSlice = createSlice({
                 requestId: null,
             }
         })
-        builder.addCase(login.pending, (state, { payload }) => {
+        builder.addCase(login.pending, (state, {payload}) => {
             state.loading = true
         })
         builder.addCase(login.rejected, (state, action) => {
@@ -83,7 +79,7 @@ const authSlice = createSlice({
                 requestId: null,
             }
         })
-        builder.addCase(register.pending, (state, { payload }) => {
+        builder.addCase(register.pending, (state, {payload}) => {
             state.loading = true
         })
         builder.addCase(register.rejected, (state, action) => {
@@ -96,6 +92,6 @@ const authSlice = createSlice({
     },
 })
 
-export const { defaultError, setAuth } = authSlice.actions
+export const {defaultError, setAuth} = authSlice.actions
 
 export default authSlice.reducer

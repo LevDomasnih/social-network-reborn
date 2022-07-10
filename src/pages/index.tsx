@@ -16,6 +16,7 @@ import {IToken} from "../models/IToken";
 import {ILogin} from "../models/ILogin";
 import Cookies from "cookies";
 import styled from "styled-components";
+import {IRegisterPage} from "../models/pages/IRegisterPage";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -81,7 +82,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     };
 };
 
-const Form = styled.div`
+const Form = styled.form`
   margin-top: 60px;
 `;
 
@@ -116,7 +117,7 @@ const SignIn = styled.a`
   color: ${(props) => props.theme.colors.purple};
 `;
 
-const Home: NextPage = () => {
+const Home: NextPage<IRegisterPage> = (props) => {
     const {
         register,
         handleSubmit,

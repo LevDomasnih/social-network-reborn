@@ -5,6 +5,7 @@ import {Controller, useFormContext} from "react-hook-form";
 import {IProfile} from "../../models/IProfile";
 import {InputDate} from "../InputDate/InputDate";
 import styled from "styled-components";
+import {IUser} from "../../models/IUser";
 
 const Container = styled.div`
   display: grid;
@@ -13,7 +14,7 @@ const Container = styled.div`
 `;
 
 export const ProfileEdit: FC<ProfileEditProps> = ({setIsEdit, profile, className, ...props}) => {
-    const {control} = useFormContext<IProfile>()
+    const {control} = useFormContext<IProfile & IUser>()
 
     return (
         <Container className={className}>

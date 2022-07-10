@@ -4,10 +4,10 @@ import {Avatar, Button as DefaultButton} from "../index"
 import {Tag} from "../Tag/Tag"
 import {IBlog} from "../../models/IBlog"
 import {useAppDispatch, useAppSelector} from "../../store/hooks"
-import {setBlogModalActive} from "../../store/records/recordsSlice"
-import {createPost} from "../../store/records/recordsThunk"
 import {IPost} from "../../models/IPost"
 import styled, {css} from "styled-components";
+import {setBlogModalActive} from "../../store/user/userSlice";
+import {createPost} from "../../store/user/userThunk";
 
 const Button = styled(DefaultButton)`
   width: 134px;
@@ -157,15 +157,15 @@ const MenuCreateButtons = styled.div`
     }
   }
 `;
-
+// TODO Сделать меню общим
 export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => {
     const [activeMenu, setActiveMenu] = useState(0)
     const [postValue, setPostValue] = useState("")
 
     const dispatch = useAppDispatch()
 
-    const {avatar, firstName, lastName} = useAppSelector(state => state.profileSlice)
-    const {userId} = useAppSelector(state => state.authSlice)
+    const {avatar, firstName, lastName} = useAppSelector(state => state.userSlice.profile)
+    const {id} = useAppSelector(state => state.authSlice)
 
     const items = (menuItems: IMenuItem<IBlog | IPost>[]) => {
         const activeItem = menuItems.find((item, i) => i === activeMenu)
@@ -190,7 +190,7 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
     const handleCreatePost = () => {
         let data = new FormData()
         data.append("text", postValue)
-        dispatch(createPost({formData: data, userId}))
+        dispatch(createPost({formData: data, userId: id}))
         setPostValue("")
     }
 

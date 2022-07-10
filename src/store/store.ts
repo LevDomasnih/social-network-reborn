@@ -1,17 +1,11 @@
-import {
-    Action, combineReducers,
-    configureStore,
-    ThunkAction,
-} from "@reduxjs/toolkit"
+import {Action, combineReducers, configureStore, ThunkAction,} from "@reduxjs/toolkit"
 import authSlice from "./auth/authSlice"
 import logger from 'redux-logger'
-import profileSlice from "./profile/profileSlice";
-import recordsSlice from "./records/recordsSlice"
+import userSlice from "./user/userSlice";
 
 const rootReducer = combineReducers({
     authSlice,
-    profileSlice,
-    recordsSlice,
+    userSlice,
 })
 
 export const store = configureStore({
@@ -21,9 +15,7 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-    ReturnType,
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     RootState,
     unknown,
-    Action<string>
-    >;
+    Action<string>>;

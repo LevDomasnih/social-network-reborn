@@ -2,8 +2,8 @@ import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
 import {Avatar, Button as DefaultButton, Search as DefaultSearch, SvgImage} from "../index";
 import {useAppDispatch, useAppSelector} from "../../store/hooks"
-import {setBlogModalActive} from "../../store/records/recordsSlice"
 import styled from "styled-components";
+import {setBlogModalActive} from "../../store/user/userSlice";
 
 const Button = styled(DefaultButton)`
   width: 134px;
@@ -65,7 +65,7 @@ const SettingItem = styled.div`
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
     const dispatch = useAppDispatch()
-    const {avatar} = useAppSelector(state => state.profileSlice)
+    const {avatar} = useAppSelector(state => state.authSlice)
 
     const openModal = () => {
         dispatch(setBlogModalActive(true))

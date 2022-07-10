@@ -1,6 +1,5 @@
-import {IToken} from "./IToken";
-
-export interface IAuth extends IToken {
+export interface IAuth {
+    id: string
     firstName: string;
     lastName: string;
     login: string

@@ -26,6 +26,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({className, ...props}) => {
 
     const temp = [
         {route: '/me', name: 'Мой профиль', img: '/svg/user.svg', height: 15, width: 15},
+        {route: '/users', name: 'Пользователи', img: '/svg/user.svg', height: 15, width: 15},
         {route: '/articles', name: 'Статьи', img: '/svg/user.svg', height: 15, width: 15},
         {route: '/inspiration', name: 'Вдохновение', img: '/svg/user.svg', height: 15, width: 15},
         {route: '/tutorial', name: 'Туториалы', img: '/svg/user.svg', height: 15, width: 15},

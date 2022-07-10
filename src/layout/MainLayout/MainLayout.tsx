@@ -35,7 +35,7 @@ const RightSidebarWrapper = styled.div`
 `;
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
-    const {blogModalIsActive} = useAppSelector(state => state.recordsSlice)
+    const {blogModalIsActive} = useAppSelector(state => state.userSlice)
 
     return (
         <Container className={className}>

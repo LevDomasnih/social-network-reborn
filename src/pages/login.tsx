@@ -5,12 +5,13 @@ import React from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {ILogin} from "../models/ILogin";
 import {login} from "../store/auth/authThunks";
-import {GetServerSidePropsContext} from "next";
+import {GetServerSidePropsContext, NextPage} from "next";
 import routes from "../utils/routes";
 import {defaultError} from "../store/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "../components";
 import styled from "styled-components";
+import {ILoginPage} from "../models/pages/ILoginPage";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
@@ -30,7 +31,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     };
 };
 
-const Form = styled.div`
+const Form = styled.form`
   margin-top: 60px;
 `;
 
@@ -65,7 +66,7 @@ const SignUp = styled.a`
   color: ${(props) => props.theme.colors.purple};
 `;
 
-const Login = () => {
+const Login: NextPage<ILoginPage> = (props) => {
     const {register, handleSubmit, getValues, watch, formState: {errors}, control} = useForm();
 
     const dispatch = useAppDispatch()

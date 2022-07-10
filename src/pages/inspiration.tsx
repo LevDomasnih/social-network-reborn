@@ -3,13 +3,14 @@ import {Menu, RightSidebarInfo, Stories} from "../components";
 import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
+import {NextPage} from "next";
 
 const StoriesStyled = styled(Stories)`
   margin-top: 40px;
   margin-bottom: 60px;
 `;
 
-const Inspiration = () => {
+const Inspiration: NextPage = (props) => {
     const menu = [
         'Для вас',
         'Подписки',

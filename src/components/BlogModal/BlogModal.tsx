@@ -6,9 +6,9 @@ import {BackgroundImage} from "../BackgroundImage/BackgroundImage"
 import {RichEditor} from "../RichEditor/RichEditor"
 import {useFileReader} from "../../hooks"
 import {useAppDispatch, useAppSelector} from "../../store/hooks"
-import {createBlog} from "../../store/records/recordsThunk"
-import {setBlogModalActive} from "../../store/records/recordsSlice"
 import styled from "styled-components";
+import {createBlog} from "../../store/user/userThunk";
+import {setBlogModalActive} from "../../store/user/userSlice";
 
 const ContainerEditor = styled.div`
   overflow: auto;
@@ -36,7 +36,7 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
     const mainImageInput = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
 
-    const {userId} = useAppSelector(state => state.authSlice)
+    const {id} = useAppSelector(state => state.authSlice)
 
     useEffect(() => {
         setMainImage(null)
@@ -54,7 +54,7 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
         }
         data.append("textBlocks", JSON.stringify(state.blocks))
         data.append("entityMap", JSON.stringify(state.entityMap))
-        dispatch(createBlog({formData: data, userId}))
+        dispatch(createBlog({formData: data, userId: id}))
         closeModal()
     }
 

@@ -1,25 +1,27 @@
-import Head from "next/head"
-import React, {useEffect} from "react"
-import {GetServerSidePropsContext, NextPage} from "next"
-import routes from "../utils/routes"
-import axios from "axios"
-import MainLayout from "../layout/MainLayout/MainLayout"
-import {Card, Menu, Post, Profile, RightSidebarFriend} from "../components"
-import {useAppDispatch, useAppSelector} from "../store/hooks"
-import {setAuth} from "../store/auth/authSlice"
-import {IMenuItem} from "../components/Menu/Menu.props"
-import {IBlog} from "../models/IBlog"
-import {IPost} from "../models/IPost"
+import {GetServerSidePropsContext, NextPage} from "next";
+import {useRouter} from "next/router";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import React, {useEffect} from "react";
+import {setAuth} from "../../store/auth/authSlice";
+import {IMenuItem} from "../../components/Menu/Menu.props";
+import {IBlog} from "../../models/IBlog";
+import {IPost} from "../../models/IPost";
+import {Card, Menu, Post, Profile, RightSidebarFriend} from "../../components";
+import MainLayout from "../../layout/MainLayout/MainLayout";
+import Head from "next/head";
 import styled from "styled-components";
-import {IMePage} from "../models/pages/IMePage";
-import {setBlogs, setProfile, setUserData} from "../store/user/userSlice";
-import {getBlogs, getPosts} from "../store/user/userThunk";
+import routes from "../../utils/routes";
+import axios from "axios";
+import {IUserPage} from "../../models/pages/IUserPage";
+import {getBlogs, getPosts, getUserWithProfileById} from "../../store/user/userThunk";
+import {setUserData} from "../../store/user/userSlice";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
+    const userId = ctx.query?.userAlias
     let auth
-    let blogs
     let user
+    let blogs
     if (!access_token) {
         return {
             redirect: {
@@ -34,8 +36,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
             headers: {Authorization: `Bearer ${access_token}`},
         })
         auth = (await query.get(`/auth/userInfo`)).data
-        user = (await query.get(`/users/me`)).data
-        blogs = (await query.get(`/blogs/user/${auth.id}`)).data
+        user = (await query.get(`/users/${userId}`)).data
+        blogs = (await query.get(`/blogs/user/${user.id}`)).data
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -45,6 +47,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
             },
         }
     }
+
     return {
         props: {
             access_token,
@@ -70,7 +73,8 @@ const Cards = styled.div`
   gap: 16px;
 `;
 
-const Me: NextPage<IMePage> = (props) => {
+const UserPage: NextPage<IUserPage> = ({...props}) => {
+    const router = useRouter()
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -81,7 +85,6 @@ const Me: NextPage<IMePage> = (props) => {
     }, [dispatch, props.access_token, props.auth])
 
     useEffect(() => {
-
         dispatch(setUserData({
             ...props.user,
             records: {
@@ -93,6 +96,11 @@ const Me: NextPage<IMePage> = (props) => {
         }))
     }, [dispatch, props.blogs, props.user])
 
+
+    // useEffect(() => {
+    //     router.query.userAlias && dispatch(getUserWithProfileById(router.query.userAlias as string))
+    // }, [dispatch, router.query.userAlias])
+
     const {
         id: userId,
         profile,
@@ -103,10 +111,7 @@ const Me: NextPage<IMePage> = (props) => {
             posts
         }
     } = useAppSelector(state => state.userSlice)
-    const {
-        login,
-        id
-    } = useAppSelector(state => state.authSlice)
+    const {login, id} = useAppSelector(state => state.authSlice)
 
     const menu = [
         "Все записи",
@@ -146,11 +151,7 @@ const Me: NextPage<IMePage> = (props) => {
             <ProfileStyled userProfile={{profile, login: userLogin, email, id: userId}}/>
             <Body>
                 <Cards>
-                    {/*TODO MOCK PHOTO*/}
                     <Card/>
-                    <Card photo={"/card.png"}/>
-                    <Card photo={"/card.png"}/>
-                    <Card photo={"/card.png"}/>
                 </Cards>
                 <Menu menuItems={menuItems}/>
             </Body>
@@ -158,4 +159,5 @@ const Me: NextPage<IMePage> = (props) => {
     )
 }
 
-export default Me
+export default UserPage;
+

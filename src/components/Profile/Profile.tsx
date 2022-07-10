@@ -6,11 +6,11 @@ import {SvgImage} from "../SvgImage/SvgImage";
 import {format} from "date-fns";
 import {ProfileEdit} from "../ProfileEdit/ProfileEdit";
 import {FormProvider, useForm} from "react-hook-form";
-import {useAppDispatch} from "../../store/hooks";
-import {editAvatar, editMainImage, editProfile} from "../../store/profile/profileThunks";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {IProfile} from "../../models/IProfile";
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 import styled, {css} from "styled-components";
+import {editAvatar, editMainImage, editProfile} from "../../store/user/userThunk";
 
 const Container = styled.div``;
 
@@ -139,15 +139,32 @@ const Status = styled.div`
   font-weight: 400;
   color: ${(props) => props.theme.colors.dark};`;
 
-export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
-    const {avatar, mainImage, ...otherProfile} = profile
+export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) => {
     const [isEdit, setIsEdit] = useState(false)
+    const [isOwnProfile, setIsOwnProfile] = useState(false)
     const avatarInput = React.useRef<HTMLInputElement>(null);
     const mainImageInput = React.useRef<HTMLInputElement>(null);
+
     const dispatch = useAppDispatch()
+
+    const {
+        profile: {
+            avatar,
+            mainImage
+        },
+    } = userProfile
+
+    const {id} = useAppSelector(state => state.authSlice)
+
     const methods = useForm({
-        defaultValues: useMemo(() => profile, [profile])
+        defaultValues: useMemo(() => ({
+            ...userProfile.profile, email: userProfile.email, login: userProfile.login
+        }), [userProfile.email, userProfile.login, userProfile.profile])
     });
+
+    useEffect(() => {
+        setIsOwnProfile(id === userProfile.id)
+    }, [id, userProfile.id])
 
     const mainImageClick = () => {
         if (mainImageInput.current) {
@@ -177,8 +194,10 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
     }
 
     useEffect(() => {
-        methods.reset(profile);
-    }, [methods, profile]);
+        methods.reset({
+            ...userProfile.profile, email: userProfile.email, login: userProfile.login
+        });
+    }, [methods, userProfile.profile, userProfile.email, userProfile.login]);
 
     const onSubmit = ({avatar, mainImage, ...profile}: IProfile) => {
         dispatch(editProfile(profile))
@@ -216,18 +235,20 @@ export const Profile: FC<ProfileProps> = ({profile, className, ...props}) => {
                                 </AvatarEdit>
                             )}
                         </AvatarWrapper>
-                        <ButtonSaveEdit
-                            color={'light'}
-                            type={isEdit ? 'button' : 'submit'}
-                            onClick={() => setIsEdit(prev => !prev)}
-                        >
-                            {isEdit ? 'Сохранить' : 'Изменить'}
-                        </ButtonSaveEdit>
+                        {isOwnProfile && (
+                            <ButtonSaveEdit
+                                color={'light'}
+                                type={isEdit ? 'button' : 'submit'}
+                                onClick={() => setIsEdit(prev => !prev)}
+                            >
+                                {isEdit ? 'Сохранить' : 'Изменить'}
+                            </ButtonSaveEdit>
+                        )}
                     </FormTop>
                     <FormBottom>
                         {isEdit ? (
                             <ProfileEdit
-                                profile={profile}
+                                profile={{...userProfile.profile, email: userProfile.email, login: userProfile.login}}
                                 setIsEdit={setIsEdit}
                             />
                         ) : (

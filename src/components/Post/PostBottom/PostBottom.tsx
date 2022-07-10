@@ -4,7 +4,7 @@ import {SvgImage} from "../../SvgImage/SvgImage";
 import styled from "styled-components";
 import {HashTag} from "../../HashTag/HashTag";
 import {useAppDispatch} from "../../../store/hooks";
-import {changeLike} from "../../../store/records/recordsThunk";
+import {changeLike} from "../../../store/user/userThunk";
 
 const ContainerBottom = styled.div`
   > * {

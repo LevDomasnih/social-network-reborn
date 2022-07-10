@@ -9,6 +9,7 @@ const Container = styled.li``;
 const LinkHref = styled.a`
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   &:hover {
     color: ${(props) => props.theme.colors.black};
