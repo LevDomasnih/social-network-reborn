@@ -70,7 +70,7 @@ const Cards = styled.div`
   gap: 16px;
 `;
 
-const Me: NextPage<IMePage> = (props) => {
+const MePage: NextPage<IMePage> = (props) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -158,4 +158,4 @@ const Me: NextPage<IMePage> = (props) => {
     )
 }
 
-export default Me
+export default MePage

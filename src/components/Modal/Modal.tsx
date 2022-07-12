@@ -1,5 +1,5 @@
 import {FC, MouseEventHandler, useEffect} from "react";
-import {ModalEventType, ModalProps} from "./Modal.props";
+import {ModalProps} from "./Modal.props";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -29,6 +29,7 @@ export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
     }, [active])
 
     const closeModal: MouseEventHandler<HTMLSpanElement> = (e) => {
+        // @ts-ignore
         if (typeof e.target.className === 'string' && e.target.className.includes('modal')) { // FIXME Продумать
             props.closeModal()
         }

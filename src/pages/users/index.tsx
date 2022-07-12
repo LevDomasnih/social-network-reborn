@@ -5,11 +5,12 @@ import {GetServerSidePropsContext, NextPage} from "next";
 import axios from "axios";
 import Link from "next/link";
 import MainLayout from "../../layout/MainLayout/MainLayout";
-import {Avatar, Search} from "../../components";
+import {Avatar, Button, Search} from "../../components";
 import routes from "../../utils/routes";
 import {setAuth} from "../../store/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
 import {IUsersPage} from "../../models/pages/IUsersPage";
+import { useRouter } from 'next/router'
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
@@ -71,6 +72,12 @@ const UsersWrapper = styled.div`
   }
 `;
 
+const UserBlockWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const UserBlock = styled.a`
   display: flex;
   align-items: center;
@@ -93,8 +100,13 @@ const UserAddInfo = styled.div`
   line-height: ${(props) => props.theme.lineHeight.sm};
 `;
 
+const StyledButton = styled(Button)`
+  width: 120px;
+`;
+
 const Users: NextPage<IUsersPage> = (props) => {
     const dispatch = useAppDispatch()
+    const router = useRouter()
 
     useEffect(() => {
         dispatch(setAuth({
@@ -118,16 +130,21 @@ const Users: NextPage<IUsersPage> = (props) => {
                 <Search placeholder={'Найти пользователя'}/>
                 <UsersWrapper>
                     {props.users.map(e => (
-                        <Link href={`users/${e.id}`} key={e.id}>
-                            <UserBlock>
-                                <Avatar img={e.profile.avatar || '/avatar.png'} width={80} height={80}/>
-                                <UserInfo>
-                                    <UserFio>{e.profile.firstName} {e.profile.lastName} {e.profile.middleName}</UserFio>
-                                    <UserAddInfo>{e.email}</UserAddInfo>
-                                    {e.email !== e.login && <UserAddInfo>{e.login}</UserAddInfo>}
-                                </UserInfo>
-                            </UserBlock>
-                        </Link>
+                        <UserBlockWrapper key={e.id}>
+                            <div>
+                                <Link href={`users/${e.id}`} >
+                                    <UserBlock>
+                                        <Avatar img={e.profile.avatar || '/avatar.png'} width={80} height={80}/>
+                                        <UserInfo>
+                                            <UserFio>{e.profile.firstName} {e.profile.lastName} {e.profile.middleName}</UserFio>
+                                            <UserAddInfo>{e.email}</UserAddInfo>
+                                            {e.email !== e.login && <UserAddInfo>{e.login}</UserAddInfo>}
+                                        </UserInfo>
+                                    </UserBlock>
+                                </Link>
+                            </div>
+                            <StyledButton onClick={() => router.push(`/dialogs/${e.id}`)}>Написать</StyledButton>
+                        </UserBlockWrapper>
                     ))}
                 </UsersWrapper>
             </MainBody>

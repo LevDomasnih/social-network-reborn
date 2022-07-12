@@ -117,7 +117,7 @@ const SignIn = styled.a`
   color: ${(props) => props.theme.colors.purple};
 `;
 
-const Home: NextPage<IRegisterPage> = (props) => {
+const HomePage: NextPage<IRegisterPage> = (props) => {
     const {
         register,
         handleSubmit,
@@ -251,4 +251,4 @@ const Home: NextPage<IRegisterPage> = (props) => {
     )
 }
 
-export default Home
+export default HomePage

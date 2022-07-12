@@ -171,6 +171,7 @@ export const Input = forwardRef((props: InputProps, ref: ForwardedRef<HTMLInputE
                     </PrefixWrapper>
                 )}
                 <InputStyled
+                    // @ts-ignore
                     ref={ref}
                     {...otherProps}
                     value={value || ''}

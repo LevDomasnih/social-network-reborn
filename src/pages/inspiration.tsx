@@ -1,5 +1,5 @@
 import MainLayout from "../layout/MainLayout/MainLayout";
-import {Menu, RightSidebarInfo, Stories} from "../components";
+import {RightSidebarInfo, Stories} from "../components";
 import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ const StoriesStyled = styled(Stories)`
   margin-bottom: 60px;
 `;
 
-const Inspiration: NextPage = (props) => {
+const InspirationPage: NextPage = (props) => {
     const menu = [
         'Для вас',
         'Подписки',
@@ -47,7 +47,7 @@ const Inspiration: NextPage = (props) => {
 
     return (
         <MainLayout
-            rightSidebar={<RightSidebarInfo />}
+            rightSidebar={<RightSidebarInfo/>}
             head={
                 <Head>
                     <title>Create Next App</title>
@@ -56,10 +56,10 @@ const Inspiration: NextPage = (props) => {
                 </Head>
             }
         >
-            <StoriesStyled />
+            <StoriesStyled/>
             {/*<Menu menu={menu} posts={posts} isTag={true} />*/}
         </MainLayout>
     )
 }
 
-export default Inspiration
+export default InspirationPage

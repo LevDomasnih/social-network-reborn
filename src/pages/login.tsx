@@ -66,7 +66,7 @@ const SignUp = styled.a`
   color: ${(props) => props.theme.colors.purple};
 `;
 
-const Login: NextPage<ILoginPage> = (props) => {
+const LoginPage: NextPage<ILoginPage> = (props) => {
     const {register, handleSubmit, getValues, watch, formState: {errors}, control} = useForm();
 
     const dispatch = useAppDispatch()
@@ -131,4 +131,4 @@ const Login: NextPage<ILoginPage> = (props) => {
     )
 }
 
-export default Login
+export default LoginPage

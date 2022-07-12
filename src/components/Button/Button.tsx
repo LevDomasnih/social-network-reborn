@@ -1,7 +1,8 @@
 import {ButtonProps} from "./Button.props";
 import styled, {css} from "styled-components";
+import React, {FC} from "react";
 
-export const Button = styled.button<ButtonProps>`
+const Container = styled.button<ButtonProps>`
   transition-duration: 300ms;
   font-size: ${(props) => props.theme.fontSize.base};
   line-height: ${(props) => props.theme.lineHeight.base};
@@ -9,6 +10,7 @@ export const Button = styled.button<ButtonProps>`
   width: 100%;
   height: 38px;
   border-radius: 38px;
+  cursor: pointer;
   ${(props) => {
     switch (props.color) {
       case "light":
@@ -36,3 +38,23 @@ export const Button = styled.button<ButtonProps>`
     }
   }}
 `;
+
+export const Button: FC<ButtonProps> = ({children, onClick, ...props}) => {
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (onClick) {
+      onClick(e)
+    }
+  }
+
+  return (
+      <Container
+          {...props}
+          onClick={handleClick}
+      >
+        {children}
+      </Container>
+  )
+}

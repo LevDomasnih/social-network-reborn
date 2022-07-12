@@ -10,7 +10,7 @@ const StoriesStyled = styled(Stories)`
   margin-bottom: 60px;
 `;
 
-const Articles: NextPage = (props) => {
+const ArticlesPage: NextPage = (props) => {
     const menu = [
         'Для вас',
         'Подписки',
@@ -62,4 +62,4 @@ const Articles: NextPage = (props) => {
     )
 }
 
-export default Articles
+export default ArticlesPage

@@ -1,5 +1,5 @@
 import { createGlobalStyle, DefaultTheme } from "styled-components"
-import { HexColor } from "../styled"
+import { HexColor } from "@/styled"
 
 function hex<T extends string>(s: HexColor<T>): T {
     return s;
