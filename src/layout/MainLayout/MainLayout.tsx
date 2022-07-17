@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
-import {Header, LeftSidebar} from "../../components";
-import {useAppSelector} from "../../store/hooks"
+import {Header, LeftSidebar} from "@/components";
+import {useAppSelector} from "@/store/hooks"
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 
@@ -19,6 +19,10 @@ const Body = styled.div`
   height: 100%;
   max-width: 1720px;
   margin: auto;
+`;
+
+const BodyWrapper = styled.div`
+  padding: 0 80px;
 `;
 
 const Main = styled.main`
@@ -41,15 +45,17 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
         <Container className={className}>
             {head}
             <Header/>
-            <Body>
-                <LeftSidebar/>
-                <Main>
-                    {children}
-                </Main>
-                <RightSidebarWrapper>
-                    {rightSidebar}
-                </RightSidebarWrapper>
-            </Body>
+            <BodyWrapper>
+                <Body>
+                    <LeftSidebar/>
+                    <Main>
+                        {children}
+                    </Main>
+                    <RightSidebarWrapper>
+                        {rightSidebar}
+                    </RightSidebarWrapper>
+                </Body>
+            </BodyWrapper>
             {blogModalIsActive && <BlogModal active={blogModalIsActive}/>}
         </Container>
     )

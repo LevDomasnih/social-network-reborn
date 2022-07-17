@@ -2,10 +2,12 @@ import {Action, combineReducers, configureStore, ThunkAction,} from "@reduxjs/to
 import authSlice from "./auth/authSlice"
 import logger from 'redux-logger'
 import userSlice from "./user/userSlice";
+import dialogsSlice from "@/store/dialogs/dialogsSlice";
 
 const rootReducer = combineReducers({
     authSlice,
     userSlice,
+    dialogsSlice,
 })
 
 export const store = configureStore({

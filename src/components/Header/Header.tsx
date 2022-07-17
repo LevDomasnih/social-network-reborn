@@ -1,9 +1,9 @@
 import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
 import {Avatar, Button as DefaultButton, Search as DefaultSearch, SvgImage} from "../index";
-import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import styled from "styled-components";
-import {setBlogModalActive} from "../../store/user/userSlice";
+import {setBlogModalActive} from "@/store/user/userSlice";
 
 const Button = styled(DefaultButton)`
   width: 134px;
@@ -14,6 +14,7 @@ const Container = styled.header`
   background: ${(props) => props.theme.colors.white};
   box-shadow: 2px 2px 4px rgba(22, 22, 22, 0.09);
   width: 100%;
+  padding: 0 80px;
 `;
 
 const Wrapper = styled.div`

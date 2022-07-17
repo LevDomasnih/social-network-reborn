@@ -8,10 +8,15 @@ import Head from "next/head";
 import Dialogs from "@/components/Dialogs/Dialogs";
 import React, {useEffect} from "react";
 import {useRouter} from "next/router";
+import {setActiveDialogs, setDialogs} from "@/store/dialogs/dialogsSlice";
+import {setAuth} from "@/store/auth/authSlice";
+import {getDialogByUserId} from "@/store/dialogs/dialogsThunk";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
     let auth
+    let dialogs
+    let user
     if (!access_token) {
         return {
             redirect: {
@@ -26,6 +31,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             headers: {Authorization: `Bearer ${access_token}`},
         })
         auth = (await query.get(`/auth/userInfo`)).data
+        dialogs = (await query.get(`/dialogs`)).data
+        user = (await query.get(`/users/me`)).data
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -39,6 +46,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         props: {
             access_token,
             auth,
+            dialogs,
+            user,
         },
     }
 };
@@ -48,15 +57,31 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
     const dispatch = useAppDispatch()
     const router = useRouter()
 
+    useEffect(() => {
+        dispatch(setAuth({
+            access_token: props.access_token,
+            ...props.auth
+        }))
+    }, [dispatch, props.access_token, props.auth])
+
+    useEffect(() => {
+        dispatch(setDialogs(props.dialogs))
+    }, [dispatch, props.dialogs])
+
+
     const {userId} = router.query
 
     useEffect(() => {
         if (userId?.length && userId?.length > 1) {
             router.push(`/dialogs/${userId[0]}`)
         }
-    }, [router, userId])
-
-    // TODO ДВА ЗАПРОСА ЗА ДАННЫМИ 1) за диалогами 2) за диалогом с пользователем [userId]
+        if (userId?.length && userId?.length === 1) {
+            dispatch(getDialogByUserId(userId[0]))
+        }
+        if (!userId || userId?.length === 0) {
+            dispatch(setActiveDialogs(null))
+        }
+    }, [dispatch, router, userId])
 
     return (
         <MainLayout
@@ -68,7 +93,7 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
                 </Head>
             }
         >
-            <Dialogs />
+            <Dialogs/>
         </MainLayout>
     )
 }

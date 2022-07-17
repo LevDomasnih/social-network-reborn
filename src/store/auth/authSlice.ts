@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 import {login, register} from "./authThunks"
-import {IAuth} from "../../models/IAuth";
-import {IToken} from "../../models/IToken";
-import {instance} from "../../api";
+import {IAuth} from "@/models/IAuth";
+import {IToken} from "@/models/IToken";
+import {instance} from "@/api";
 
 interface initialState extends IAuth, IToken {
     authError: {

@@ -12,7 +12,7 @@ import {IBlog} from "../models/IBlog"
 import {IPost} from "../models/IPost"
 import styled from "styled-components";
 import {IMePage} from "../models/pages/IMePage";
-import {setBlogs, setProfile, setUserData} from "../store/user/userSlice";
+import {setUserData} from "../store/user/userSlice";
 import {getBlogs, getPosts} from "../store/user/userThunk";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {

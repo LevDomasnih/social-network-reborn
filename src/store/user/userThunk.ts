@@ -1,11 +1,11 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {UsersDto} from "../../api/users/usersDto";
-import {IError} from "../../models/IError";
-import {usersApi} from "../../api/users/usersApi";
-import {IProfile} from "../../models/IProfile";
-import {blogApi, postApi, profileApi} from "../../api";
-import {IBlog} from "../../models/IBlog";
-import {IPost} from "../../models/IPost";
+import {UsersDto} from "@/api/users/usersDto";
+import {usersApi} from "@/api/users/usersApi";
+import {IProfile} from "@/models/IProfile";
+import {blogApi, postApi, profileApi} from "@/api";
+import {IBlog} from "@/models/IBlog";
+import {IPost} from "@/models/IPost";
+import {IError} from "@/models/IError";
 
 //profile
 export const getUserWithProfileById = createAsyncThunk<UsersDto.GetUserById.Response, string, { rejectValue: IError }>(
@@ -62,7 +62,7 @@ export const editMainImage = createAsyncThunk<{ fileName: string }, FormData, { 
 
 //records
 
-export const createBlog = createAsyncThunk<IBlog[], {formData: FormData, userId: string}, { rejectValue: IError }>(
+export const createBlog = createAsyncThunk<IBlog[], { formData: FormData, userId: string }, { rejectValue: IError }>(
     "records/blogs/createBlog",
     async (data, thunkAPI) => {
         const action = await blogApi.createBlog(data.formData)
@@ -90,7 +90,7 @@ export const getBlogs = createAsyncThunk<IBlog[], string, { rejectValue: IError 
     },
 )
 
-export const createPost = createAsyncThunk<any, {formData: FormData, userId: string}, { rejectValue: IError }>(
+export const createPost = createAsyncThunk<any, { formData: FormData, userId: string }, { rejectValue: IError }>(
     "records/posts/createPost",
     async (data, thunkAPI) => {
         const action = await postApi.createPost(data.formData)

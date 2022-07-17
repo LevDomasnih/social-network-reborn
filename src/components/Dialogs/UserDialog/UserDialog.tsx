@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import {Avatar} from "@/components";
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {UserDialogProps} from "./UserDialog.props";
 import {format} from "date-fns";
+import {useRouter} from "next/router";
 
 const Container = styled.div`
   width: 100%;
@@ -61,31 +62,80 @@ const NotReadOption = styled.div`
   border-radius: 50%;
 `;
 
+const WhoSend = styled.span`
+  color: ${(props) => props.theme.colors.grey};
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.sm};
+  margin-right: 3px;
+`;
+
+type userDataType = {
+    lastName: string | null,
+    messageTime: Date | null,
+    avatar: string | null,
+    currentUserSend: boolean,
+    firstName: string | null
+}
+
 const UserDialog: FC<UserDialogProps> = (props) => {
     const {
-        userName,
+        id,
+        status,
         lastMessage,
-        isRead,
-        messageTime,
-        onClick,
+        users,
+        userId,
         ...otherProps
-    } = props
+    } = props;
+
+    const router = useRouter()
+
+    const [userData, setUserData] = useState<userDataType>({
+        firstName: null,
+        lastName: null,
+        messageTime: null,
+        avatar: null,
+        currentUserSend: false
+    })
+
+    useEffect(() => {
+        const userLast = users.find(u => u.id === lastMessage.ownerId)
+        const currentUser = users.find(u => u.id === userId)
+        if (userLast && currentUser) {
+            setUserData(prev => ({
+                ...prev,
+                avatar: currentUser.avatar,
+                messageTime: lastMessage.createAt,
+                firstName: currentUser.firstName,
+                lastName: currentUser.lastName,
+                currentUserSend: lastMessage.ownerId === userId
+            }))
+        }
+    }, [lastMessage.createAt, lastMessage.ownerId, userId, users])
+
+    const isRead = true // FIXME mock
+
+    const handleClick = () => {
+        router.push(`/dialogs/${userId}`)
+    }
 
     return (
-        <Container {...otherProps} onClick={onClick}>
-            <Avatar img={'/avatar.png'} width={50} height={50}/>
+        <Container {...otherProps} onClick={handleClick}>
+            <Avatar img={userData.avatar || '/avatar.png'} width={50} height={50}/>
             <Info>
                 <TopInfo>
                     <UserFullName>
-                        {userName}
+                        {userData.firstName} {userData.lastName}
                     </UserFullName>
                     <MessageTime>
-                        {format(new Date(messageTime), 'HH:mm')}
+                        {userData.messageTime && format(new Date(userData.messageTime), 'HH:mm')}
                     </MessageTime>
                 </TopInfo>
                 <BottomInfo>
                     <LastMessage>
-                        {lastMessage}
+                        <WhoSend>
+                            {userData.currentUserSend ? 'Вы' : userData.firstName}:
+                        </WhoSend>
+                        {lastMessage.text}
                     </LastMessage>
                     <Options>
                         {!isRead && <NotReadOption/>}

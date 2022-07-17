@@ -42,9 +42,8 @@ const Container = styled.button<ButtonProps>`
 export const Button: FC<ButtonProps> = ({children, onClick, ...props}) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
     if (onClick) {
+      e.preventDefault();
       onClick(e)
     }
   }
