@@ -5,10 +5,10 @@ import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "../store/hooks"
 import Link from 'next/link'
-import {register as registerThunk} from "../store/auth/authThunks"
+import {register as registerThunk} from "../store/modules/auth/authThunks"
 import {IRegister} from "../models/IRegister"
 import routes from "../utils/routes";
-import {defaultError} from "../store/auth/authSlice";
+import {defaultError} from "../store/modules/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "../components";
 import axios, {AxiosResponse} from "axios";

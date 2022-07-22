@@ -2,7 +2,7 @@ import {GetServerSidePropsContext, NextPage} from "next";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import React, {useEffect} from "react";
-import {setAuth} from "../../store/auth/authSlice";
+import {setAuth} from "../../store/modules/auth/authSlice";
 import {IMenuItem} from "../../components/Menu/Menu.props";
 import {IBlog} from "../../models/IBlog";
 import {IPost} from "../../models/IPost";
@@ -13,8 +13,8 @@ import styled from "styled-components";
 import routes from "../../utils/routes";
 import axios from "axios";
 import {IUserPage} from "../../models/pages/IUserPage";
-import {getBlogs, getPosts, getUserWithProfileById} from "../../store/user/userThunk";
-import {setUserData} from "../../store/user/userSlice";
+import {getBlogs, getPosts, getUserWithProfileById} from "../../store/modules/user/userThunk";
+import {setUserData} from "../../store/modules/user/userSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt

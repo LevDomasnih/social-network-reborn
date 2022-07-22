@@ -4,10 +4,10 @@ import Link from "next/link";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {ILogin} from "../models/ILogin";
-import {login} from "../store/auth/authThunks";
+import {login} from "../store/modules/auth/authThunks";
 import {GetServerSidePropsContext, NextPage} from "next";
 import routes from "../utils/routes";
-import {defaultError} from "../store/auth/authSlice";
+import {defaultError} from "../store/modules/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "../components";
 import styled from "styled-components";

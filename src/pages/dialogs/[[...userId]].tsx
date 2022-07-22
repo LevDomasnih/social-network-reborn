@@ -8,9 +8,15 @@ import Head from "next/head";
 import Dialogs from "@/components/Dialogs/Dialogs";
 import React, {useEffect} from "react";
 import {useRouter} from "next/router";
-import {setActiveDialogs, setDialogs} from "@/store/dialogs/dialogsSlice";
-import {setAuth} from "@/store/auth/authSlice";
-import {getDialogByUserId} from "@/store/dialogs/dialogsThunk";
+import {setAuth} from "@/store/modules/auth/authSlice";
+import {
+    dialogsJoinRoom,
+    dialogsSendMessage,
+    dialogsSubscribe,
+    setActiveDialogs,
+    setDialogs
+} from "@/store/modules/dialogs/dialogsSlice";
+import {getDialogByUserId} from "@/store/modules/dialogs/dialogsThunk";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
@@ -66,6 +72,8 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
 
     useEffect(() => {
         dispatch(setDialogs(props.dialogs))
+        dispatch(dialogsJoinRoom())
+        dispatch(dialogsSubscribe())
     }, [dispatch, props.dialogs])
 
 

@@ -4,6 +4,7 @@ import {FC, useEffect, useState} from "react";
 import {UserDialogProps} from "./UserDialog.props";
 import {format} from "date-fns";
 import {useRouter} from "next/router";
+import {useAppSelector} from "@/store/hooks";
 
 const Container = styled.div`
   width: 100%;
@@ -87,6 +88,8 @@ const UserDialog: FC<UserDialogProps> = (props) => {
         ...otherProps
     } = props;
 
+    const authId = useAppSelector(state => state.authSlice.id)
+
     const router = useRouter()
 
     const [userData, setUserData] = useState<userDataType>({
@@ -98,19 +101,19 @@ const UserDialog: FC<UserDialogProps> = (props) => {
     })
 
     useEffect(() => {
-        const userLast = users.find(u => u.id === lastMessage.ownerId)
+        const userLast = users.find(u => u.id === lastMessage?.ownerId)
         const currentUser = users.find(u => u.id === userId)
         if (userLast && currentUser) {
             setUserData(prev => ({
                 ...prev,
                 avatar: currentUser.avatar,
-                messageTime: lastMessage.createAt,
-                firstName: currentUser.firstName,
+                messageTime: lastMessage?.createdAt,
+                firstName: currentUser?.firstName,
                 lastName: currentUser.lastName,
-                currentUserSend: lastMessage.ownerId === userId
+                currentUserSend: lastMessage?.ownerId === authId
             }))
         }
-    }, [lastMessage.createAt, lastMessage.ownerId, userId, users])
+    }, [userId, users, authId, lastMessage?.ownerId, lastMessage?.createdAt])
 
     const isRead = true // FIXME mock
 
@@ -135,7 +138,7 @@ const UserDialog: FC<UserDialogProps> = (props) => {
                         <WhoSend>
                             {userData.currentUserSend ? 'Вы' : userData.firstName}:
                         </WhoSend>
-                        {lastMessage.text}
+                        {lastMessage?.text}
                     </LastMessage>
                     <Options>
                         {!isRead && <NotReadOption/>}

@@ -1,10 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit"
-import {ILogin} from "../../models/ILogin"
-import {IRegister} from "../../models/IRegister"
-import {IToken} from "../../models/IToken"
-import {IError} from "../../models/IError"
-import sleep from "../../utils/sleep"
-import {authApi} from "../../api"
+import sleep from "../../../utils/sleep"
+import {authApi} from "@/api"
+import {IToken} from "@/models/IToken";
+import {IRegister} from "@/models/IRegister";
+import {IError} from "@/models/IError";
+import {ILogin} from "@/models/ILogin";
 
 export const register = createAsyncThunk<IToken, IRegister, { rejectValue: IError }>(
     "auth/register",

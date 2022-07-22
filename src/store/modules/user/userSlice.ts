@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IUser} from "../../models/IUser";
-import {IProfile} from "../../models/IProfile";
-import {IBlog} from "../../models/IBlog";
+import {IUser} from "../../../models/IUser";
+import {IProfile} from "../../../models/IProfile";
+import {IBlog} from "../../../models/IBlog";
 import {
     createBlog,
     createPost,
@@ -12,7 +12,7 @@ import {
     getPosts,
     getUserWithProfileById
 } from "./userThunk";
-import {IRecords} from "../../models/IRecords";
+import {IRecords} from "../../../models/IRecords";
 
 interface initialState extends IUser {
     profile: IProfile,

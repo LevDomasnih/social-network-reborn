@@ -20,8 +20,8 @@ export interface ChatDialogProps extends DetailedHTMLProps<HTMLAttributes<HTMLDi
             id: string,
             text: string,
             ownerId: string,
-            createAt: Date,
-            updateAt: Date
+            createdAt: Date,
+            updatedAt: Date
         }[]
     } | null,
     currentUserId: string

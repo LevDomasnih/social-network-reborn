@@ -1,7 +1,7 @@
 import React, {ForwardedRef, forwardRef} from "react";
 import {CheckboxProps} from "./Checkbox.props";
 import Link from "next/link";
-import {defaultError} from "../../store/auth/authSlice";
+import {defaultError} from "../../store/modules/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
 import styled from "styled-components";
 

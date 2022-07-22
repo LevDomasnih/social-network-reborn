@@ -14,7 +14,7 @@ export interface UserDialogProps extends HTMLAttributes<HTMLDivElement> {
         id: string,
         text: string,
         ownerId: string,
-        createAt: Date,
-        updateAt: Date
+        createdAt: Date,
+        updatedAt: Date
     },
 }

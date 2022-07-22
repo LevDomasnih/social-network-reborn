@@ -12,7 +12,7 @@ export const getDialogByUserId = createAsyncThunk<any, string, { rejectValue: IE
         }
 
         return action.data
-    }
+    },
 )
 
 export const sendMessage = createAsyncThunk<any, {text: string, secondOwnerId: string}, { rejectValue: IError }>(

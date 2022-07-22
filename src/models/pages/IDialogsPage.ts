@@ -19,8 +19,8 @@ export interface IDialogsPage extends IToken {
             id: string,
             text: string,
             ownerId: string,
-            createAt: Date,
-            updateAt: Date
+            createdAt: Date,
+            updatedAt: Date
         }
     }[],
     user: {

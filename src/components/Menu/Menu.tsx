@@ -6,8 +6,8 @@ import {IBlog} from "../../models/IBlog"
 import {useAppDispatch, useAppSelector} from "../../store/hooks"
 import {IPost} from "../../models/IPost"
 import styled, {css} from "styled-components";
-import {setBlogModalActive} from "../../store/user/userSlice";
-import {createPost} from "../../store/user/userThunk";
+import {setBlogModalActive} from "../../store/modules/user/userSlice";
+import {createPost} from "../../store/modules/user/userThunk";
 
 const Button = styled(DefaultButton)`
   width: 134px;

@@ -7,8 +7,8 @@ import {RichEditor} from "../RichEditor/RichEditor"
 import {useFileReader} from "../../hooks"
 import {useAppDispatch, useAppSelector} from "../../store/hooks"
 import styled from "styled-components";
-import {createBlog} from "../../store/user/userThunk";
-import {setBlogModalActive} from "../../store/user/userSlice";
+import {createBlog} from "../../store/modules/user/userThunk";
+import {setBlogModalActive} from "../../store/modules/user/userSlice";
 
 const ContainerEditor = styled.div`
   overflow: auto;

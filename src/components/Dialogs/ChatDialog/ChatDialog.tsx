@@ -4,7 +4,8 @@ import {Avatar, Button} from "@/components";
 import styled from "styled-components";
 import {format} from "date-fns";
 import {useAppDispatch} from "@/store/hooks";
-import {sendMessage} from "@/store/dialogs/dialogsThunk";
+import {sendMessage} from "@/store/modules/dialogs/dialogsThunk";
+import {dialogsSendMessage, dialogsSubscribe} from "@/store/modules/dialogs/dialogsSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -112,7 +113,7 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
 
     const handleSendMessage = () => {
         if (user && message) {
-            dispatch(sendMessage({
+            dispatch(dialogsSendMessage({
                 text: message,
                 secondOwnerId: user.id
             }))
@@ -146,7 +147,7 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
                                             {users?.find(u => u.id === m.ownerId)?.firstName}
                                         </MessageUserName>
                                         <MessageTime>
-                                            {format(new Date(m.createAt), 'HH:mm')}
+                                            {format(new Date(m.createdAt), 'HH:mm')}
                                         </MessageTime>
                                     </MessageInfoBlock>
                                     <MessageText>

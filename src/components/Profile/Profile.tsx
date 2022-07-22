@@ -10,7 +10,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {IProfile} from "../../models/IProfile";
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 import styled, {css} from "styled-components";
-import {editAvatar, editMainImage, editProfile} from "../../store/user/userThunk";
+import {editAvatar, editMainImage, editProfile} from "../../store/modules/user/userThunk";
 
 const Container = styled.div``;
 

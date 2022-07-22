@@ -6,14 +6,14 @@ import axios from "axios"
 import MainLayout from "../layout/MainLayout/MainLayout"
 import {Card, Menu, Post, Profile, RightSidebarFriend} from "../components"
 import {useAppDispatch, useAppSelector} from "../store/hooks"
-import {setAuth} from "../store/auth/authSlice"
+import {setAuth} from "../store/modules/auth/authSlice"
 import {IMenuItem} from "../components/Menu/Menu.props"
 import {IBlog} from "../models/IBlog"
 import {IPost} from "../models/IPost"
 import styled from "styled-components";
 import {IMePage} from "../models/pages/IMePage";
-import {setUserData} from "../store/user/userSlice";
-import {getBlogs, getPosts} from "../store/user/userThunk";
+import {setUserData} from "../store/modules/user/userSlice";
+import {getBlogs, getPosts} from "../store/modules/user/userThunk";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {
     const access_token = ctx.req.cookies.jwt

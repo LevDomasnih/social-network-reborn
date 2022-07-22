@@ -7,7 +7,7 @@ import Link from "next/link";
 import MainLayout from "../../layout/MainLayout/MainLayout";
 import {Avatar, Button, Search} from "../../components";
 import routes from "../../utils/routes";
-import {setAuth} from "../../store/auth/authSlice";
+import {setAuth} from "../../store/modules/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
 import {IUsersPage} from "../../models/pages/IUsersPage";
 import { useRouter } from 'next/router'

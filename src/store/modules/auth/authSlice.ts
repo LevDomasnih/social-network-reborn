@@ -93,5 +93,5 @@ const authSlice = createSlice({
 })
 
 export const {defaultError, setAuth} = authSlice.actions
-
+defaultError()
 export default authSlice.reducer

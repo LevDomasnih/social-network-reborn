@@ -3,7 +3,7 @@ import {HeaderProps} from "./Header.props";
 import {Avatar, Button as DefaultButton, Search as DefaultSearch, SvgImage} from "../index";
 import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import styled from "styled-components";
-import {setBlogModalActive} from "@/store/user/userSlice";
+import {setBlogModalActive} from "@/store/modules/user/userSlice";
 
 const Button = styled(DefaultButton)`
   width: 134px;

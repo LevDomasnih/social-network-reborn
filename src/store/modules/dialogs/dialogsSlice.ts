@@ -1,5 +1,41 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {getDialogByUserId, sendMessage} from "@/store/dialogs/dialogsThunk";
+import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {getDialogByUserId, sendMessage} from "@/store/modules/dialogs/dialogsThunk";
+import {WebsocketActionProps} from "@/store/store";
+
+export const dialogsJoinRoom = createAction<() => WebsocketActionProps>('dialogs/joinRoom', () => {
+    return {
+        payload: {},
+        meta: {
+            type: 'send',
+            namespace: 'dialogs',
+            event: 'joinRoom',
+        }
+    }
+})
+
+export const dialogsSubscribe = createAction<() => WebsocketActionProps>('dialogs/getMessage', () => {
+    return {
+        payload: {},
+        meta: {
+            type: 'subscribe',
+            namespace: 'dialogs',
+            event: 'getMessage'
+        }
+    }
+})
+
+export const dialogsSendMessage = createAction<
+    (payload: { text: string, secondOwnerId: string }) => WebsocketActionProps
+    >('dialogs/sendMessage', (payload) => {
+    return {
+        payload,
+        meta: {
+            type: 'send',
+            namespace: 'dialogs',
+            event: 'createMessage'
+        }
+    }
+})
 
 interface initialState {
     dialogs: {
@@ -16,8 +52,8 @@ interface initialState {
             id: string,
             text: string,
             ownerId: string,
-            createAt: Date,
-            updateAt: Date
+            createdAt: Date,
+            updatedAt: Date
         }
     }[],
     activeDialog: {
@@ -39,8 +75,8 @@ interface initialState {
             id: string,
             text: string,
             ownerId: string,
-            createAt: Date,
-            updateAt: Date
+            createdAt: Date,
+            updatedAt: Date
         }[]
     } | null
 }
@@ -77,6 +113,21 @@ const dialogsSlice = createSlice({
         builder.addCase(sendMessage.pending, (state, action) => {
         })
         builder.addCase(sendMessage.rejected, (state, action) => {
+        })
+
+        builder.addCase(dialogsSubscribe, (state, action) => {
+            if (state.activeDialog && action.payload.dialogId === state.activeDialog.id) {
+                state.activeDialog.messages = [
+                    action.payload,
+                    ...state.activeDialog.messages,
+                ]
+            }
+
+            state.dialogs.forEach(d => {
+                if (d.id === action.payload.dialogId) {
+                    d.lastMessage = action.payload
+                }
+            })
         })
     }
 })
