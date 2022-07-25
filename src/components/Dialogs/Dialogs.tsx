@@ -49,7 +49,7 @@ const AddFriend = styled(props => <SvgImage svg='addFriend' color={'#000'} {...p
 
 const Dialogs: FC<DialogsProps> = (props) => {
     const {dialogs, activeDialog} = useAppSelector(state => state.dialogsSlice)
-    const { id } = useAppSelector(state => state.authSlice)
+    const {id} = useAppSelector(state => state.authSlice)
 
     return (
         <DialogsContainer style={{height: 840}}>
@@ -62,7 +62,7 @@ const Dialogs: FC<DialogsProps> = (props) => {
                     {dialogs.map((dialog) => <UserDialog key={dialog.id} {...dialog} />)}
                 </UserDialogs>
             </DialogsMenu>
-            <ChatDialog activeDialog={activeDialog} currentUserId={id} />
+            <ChatDialog activeDialog={activeDialog} currentUserId={id}/>
         </DialogsContainer>
     )
 }

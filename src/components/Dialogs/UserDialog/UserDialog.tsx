@@ -1,17 +1,17 @@
 import styled from "styled-components";
 import {Avatar} from "@/components";
-import {FC, useEffect, useState} from "react";
+import {FC} from "react";
 import {UserDialogProps} from "./UserDialog.props";
 import {format} from "date-fns";
 import {useRouter} from "next/router";
 import {useAppSelector} from "@/store/hooks";
 
-const Container = styled.div`
+const Container = styled.div<{ isActive: boolean }>`
   width: 100%;
   display: flex;
   padding: 10px 10px;
   border-bottom: 1px solid #E4E4E4;
-  background: ${(props) => props.theme.colors.whiteGrey};
+  background: ${(props) => props.isActive ? props.theme.colors.violet : props.theme.colors.whiteGrey};
   cursor: pointer;
 `;
 
@@ -70,73 +70,43 @@ const WhoSend = styled.span`
   margin-right: 3px;
 `;
 
-type userDataType = {
-    lastName: string | null,
-    messageTime: Date | null,
-    avatar: string | null,
-    currentUserSend: boolean,
-    firstName: string | null
-}
-
 const UserDialog: FC<UserDialogProps> = (props) => {
     const {
         id,
         status,
         lastMessage,
         users,
-        userId,
+        info,
         ...otherProps
     } = props;
 
     const authId = useAppSelector(state => state.authSlice.id)
+    const {activeDialog} = useAppSelector(state => state.dialogsSlice)
 
     const router = useRouter()
-
-    const [userData, setUserData] = useState<userDataType>({
-        firstName: null,
-        lastName: null,
-        messageTime: null,
-        avatar: null,
-        currentUserSend: false
-    })
-
-    useEffect(() => {
-        const userLast = users.find(u => u.id === lastMessage?.ownerId)
-        const currentUser = users.find(u => u.id === userId)
-        if (userLast && currentUser) {
-            setUserData(prev => ({
-                ...prev,
-                avatar: currentUser.avatar,
-                messageTime: lastMessage?.createdAt,
-                firstName: currentUser?.firstName,
-                lastName: currentUser.lastName,
-                currentUserSend: lastMessage?.ownerId === authId
-            }))
-        }
-    }, [userId, users, authId, lastMessage?.ownerId, lastMessage?.createdAt])
 
     const isRead = true // FIXME mock
 
     const handleClick = () => {
-        router.push(`/dialogs/${userId}`)
+        router.push(`/dialogs/${info.id}`)
     }
 
     return (
-        <Container {...otherProps} onClick={handleClick}>
-            <Avatar img={userData.avatar || '/avatar.png'} width={50} height={50}/>
+        <Container {...otherProps} onClick={handleClick} isActive={activeDialog?.id === id}>
+            <Avatar img={info.image || '/avatar.png'} width={50} height={50}/>
             <Info>
                 <TopInfo>
                     <UserFullName>
-                        {userData.firstName} {userData.lastName}
+                        {info.name}
                     </UserFullName>
                     <MessageTime>
-                        {userData.messageTime && format(new Date(userData.messageTime), 'HH:mm')}
+                        {lastMessage?.createdAt && format(new Date(lastMessage.createdAt), 'HH:mm')}
                     </MessageTime>
                 </TopInfo>
                 <BottomInfo>
                     <LastMessage>
                         <WhoSend>
-                            {userData.currentUserSend ? 'Вы' : userData.firstName}:
+                            {lastMessage?.ownerId === authId ? 'Вы' : users.find(u => u.id === lastMessage?.ownerId)?.firstName}:
                         </WhoSend>
                         {lastMessage?.text}
                     </LastMessage>

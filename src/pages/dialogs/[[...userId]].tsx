@@ -2,7 +2,7 @@ import {GetServerSidePropsContext, NextPage} from "next";
 import routes from "@/utils/routes";
 import axios from "axios";
 import {IDialogsPage} from "@/models/pages/IDialogsPage";
-import {useAppDispatch} from "@/store/hooks";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import MainLayout from "@/layout/MainLayout/MainLayout";
 import Head from "next/head";
 import Dialogs from "@/components/Dialogs/Dialogs";
@@ -10,9 +10,9 @@ import React, {useEffect} from "react";
 import {useRouter} from "next/router";
 import {setAuth} from "@/store/modules/auth/authSlice";
 import {
-    dialogsJoinRoom,
-    dialogsSendMessage,
-    dialogsSubscribe,
+    dialogsGetMessage,
+    dialogsGetNewDialog,
+    dialogsRoom,
     setActiveDialogs,
     setDialogs
 } from "@/store/modules/dialogs/dialogsSlice";
@@ -63,6 +63,23 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
     const dispatch = useAppDispatch()
     const router = useRouter()
 
+    const {userId} = router.query
+
+    const token = useAppSelector(state => state.authSlice.access_token)
+
+    useEffect(() => {
+        if (token) {
+            dispatch(dialogsRoom())
+            dispatch(dialogsGetMessage())
+            dispatch(dialogsGetNewDialog())
+        }
+
+        return () => {
+            dispatch(dialogsGetMessage('unsubscribe'))
+            dispatch(dialogsGetNewDialog('unsubscribe'))
+        }
+    }, [dispatch, token])
+
     useEffect(() => {
         dispatch(setAuth({
             access_token: props.access_token,
@@ -72,12 +89,7 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
 
     useEffect(() => {
         dispatch(setDialogs(props.dialogs))
-        dispatch(dialogsJoinRoom())
-        dispatch(dialogsSubscribe())
     }, [dispatch, props.dialogs])
-
-
-    const {userId} = router.query
 
     useEffect(() => {
         if (userId?.length && userId?.length > 1) {

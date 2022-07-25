@@ -4,11 +4,10 @@ export interface ChatDialogProps extends DetailedHTMLProps<HTMLAttributes<HTMLDi
     activeDialog: {
         id: string,
         status: string,
-        user: {
+        info: {
             id: string,
-            avatar: string | null,
-            lastName: string,
-            firstName: string
+            image: string | null,
+            name: string,
         },
         users: {
             id: string,

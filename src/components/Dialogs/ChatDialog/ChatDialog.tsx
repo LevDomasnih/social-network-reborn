@@ -2,10 +2,10 @@ import React, {FC, FormEvent, useEffect, useState} from "react";
 import {ChatDialogProps} from "@/components/Dialogs/ChatDialog/ChatDialog.props";
 import {Avatar, Button} from "@/components";
 import styled from "styled-components";
-import {format} from "date-fns";
 import {useAppDispatch} from "@/store/hooks";
-import {sendMessage} from "@/store/modules/dialogs/dialogsThunk";
-import {dialogsSendMessage, dialogsSubscribe} from "@/store/modules/dialogs/dialogsSlice";
+import {dialogsSendMessage} from "@/store/modules/dialogs/dialogsSlice";
+import Message from "@/components/Dialogs/Message/Message";
+import Link from "next/link";
 
 const Container = styled.div`
   flex: 1;
@@ -68,54 +68,23 @@ const UserFullName = styled.div`
   line-height: ${(props) => props.theme.lineHeight.lg};
 `;
 
-const MessageWrapper = styled.div`
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-`;
-
-const MessageText = styled.div`
-  color: ${(props) => props.theme.colors.dark};
-  font-size: ${(props) => props.theme.fontSize.base};
-  line-height: ${(props) => props.theme.lineHeight.base};
-`;
-
-const MessageTime = styled.span`
-  color: ${(props) => props.theme.colors.grey};
-  font-size: ${(props) => props.theme.fontSize.sm};
-  line-height: ${(props) => props.theme.lineHeight.sm};
-`;
-
-const MessageUserName = styled.div`
-`;
-
-const MessageInfoBlock = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 5px;
-`;
-
-const MessageBlock = styled.div`
-  margin-left: 15px;
-`;
-
 const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}) => {
     const [message, setMessage] = useState('')
     const dispatch = useAppDispatch()
 
     const messages = activeDialog?.messages
     const users = activeDialog?.users
-    const user = activeDialog?.user
+    const info = activeDialog?.info
 
     const handleMessageChange = (event: FormEvent<HTMLTextAreaElement>) => {
         setMessage((event.target as HTMLTextAreaElement).value);
     };
 
     const handleSendMessage = () => {
-        if (user && message) {
+        if (info && message) {
             dispatch(dialogsSendMessage({
                 text: message,
-                secondOwnerId: user.id
+                secondOwnerId: info.id
             }))
             setMessage('')
         }
@@ -125,36 +94,33 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
         return () => {
             setMessage('')
         }
-    }, [user])
+    }, [info])
 
     return (
         <Container>
             {activeDialog && (
                 <PickedChat>
-                    <ChatHeader>
-                        <UserFullName>
-                            {activeDialog.user.firstName} {activeDialog.user.lastName}
-                        </UserFullName>
-                        <Avatar img={activeDialog.user.avatar || '/avatar.png'} width={38} height={38} />
-                    </ChatHeader>
+                    {info && (
+                        <ChatHeader>
+                            <UserFullName>
+                                {activeDialog.info.name}
+                            </UserFullName>
+                            <Link href={`/users/${info.id}`}>
+                                <a>
+                                    <Avatar img={activeDialog.info.image || '/avatar.png'} width={38} height={38}/>
+                                </a>
+                            </Link>
+                        </ChatHeader>
+                    )}
                     <ChatScreen>
                         {messages?.map(m => (
-                            <MessageWrapper key={m.id}>
-                                <Avatar img={users?.find(u => u.id === m.ownerId)?.avatar || '/avatar.png'} width={50} height={50} />
-                                <MessageBlock>
-                                    <MessageInfoBlock>
-                                        <MessageUserName>
-                                            {users?.find(u => u.id === m.ownerId)?.firstName}
-                                        </MessageUserName>
-                                        <MessageTime>
-                                            {format(new Date(m.createdAt), 'HH:mm')}
-                                        </MessageTime>
-                                    </MessageInfoBlock>
-                                    <MessageText>
-                                        {m.text}
-                                    </MessageText>
-                                </MessageBlock>
-                            </MessageWrapper>
+                            <Message
+                                key={m.id}
+                                text={m.text}
+                                ownerId={m.ownerId}
+                                createdAt={m.createdAt}
+                                users={users}
+                            />
                         ))}
                     </ChatScreen>
                     <ChatControl>

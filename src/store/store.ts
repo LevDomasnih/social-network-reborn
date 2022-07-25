@@ -18,10 +18,10 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger).concat(socketMiddleware),
 });
 
-export interface WebsocketActionProps {
-    payload: Record<string, any>,
+export interface WebsocketActionProps<PayloadType = Record<string, any>> {
+    payload: PayloadType,
     meta: {
-        type: 'subscribe' | 'send',
+        type: 'subscribe' | 'send' | 'unsubscribe',
         namespace: string,
         event: string
     }
