@@ -1,4 +1,5 @@
-export interface IBase {
-    _id: string
-    __v: number
+import {ITimeStamps} from "./ITimeStamps";
+
+export interface IBase extends ITimeStamps{
+    id: string
 }

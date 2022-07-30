@@ -1,15 +1,16 @@
-import {ITimeStamps} from "./ITimeStamps";
-import {IBase} from "./IBase";
-
-export interface IProfile extends ITimeStamps, IBase {
-    name: string
-    surname: string
+export interface IProfile {
+    id: string
+    firstName: string
+    lastName: string
     avatar: string
-    status: string
-    about: string
-    dateOfBirth: string
-    country: string
-    city: string
-    brothersAndSisters: string
-    school: string
+    phone: string
+    middleName: string
+    mainImage: string | null
+    status: string | null
+    about: string | null
+    birthday: string | null
+    country: string | null
+    city: string | null
+    relatives: string | null
+    school: string | null
 }

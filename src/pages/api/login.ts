@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
 
     return axios
-        .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.API_URL}/auth/login`, dataToBeSent)
+        .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, dataToBeSent)
         .then((response) => {
             if (response.status === 200) {
                 cookies.set('jwt', response.data.access_token, {

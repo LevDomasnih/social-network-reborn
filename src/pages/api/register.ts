@@ -12,11 +12,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phone: req.body.phone,
-        login: req.body.login,
     }
 
     return axios
-        .post<IToken, AxiosResponse<IToken>, IRegister>(`${process.env.API_URL}/auth/register`, dataToBeSent)
+        .post<IToken, AxiosResponse<IToken>, IRegister>(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, dataToBeSent)
         .then((response) => {
             if (response.status === 201) {
                 cookies.set("jwt", response.data.access_token, {

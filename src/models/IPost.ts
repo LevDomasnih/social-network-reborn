@@ -1,12 +1,16 @@
-import {IUser} from "./IUser";
-import {ITimeStamps} from "./ITimeStamps";
 import {IBase} from "./IBase";
 
-export interface IPost extends ITimeStamps, IBase {
-    "owner": string | IUser
-    "text": string,
-    "image": string,
-    "likes": number,
-    "views": number,
-    "comments": string[] | IPost[]
+export interface IPost extends IBase {
+    text: string,
+    likes: number,
+    views: number,
+    isLiked: boolean,
+    mainImage: string | null
+    comments: unknown[]
+    profile: {
+        avatar: string | null
+        firstName: string | null
+        lastName: string | null
+        middleName: string | null
+    },
 }
