@@ -11,6 +11,7 @@ import {setAuth} from "../../store/modules/auth/authSlice";
 import {useAppDispatch} from "../../store/hooks";
 import {IUsersPage} from "../../models/pages/IUsersPage";
 import { useRouter } from 'next/router'
+import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
@@ -113,6 +114,7 @@ const Users: NextPage<IUsersPage> = (props) => {
             access_token: props.access_token,
             ...props.auth
         }))
+        dispatch(setUserId(props.auth.id))
     }, [dispatch, props.access_token, props.auth])
 
     return (

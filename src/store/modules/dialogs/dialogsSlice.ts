@@ -1,4 +1,4 @@
-import {createAction, createSlice, PayloadAction, PayloadActionCreator} from "@reduxjs/toolkit";
+import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {getDialogByUserId, sendMessage} from "@/store/modules/dialogs/dialogsThunk";
 import {WebsocketActionProps} from "@/store/store";
 
@@ -15,7 +15,12 @@ export const dialogsRoom = createAction<() => WebsocketActionProps>('dialogs/joi
 
 interface DialogsGetMessageResponse {
     dialogId: string,
-    ownerId: string,
+    user: {
+        id: string,
+        avatar: string | null,
+        lastName: string,
+        firstName: string,
+    },
     id: string,
     text: string,
     createdAt: Date,
@@ -79,6 +84,7 @@ export const dialogsSendMessage = createAction<(payload: { text: string, secondO
 })
 
 interface initialState {
+    userId: string | null,
     dialogs: {
         id: string,
         status: string,
@@ -122,26 +128,52 @@ interface initialState {
             createdAt: Date,
             updatedAt: Date
         }[]
-    } | null
+    } | null,
+    messagesPush: {
+        id: string,
+        text: string,
+        user: {
+            id: string,
+            avatar: string | null,
+            lastName: string,
+            firstName: string
+        },
+        createdAt: Date,
+        updatedAt: Date
+    }[]
 }
 
 const initialState: initialState = {
+    userId: null,
     dialogs: [],
     activeDialog: null,
+    messagesPush: [],
 }
 
 const dialogsSlice = createSlice({
     name: 'dialogs',
     initialState,
     reducers: {
-        setDialogs: (state, data: PayloadAction<any>) => ({
+        setUserId: (state, data: PayloadAction<string> ) => ({
+            ...state,
+            userId: data.payload
+        }),
+        setDialogs: (state, data: PayloadAction<initialState['dialogs']>) => ({
             ...state,
             dialogs: data.payload
         }),
-        setActiveDialogs: (state, data: PayloadAction<any>) => ({
+        setActiveDialogs: (state, data: PayloadAction<initialState['activeDialog']>) => ({
             ...state,
             activeDialog: data.payload
-        })
+        }),
+        deleteMessagePushById: (state, data: PayloadAction<string>) => ({
+            ...state,
+            messagesPush: state.messagesPush.filter(message => message.id !== data.payload)
+        }),
+        deleteMessagePushByUserId : (state, data: PayloadAction<string>) => ({
+            ...state,
+            messagesPush: state.messagesPush.filter(message => message.user.id !== data.payload)
+        }),
     },
     extraReducers: (builder) => {
         builder.addCase(getDialogByUserId.fulfilled, (state, action) => ({
@@ -162,16 +194,41 @@ const dialogsSlice = createSlice({
         builder.addCase(dialogsGetMessage.type, (state, action: PayloadAction<DialogsGetMessageResponse, "dialogs/getMessage">) => {
             if (state.activeDialog && action.payload.dialogId === state.activeDialog.id) {
                 state.activeDialog.messages = [
-                    action.payload,
+                    {
+                        id: action.payload.id,
+                        ownerId: action.payload.user.id,
+                        updatedAt: action.payload.updatedAt,
+                        text: action.payload.text,
+                        createdAt: action.payload.createdAt
+                    },
                     ...state.activeDialog.messages,
                 ]
             }
 
             state.dialogs.forEach(d => {
                 if (d.id === action.payload.dialogId) {
-                    d.lastMessage = action.payload
+                    d.lastMessage = {
+                        id: action.payload.id,
+                        ownerId: action.payload.user.id,
+                        updatedAt: action.payload.updatedAt,
+                        text: action.payload.text,
+                        createdAt: action.payload.createdAt
+                    }
                 }
             })
+
+            if ((!state.activeDialog || (state.activeDialog && action.payload.dialogId !== state.activeDialog.id)) && action.payload.user.id !== state.userId) {
+                state.messagesPush = [
+                    ...state.messagesPush,
+                    {
+                        id: action.payload.id,
+                        user: action.payload.user,
+                        updatedAt: action.payload.updatedAt,
+                        text: action.payload.text,
+                        createdAt: action.payload.createdAt
+                    },
+                ]
+            }
         })
 
         builder.addCase(dialogsGetNewDialog.type, (state, action: PayloadAction<DialogsGetNewDialogResponse, "dialogs/getNewDialog">) => {
@@ -193,5 +250,8 @@ const dialogsSlice = createSlice({
 export const {
     setDialogs,
     setActiveDialogs,
+    setUserId,
+    deleteMessagePushById,
+    deleteMessagePushByUserId,
 } = dialogsSlice.actions
 export default dialogsSlice.reducer

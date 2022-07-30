@@ -1,9 +1,11 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {MainLayoutProps} from "./MainLayout.props";
 import {Header, LeftSidebar} from "@/components";
-import {useAppSelector} from "@/store/hooks"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import dynamic from "next/dynamic";
 import styled from "styled-components";
+import Push from "@/components/Push/Push";
+import {dialogsGetMessage, dialogsGetNewDialog, dialogsRoom} from "@/store/modules/dialogs/dialogsSlice";
 
 const BlogModal = dynamic(
     () => import('../../components/BlogModal/BlogModal'),
@@ -40,6 +42,22 @@ const RightSidebarWrapper = styled.div`
 
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
     const {blogModalIsActive} = useAppSelector(state => state.userSlice)
+    const {access_token} = useAppSelector(state => state.authSlice)
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (access_token) {
+            dispatch(dialogsRoom())
+            dispatch(dialogsGetMessage())
+            dispatch(dialogsGetNewDialog())
+        }
+
+        return () => {
+            dispatch(dialogsGetMessage('unsubscribe'))
+            dispatch(dialogsGetNewDialog('unsubscribe'))
+        }
+    }, [dispatch, access_token])
 
     return (
         <Container className={className}>
@@ -57,6 +75,7 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
                 </Body>
             </BodyWrapper>
             {blogModalIsActive && <BlogModal active={blogModalIsActive}/>}
+            <Push />
         </Container>
     )
 }

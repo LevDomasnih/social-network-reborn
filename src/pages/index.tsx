@@ -3,20 +3,20 @@ import {GetServerSidePropsContext} from "next";
 import Head from 'next/head'
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import React from 'react';
-import {useAppDispatch, useAppSelector} from "../store/hooks"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import Link from 'next/link'
 import {register as registerThunk} from "../store/modules/auth/authThunks"
-import {IRegister} from "../models/IRegister"
+import {IRegister} from "@/models/IRegister"
 import routes from "../utils/routes";
-import {defaultError} from "../store/modules/auth/authSlice";
+import {defaultError} from "@/store/modules/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
-import {Button, Checkbox, Input} from "../components";
+import {Button, Checkbox, Input} from "@/components";
 import axios, {AxiosResponse} from "axios";
-import {IToken} from "../models/IToken";
-import {ILogin} from "../models/ILogin";
+import {IToken} from "@/models/IToken";
+import {ILogin} from "@/models/ILogin";
 import Cookies from "cookies";
 import styled from "styled-components";
-import {IRegisterPage} from "../models/pages/IRegisterPage";
+import {IRegisterPage} from "@/models/pages/IRegisterPage";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {

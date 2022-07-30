@@ -14,7 +14,7 @@ import {
     dialogsGetNewDialog,
     dialogsRoom,
     setActiveDialogs,
-    setDialogs
+    setDialogs, setUserId
 } from "@/store/modules/dialogs/dialogsSlice";
 import {getDialogByUserId} from "@/store/modules/dialogs/dialogsThunk";
 
@@ -65,26 +65,12 @@ const DialogsPage: NextPage<IDialogsPage> = (props) => {
 
     const {userId} = router.query
 
-    const token = useAppSelector(state => state.authSlice.access_token)
-
-    useEffect(() => {
-        if (token) {
-            dispatch(dialogsRoom())
-            dispatch(dialogsGetMessage())
-            dispatch(dialogsGetNewDialog())
-        }
-
-        return () => {
-            dispatch(dialogsGetMessage('unsubscribe'))
-            dispatch(dialogsGetNewDialog('unsubscribe'))
-        }
-    }, [dispatch, token])
-
     useEffect(() => {
         dispatch(setAuth({
             access_token: props.access_token,
             ...props.auth
         }))
+        dispatch(setUserId(props.auth.id))
     }, [dispatch, props.access_token, props.auth])
 
     useEffect(() => {

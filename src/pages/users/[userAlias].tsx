@@ -1,20 +1,21 @@
 import {GetServerSidePropsContext, NextPage} from "next";
 import {useRouter} from "next/router";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import React, {useEffect} from "react";
-import {setAuth} from "../../store/modules/auth/authSlice";
-import {IMenuItem} from "../../components/Menu/Menu.props";
-import {IBlog} from "../../models/IBlog";
-import {IPost} from "../../models/IPost";
-import {Card, Menu, Post, Profile, RightSidebarFriend} from "../../components";
+import {setAuth} from "@/store/modules/auth/authSlice";
+import {IMenuItem} from "@/components/Menu/Menu.props";
+import {IBlog} from "@/models/IBlog";
+import {IPost} from "@/models/IPost";
+import {Card, Menu, Post, Profile, RightSidebarFriend} from "@/components";
 import MainLayout from "../../layout/MainLayout/MainLayout";
 import Head from "next/head";
 import styled from "styled-components";
 import routes from "../../utils/routes";
 import axios from "axios";
-import {IUserPage} from "../../models/pages/IUserPage";
-import {getBlogs, getPosts, getUserWithProfileById} from "../../store/modules/user/userThunk";
-import {setUserData} from "../../store/modules/user/userSlice";
+import {IUserPage} from "@/models/pages/IUserPage";
+import {getBlogs, getPosts} from "@/store/modules/user/userThunk";
+import {setUserData} from "@/store/modules/user/userSlice";
+import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
@@ -82,6 +83,7 @@ const UserPage: NextPage<IUserPage> = ({...props}) => {
             access_token: props.access_token,
             ...props.auth
         }))
+        dispatch(setUserId(props.auth.id))
     }, [dispatch, props.access_token, props.auth])
 
     useEffect(() => {

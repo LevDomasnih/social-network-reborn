@@ -37,7 +37,9 @@ class MyDocument extends Document {
                 <Head/>
                 <body>
                 <Main/>
-                <NextScript/>
+                    <div id='push-portal'/>
+                    <div id='modal-portal'/>
+                    <NextScript/>
                 </body>
             </Html>
         )

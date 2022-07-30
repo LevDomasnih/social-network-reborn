@@ -14,6 +14,7 @@ import styled from "styled-components";
 import {IMePage} from "../models/pages/IMePage";
 import {setUserData} from "../store/modules/user/userSlice";
 import {getBlogs, getPosts} from "../store/modules/user/userThunk";
+import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {
     const access_token = ctx.req.cookies.jwt
@@ -78,6 +79,7 @@ const MePage: NextPage<IMePage> = (props) => {
             access_token: props.access_token,
             ...props.auth
         }))
+        dispatch(setUserId(props.auth.id))
     }, [dispatch, props.access_token, props.auth])
 
     useEffect(() => {
