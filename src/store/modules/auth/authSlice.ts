@@ -85,7 +85,7 @@ const authSlice = createSlice({
         builder.addCase(register.rejected, (state, action) => {
             state.loading = false
             state.authError = {
-                // message: action.payload!.message,
+                ...state.authError,
                 requestId: action.meta.requestId,
             }
         })

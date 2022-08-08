@@ -1,4 +1,4 @@
-import {register} from "@/store/modules/auth/authThunks";
+import {login, register} from "@/store/modules/auth/authThunks";
 import axios from "axios";
 
 jest.mock('axios');
@@ -72,6 +72,70 @@ describe('auth thunk', () => {
         expect(start[0].type).toBe(register.pending().type)
         // @ts-ignore
         expect(end[0].type).toBe(register.rejected().type)
+        expect(end[0].meta.rejectedWithValue).toBeTruthy()
+    });
+
+    it('should login with resolve response', async function () {
+        const dispatch = jest.fn()
+
+        mockedAxios.post.mockResolvedValue({
+            data: {
+                access_token: 'your_access_token'
+            },
+            status: 200,
+        });
+
+        const loginThunk = login({
+            loginOrEmail: 'tested@tested.com',
+            password: 'tested_password',
+        })
+
+        await loginThunk(dispatch, () => ({}), {})
+
+        const {
+            calls
+        } = dispatch.mock;
+
+        expect(calls).toHaveLength(2)
+
+        const [start, end] = calls;
+
+        // @ts-ignore
+        expect(start[0].type).toBe(login.pending().type)
+        // @ts-ignore
+        expect(end[0].type).toBe(login.fulfilled().type)
+        expect(end[0].payload).toStrictEqual({'access_token': 'your_access_token'})
+    });
+
+    it('should login with resolve reject', async function () {
+        const dispatch = jest.fn()
+
+        mockedAxios.post.mockResolvedValue({
+            data: {
+                access_token: 'your_access_token'
+            },
+            status: 400,
+        });
+
+        const loginThunk = login({
+            loginOrEmail: 'tested@tested.com',
+            password: 'tested_password',
+        })
+
+        await loginThunk(dispatch, () => ({}), {})
+
+        const {
+            calls
+        } = dispatch.mock;
+
+        expect(calls).toHaveLength(2)
+
+        const [start, end] = calls;
+
+        // @ts-ignore
+        expect(start[0].type).toBe(login.pending().type)
+        // @ts-ignore
+        expect(end[0].type).toBe(login.rejected().type)
         expect(end[0].meta.rejectedWithValue).toBeTruthy()
     });
 })

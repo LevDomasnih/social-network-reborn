@@ -2,7 +2,7 @@ import React, {FC, FormEvent, useEffect, useRef, useState} from "react"
 import {EditorState, RawDraftContentState} from "draft-js"
 import {BlogModalProps} from "./BlogModal.props"
 import {Modal} from "@/components"
-import {BackgroundImage} from "@/components"
+import {BackgroundImage} from "../BackgroundImage/BackgroundImage"
 import {RichEditor} from "@/components"
 import {useFileReader} from "@/hooks"
 import {useAppDispatch, useAppSelector} from "@/store/hooks"
@@ -69,7 +69,7 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
     }
 
     return (
-        <Modal active={active} closeModal={closeModal} {...props}>
+        <Modal data-testid='modal' active={active} closeModal={closeModal} {...props}>
             <ContainerEditor>
                 <ContainerBackground>
                     <Background

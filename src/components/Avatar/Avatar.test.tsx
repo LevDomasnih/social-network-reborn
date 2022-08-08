@@ -2,7 +2,7 @@ import {render, screen, waitFor} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import {Avatar} from "./Avatar";
 
-describe('Avatar', () => {
+describe('Avatar component', () => {
     it('Avatar is render', () => {
         const { container } = render(<Avatar img={'/avatar.png'} width={40} height={40}/>);
         expect(container).toBeInTheDocument()

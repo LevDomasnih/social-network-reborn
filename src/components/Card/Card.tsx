@@ -61,9 +61,9 @@ export const Card: FC<CardProps> = ({photo, ...props}) => {
     }
 
     return (
-        <Container photo={photo} onClick={handleClick}>
+        <Container data-testid='card' photo={photo} onClick={handleClick}>
             {photo ? (
-                <Image src={photo} width={140} height={175} objectFit='cover' objectPosition='center'/>
+                <Image data-testid='image' src={photo} width={140} height={175} objectFit='cover' objectPosition='center'/>
             ) : (
                 <ContainerEmpty>
                     <Rounded>
