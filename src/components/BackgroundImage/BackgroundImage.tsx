@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {SvgImage} from "../SvgImage/SvgImage";
+import {SvgImage} from "@/components";
 import React, {ForwardedRef, forwardRef} from "react";
 import {BackgroundImageProps} from "./BackgroundImage.props";
 import cn from "classnames";

@@ -85,7 +85,7 @@ const authSlice = createSlice({
         builder.addCase(register.rejected, (state, action) => {
             state.loading = false
             state.authError = {
-                message: action.payload!.message,
+                // message: action.payload!.message,
                 requestId: action.meta.requestId,
             }
         })
@@ -93,5 +93,4 @@ const authSlice = createSlice({
 })
 
 export const {defaultError, setAuth} = authSlice.actions
-defaultError()
 export default authSlice.reducer

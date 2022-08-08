@@ -1,14 +1,14 @@
 import React, {FC, FormEvent, useEffect, useRef, useState} from "react"
 import {EditorState, RawDraftContentState} from "draft-js"
 import {BlogModalProps} from "./BlogModal.props"
-import {Modal} from "../Modal/Modal"
-import {BackgroundImage} from "../BackgroundImage/BackgroundImage"
-import {RichEditor} from "../RichEditor/RichEditor"
-import {useFileReader} from "../../hooks"
-import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {Modal} from "@/components"
+import {BackgroundImage} from "@/components"
+import {RichEditor} from "@/components"
+import {useFileReader} from "@/hooks"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import styled from "styled-components";
-import {createBlog} from "../../store/modules/user/userThunk";
-import {setBlogModalActive} from "../../store/modules/user/userSlice";
+import {createBlog} from "@/store/modules/user/userThunk";
+import {setBlogModalActive} from "@/store/modules/user/userSlice";
 
 const ContainerEditor = styled.div`
   overflow: auto;
