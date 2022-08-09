@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button component should Button match snapshot 1`] = `
+<button
+  class="sc-gsnTZi dtFTOr"
+>
+  Кнопка
+</button>
+`;
