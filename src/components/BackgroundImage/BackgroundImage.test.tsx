@@ -30,6 +30,10 @@ describe('BackgroundImage component', () => {
         await userEvent.upload(fileInput, testImageFile);
         expect(fileInput.files.length).toBe(1);
     });
+    it('should BackgroundImage match snapshot', function () {
+        render(<BackgroundImage src={'/avatar.png'} />)
+        expect(screen.getByTestId('background-image')).toMatchSnapshot()
+    });
 })
 
 export {}

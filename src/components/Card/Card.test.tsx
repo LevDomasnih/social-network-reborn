@@ -30,6 +30,14 @@ describe('Card component', () => {
         )
         expect(screen.getByText(/добавить/i)).toBeInTheDocument()
     });
+    it('should Card match snapshot', function () {
+        render(
+            <WrapThemes>
+                <Card />
+            </WrapThemes>
+        )
+        expect(screen.getByTestId('card')).toMatchSnapshot()
+    });
 })
 
 export {}

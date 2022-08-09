@@ -93,6 +93,14 @@ describe('Header component', () => {
         expect(dispatch).toHaveBeenCalledTimes(1)
         expect(mockedSetBlogModalActive).toHaveBeenCalledWith(true)
     });
+    it('should Header match snapshot', function () {
+        const {container} = render(
+            <WrapThemes>
+                <Header />
+            </WrapThemes>
+        )
+        expect(container).toMatchSnapshot()
+    });
 })
 
 export {}

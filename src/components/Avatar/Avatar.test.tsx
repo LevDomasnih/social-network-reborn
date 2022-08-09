@@ -47,4 +47,10 @@ describe('Avatar component', () => {
         expect(getByRole('img')).not.toHaveAttribute('src', '')
         expect(getByRole('img')).not.toHaveAttribute('src', '/')
     })
+    it('should match snapshot', async function () {
+        render(<Avatar classname='NewAvatar' img={'/avatar.png'} width={40} height={40}/>)
+        await waitFor(() => {
+            expect(screen.getByRole('img')).toMatchSnapshot()
+        })
+    });
 })

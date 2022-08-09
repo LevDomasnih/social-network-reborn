@@ -26,6 +26,14 @@ describe('Button component', () => {
 
         expect(click).toHaveBeenCalledTimes(1)
     });
+    it('should Button match snapshot', function () {
+        render(
+            <WrapThemes>
+                <Button>Кнопка</Button>
+            </WrapThemes>
+        )
+        expect(screen.getByRole('button')).toMatchSnapshot()
+    });
 })
 
 export {}

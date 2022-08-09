@@ -33,6 +33,10 @@ describe('BlogModal component', () => {
         render(<WrapThemes><BlogModal active={false} /></WrapThemes>)
         expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
     });
+    it('should BlogModal null match snapshot', function () {
+        render(<WrapThemes><BlogModal active={false} /></WrapThemes>)
+        expect(screen.findByTestId('modal')).toMatchSnapshot()
+    });
 })
 
 export {}
