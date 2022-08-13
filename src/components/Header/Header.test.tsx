@@ -59,7 +59,7 @@ describe('Header component', () => {
     // });
 
     it('should be render image', async () => {
-        mockedUseSelector.mockReturnValue({avatar: '/test.png'})
+        mockedUseSelector.mockReturnValue({avatar: '/__tests__.png'})
 
         // @ts-ignore
         mockedUseDispatch.mockResolvedValue(jest.fn())

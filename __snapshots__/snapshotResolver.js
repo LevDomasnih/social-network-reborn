@@ -3,12 +3,12 @@ const path = require('path')
 const rootDir = path.resolve(__dirname, '..')
 
 module.exports = {
-    /** resolves from test to snapshot path */
+    /** resolves from __tests__ to snapshot path */
     resolveSnapshotPath: (testPath, snapshotExtension) => {
         return testPath.replace('src/', '__snapshots__/') + snapshotExtension
     },
 
-    /** resolves from snapshot to test path */
+    /** resolves from snapshot to __tests__ path */
     resolveTestPath: (snapshotFilePath, snapshotExtension) => {
         return snapshotFilePath
             .replace('__snapshots__/', 'src/')
