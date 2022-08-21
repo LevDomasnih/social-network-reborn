@@ -4,17 +4,26 @@ import {GetServerSidePropsContext, NextPage} from "next"
 import routes from "../utils/routes"
 import axios from "axios"
 import MainLayout from "../layout/MainLayout/MainLayout"
-import {Card, Menu, Post, Profile, RightSidebarFriend} from "../components"
-import {useAppDispatch, useAppSelector} from "../store/hooks"
-import {setAuth} from "../store/modules/auth/authSlice"
-import {IMenuItem} from "../components/Menu/Menu.props"
-import {IBlog} from "../models/IBlog"
-import {IPost} from "../models/IPost"
+import {Card, Menu, Post, Profile, RightSidebarFriend} from "@/components"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
+import {setAuth} from "@/store/modules/auth/authSlice"
+import {IMenuItem} from "@/components/Menu/Menu.props"
+import {IBlog} from "@/models/IBlog"
+import {IPost} from "@/models/IPost"
 import styled from "styled-components";
-import {IMePage} from "../models/pages/IMePage";
-import {setUserData} from "../store/modules/user/userSlice";
-import {getBlogs, getPosts} from "../store/modules/user/userThunk";
+import {IMePage} from "@/models/pages/IMePage";
+import {setUserData} from "@/store/modules/user/userSlice";
+import {getBlogs, getPosts} from "@/store/modules/user/userThunk";
 import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
+import client from "../../apollo-client";
+import {
+    AuthDocument,
+    AuthQuery,
+    UserBlogsDocument,
+    UserBlogsQuery, UserBlogsQueryVariables,
+    UserMeDocument,
+    UserMeQuery
+} from "@/generated/graphql";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {
     const access_token = ctx.req.cookies.jwt
@@ -30,13 +39,36 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
         }
     }
     try {
-        const query = axios.create({
-            baseURL: process.env.NEXT_PUBLIC_API_URL,
-            headers: {Authorization: `Bearer ${access_token}`},
-        })
-        auth = (await query.get(`/auth/userInfo`)).data
-        user = (await query.get(`/users/me`)).data
-        blogs = (await query.get(`/blogs/user/${auth.id}`)).data
+        auth = await client.query<AuthQuery>({
+            query: AuthDocument,
+            errorPolicy: "all",
+            context: {
+                headers: {
+                    cookieToken: access_token
+                }
+            }
+        });
+        user = await client.query<UserMeQuery>({
+            query: UserMeDocument,
+            errorPolicy: "all",
+            context: {
+                headers: {
+                    cookieToken: access_token
+                }
+            }
+        });
+        blogs = await client.query<UserBlogsQuery, UserBlogsQueryVariables>({
+            query: UserBlogsDocument,
+            variables: {
+                id: auth.data.auth.id
+            },
+            errorPolicy: "all",
+            context: {
+                headers: {
+                    cookieToken: access_token
+                }
+            }
+        });
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -49,9 +81,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
     return {
         props: {
             access_token,
-            auth,
-            user,
-            blogs,
+            auth: auth.data,
+            user: user.data,
+            blogs: blogs.data,
         },
     }
 }

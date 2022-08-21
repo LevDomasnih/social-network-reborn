@@ -1,0 +1,329 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type AuthScheme {
+    avatar: String
+    email: String!
+    firstName: String!
+    id: ID!
+    lastName: String!
+    login: String!
+    notifications: Int!
+}
+
+type BlogsOfUserScheme {
+    createdAt: String!
+    id: ID!
+    isLiked: Boolean!
+    likes: Int!
+    mainImage: String
+    profile: BlogsOfUserSchemeProfile!
+    text: [BlogsOfUserSchemeTextBlock!]!
+    updatedAt: String!
+    views: Int!
+}
+
+type BlogsOfUserSchemeInlineStyleRanges {
+    length: Float!
+    offset: Float!
+    style: String!
+}
+
+type BlogsOfUserSchemeProfile {
+    avatar: String
+    firstName: String
+    lastName: String
+    middleName: String
+}
+
+type BlogsOfUserSchemeTextBlock {
+    createdAt: String!
+    depth: Int!
+    id: ID!
+    inlineStyleRanges: BlogsOfUserSchemeInlineStyleRanges
+    key: String!
+    text: String!
+    type: String!
+    updatedAt: String!
+}
+
+type ChangeLikeScheme {
+    text: String!
+}
+
+type CreateBlogScheme {
+    createdAt: DateTime!
+    id: ID!
+    likes: Int!
+    mainImage: String
+    profile: CreateBlogSchemeProfile!
+    text: [CreateBlogSchemeTextBlock!]!
+    updatedAt: DateTime!
+    views: Int!
+}
+
+type CreateBlogSchemeInlineStyleRanges {
+    length: Float!
+    offset: Float!
+    style: String!
+}
+
+type CreateBlogSchemeProfile {
+    avatar: String
+    firstName: String
+    lastName: String
+    middleName: String
+}
+
+type CreateBlogSchemeTextBlock {
+    createdAt: DateTime!
+    depth: Int!
+    id: ID!
+    inlineStyleRanges: CreateBlogSchemeInlineStyleRanges
+    key: String!
+    text: String!
+    type: String!
+    updatedAt: DateTime!
+}
+
+type CreatePostScheme {
+    text: String!
+}
+
+type DeleteBlogScheme {
+    deleted: Boolean!
+}
+
+type EditImageScheme {
+    fileName: String!
+}
+
+type EditProfileScheme {
+    updated: Boolean!
+}
+
+type GetDialogScheme {
+    id: ID
+    info: GetDialogSchemeInfo!
+    messages: [GetDialogSchemeMessages!]!
+    status: String!
+    users: [GetDialogSchemeUser!]!
+}
+
+type GetDialogSchemeInfo {
+    id: ID!
+    image: String
+    name: String!
+}
+
+type GetDialogSchemeMessages {
+    createdAt: DateTime!
+    id: ID!
+    ownerId: ID!
+    text: String!
+    updatedAt: DateTime!
+}
+
+type GetDialogSchemeUser {
+    avatar: String
+    firstName: String!
+    id: ID!
+    lastName: String!
+}
+
+type GetDialogsScheme {
+    id: ID!
+    info: GetDialogsSchemeInfo!
+    lastMessage: GetDialogsSchemeLastMessages!
+    status: String!
+    userId: ID!
+    users: [GetDialogsSchemeUser!]!
+}
+
+type GetDialogsSchemeInfo {
+    id: ID!
+    image: String
+    name: String!
+}
+
+type GetDialogsSchemeLastMessages {
+    createdAt: DateTime!
+    id: ID!
+    ownerId: ID!
+    text: String!
+    updatedAt: DateTime!
+}
+
+type GetDialogsSchemeUser {
+    avatar: String
+    firstName: String!
+    id: ID!
+    lastName: String!
+}
+
+type GetFollowScheme {
+    email: String!
+    id: ID!
+    login: String!
+}
+
+type GetPostScheme {
+    likes: [String!]!
+    text: String!
+    views: [String!]!
+}
+
+type GetPostsScheme {
+    createdAt: DateTime!
+    id: ID!
+    isLiked: Boolean!
+    likes: Int!
+    profile: GetPostsSchemeProfile!
+    text: String!
+    updatedAt: DateTime!
+    views: Int!
+}
+
+type GetPostsSchemeProfile {
+    avatar: String
+    firstName: String!
+    lastName: String!
+}
+
+type GetProfileScheme {
+    about: String
+    avatar: String
+    birthday: DateTime
+    city: String
+    country: String
+    firstName: String!
+    lastName: String!
+    mainImage: String
+    middleName: String!
+    phone: String!
+    relatives: String
+    school: String
+    status: String
+}
+
+type GetUserScheme {
+    email: String!
+    id: ID!
+    login: String!
+    profile: GetUsersSchemeProfile!
+}
+
+type GetUsersSchemeProfile {
+    about: String
+    avatar: String!
+    birthday: String
+    city: String
+    country: String
+    firstName: String!
+    id: ID!
+    lastName: String!
+    mainImage: String
+    middleName: String!
+    phone: String!
+    relatives: String
+    school: String
+    status: String
+}
+
+type IsValidScheme {
+    valid: Boolean!
+}
+
+type LoginScheme {
+    access_token: String!
+}
+
+type Mutation {
+    changeLike(postId: String!): ChangeLikeScheme!
+    createBlog(blogData: CreateBlogDto!, files: [Upload!]!): [CreateBlogScheme!]!
+    createPost(data: CreatePostInput!, files: [Upload!]!): CreatePostScheme!
+    deleteBlog(id: String!): DeleteBlogScheme!
+    edit(data: EditProfileInput!): EditProfileScheme!
+    editImg(field: String!, files: [Upload!]!): EditImageScheme!
+    register(registerData: register!): RegisterScheme!
+}
+
+type Query {
+    auth: AuthScheme!
+    blogsOfUser(id: ID!): [BlogsOfUserScheme!]!
+    get(userId: String!): GetProfileScheme!
+    getDialog(id: String!): GetDialogScheme!
+    getDialogs: [GetDialogsScheme!]!
+    getFollowUsers(id: String!): [GetFollowScheme!]!
+    getMe: GetUserScheme!
+    getPost(postId: String!): GetPostScheme!
+    getPosts(userId: String!): [GetPostsScheme!]!
+    getUserById(id: String!): GetUserScheme!
+    getUsers: [GetUserScheme!]!
+    isValidFields(fieldName: String!, fieldValue: String!): IsValidScheme!
+    login(loginOrEmail: String!, password: String!): LoginScheme!
+}
+
+type RegisterScheme {
+    access_token: String!
+}
+
+"A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
+scalar DateTime
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
+input CreateBlogDto {
+    textBlocks: [CreateBlogDtoTextBlocks!]!
+}
+
+input CreateBlogDtoInlineStyleRangesDto {
+    length: String!
+    offset: String!
+    style: String!
+}
+
+input CreateBlogDtoTextBlocks {
+    depth: Int!
+    entityRanges: [String!]!
+    inlineStyleRanges: [CreateBlogDtoInlineStyleRangesDto!]!
+    key: String!
+    text: String!
+    type: String!
+}
+
+input CreatePostInput {
+    parentPost: String!
+    text: String!
+}
+
+input EditProfileInput {
+    about: String
+    birthday: String
+    city: String
+    country: String
+    createdAt: DateTime!
+    email: String!
+    firstName: String!
+    lastName: String!
+    login: String!
+    middleName: String!
+    phone: String!
+    relatives: String
+    school: String
+    status: String
+    updatedAt: DateTime!
+}
+
+input register {
+    email: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+    phone: String!
+}

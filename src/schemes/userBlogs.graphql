@@ -1,0 +1,31 @@
+query UserBlogs($id: ID!) {
+    blogsOfUser(id: $id) {
+        id,
+        mainImage,
+        createdAt,
+        isLiked,
+        likes,
+        text {
+            text,
+            createdAt,
+            id,
+            depth,
+            inlineStyleRanges {
+                length,
+                offset,
+                style,
+            },
+            key,
+            type,
+            updatedAt
+        }
+        updatedAt,
+        views,
+        profile {
+            middleName,
+            lastName,
+            firstName,
+            avatar,
+        }
+    }
+}

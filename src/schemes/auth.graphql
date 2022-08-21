@@ -1,0 +1,11 @@
+query Auth {
+    auth {
+        lastName,
+        firstName,
+        email,
+        login,
+        avatar,
+        id,
+        notifications,
+    }
+}
