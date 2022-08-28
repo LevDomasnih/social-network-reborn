@@ -14,58 +14,37 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
+  JSON: any;
   Upload: any;
 };
 
-export type AuthScheme = {
-  __typename?: 'AuthScheme';
-  avatar?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  firstName: Scalars['String'];
+export type BlogEntity = {
+  __typename?: 'BlogEntity';
+  createdAt: Scalars['DateTime'];
+  entityMap?: Maybe<Scalars['JSON']>;
+  headers?: Maybe<Array<Scalars['String']>>;
   id: Scalars['ID'];
-  lastName: Scalars['String'];
-  login: Scalars['String'];
-  notifications: Scalars['Int'];
-};
-
-export type BlogsOfUserScheme = {
-  __typename?: 'BlogsOfUserScheme';
-  createdAt: Scalars['String'];
-  id: Scalars['ID'];
-  isLiked: Scalars['Boolean'];
   likes: Scalars['Int'];
-  mainImage?: Maybe<Scalars['String']>;
-  profile: BlogsOfUserSchemeProfile;
-  text: Array<BlogsOfUserSchemeTextBlock>;
-  updatedAt: Scalars['String'];
+  mainImage?: Maybe<FilesEntity>;
+  owner: UserEntity;
+  textBlocks: Array<BlogTextBlockEntity>;
+  updatedAt: Scalars['DateTime'];
   views: Scalars['Int'];
 };
 
-export type BlogsOfUserSchemeInlineStyleRanges = {
-  __typename?: 'BlogsOfUserSchemeInlineStyleRanges';
-  length: Scalars['Float'];
-  offset: Scalars['Float'];
-  style: Scalars['String'];
-};
-
-export type BlogsOfUserSchemeProfile = {
-  __typename?: 'BlogsOfUserSchemeProfile';
-  avatar?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  middleName?: Maybe<Scalars['String']>;
-};
-
-export type BlogsOfUserSchemeTextBlock = {
-  __typename?: 'BlogsOfUserSchemeTextBlock';
-  createdAt: Scalars['String'];
+export type BlogTextBlockEntity = {
+  __typename?: 'BlogTextBlockEntity';
+  createdAt: Scalars['DateTime'];
+  data?: Maybe<Scalars['JSON']>;
   depth: Scalars['Int'];
+  entityRanges?: Maybe<Array<Scalars['String']>>;
   id: Scalars['ID'];
-  inlineStyleRanges?: Maybe<BlogsOfUserSchemeInlineStyleRanges>;
+  inlineStyleRanges?: Maybe<Array<InlineStyleRanges>>;
   key: Scalars['String'];
+  postOwner: BlogEntity;
   text: Scalars['String'];
   type: Scalars['String'];
-  updatedAt: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ChangeLikeScheme = {
@@ -146,6 +125,22 @@ export type DeleteBlogScheme = {
   deleted: Scalars['Boolean'];
 };
 
+export enum DialogType {
+  Chat = 'CHAT',
+  Dialogs = 'DIALOGS'
+}
+
+export type DialogsEntity = {
+  __typename?: 'DialogsEntity';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  lastMessage: MessagesEntity;
+  messages: Array<MessagesEntity>;
+  owners: Array<UserEntity>;
+  status: DialogType;
+  updatedAt: Scalars['DateTime'];
+};
+
 export type EditImageScheme = {
   __typename?: 'EditImageScheme';
   fileName: Scalars['String'];
@@ -174,71 +169,24 @@ export type EditProfileScheme = {
   updated: Scalars['Boolean'];
 };
 
-export type GetDialogScheme = {
-  __typename?: 'GetDialogScheme';
-  id?: Maybe<Scalars['ID']>;
-  info: GetDialogSchemeInfo;
-  messages: Array<GetDialogSchemeMessages>;
-  status: Scalars['String'];
-  users: Array<GetDialogSchemeUser>;
-};
-
-export type GetDialogSchemeInfo = {
-  __typename?: 'GetDialogSchemeInfo';
-  id: Scalars['ID'];
-  image?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
-export type GetDialogSchemeMessages = {
-  __typename?: 'GetDialogSchemeMessages';
+export type FilesEntity = {
+  __typename?: 'FilesEntity';
   createdAt: Scalars['DateTime'];
+  filePath: Scalars['String'];
   id: Scalars['ID'];
-  ownerId: Scalars['ID'];
-  text: Scalars['String'];
+  name: Scalars['String'];
+  owner: UserEntity;
   updatedAt: Scalars['DateTime'];
 };
 
-export type GetDialogSchemeUser = {
-  __typename?: 'GetDialogSchemeUser';
-  avatar?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
-};
-
-export type GetDialogsScheme = {
-  __typename?: 'GetDialogsScheme';
-  id: Scalars['ID'];
-  info: GetDialogsSchemeInfo;
-  lastMessage: GetDialogsSchemeLastMessages;
-  status: Scalars['String'];
-  userId: Scalars['ID'];
-  users: Array<GetDialogsSchemeUser>;
-};
-
-export type GetDialogsSchemeInfo = {
-  __typename?: 'GetDialogsSchemeInfo';
-  id: Scalars['ID'];
-  image?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
-export type GetDialogsSchemeLastMessages = {
-  __typename?: 'GetDialogsSchemeLastMessages';
+export type FollowEntity = {
+  __typename?: 'FollowEntity';
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
-  ownerId: Scalars['ID'];
-  text: Scalars['String'];
+  owner: UserEntity;
+  subscriber: Array<FollowEntity>;
+  subscriberOwner: Array<FollowEntity>;
   updatedAt: Scalars['DateTime'];
-};
-
-export type GetDialogsSchemeUser = {
-  __typename?: 'GetDialogsSchemeUser';
-  avatar?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
 };
 
 export type GetFollowScheme = {
@@ -248,73 +196,22 @@ export type GetFollowScheme = {
   login: Scalars['String'];
 };
 
-export type GetPostScheme = {
-  __typename?: 'GetPostScheme';
-  likes: Array<Scalars['String']>;
-  text: Scalars['String'];
-  views: Array<Scalars['String']>;
-};
-
-export type GetPostsScheme = {
-  __typename?: 'GetPostsScheme';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  isLiked: Scalars['Boolean'];
-  likes: Scalars['Int'];
-  profile: GetPostsSchemeProfile;
-  text: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
-  views: Scalars['Int'];
-};
-
-export type GetPostsSchemeProfile = {
-  __typename?: 'GetPostsSchemeProfile';
-  avatar?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-};
-
-export type GetProfileScheme = {
-  __typename?: 'GetProfileScheme';
-  about?: Maybe<Scalars['String']>;
-  avatar?: Maybe<Scalars['String']>;
-  birthday?: Maybe<Scalars['DateTime']>;
-  city?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  mainImage?: Maybe<Scalars['String']>;
-  middleName: Scalars['String'];
-  phone: Scalars['String'];
-  relatives?: Maybe<Scalars['String']>;
-  school?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-};
-
-export type GetUserScheme = {
-  __typename?: 'GetUserScheme';
+export type GetUserBaseInfo = {
+  __typename?: 'GetUserBaseInfo';
+  avatar?: Maybe<FilesEntity>;
   email: Scalars['String'];
-  id: Scalars['ID'];
+  firstName: Scalars['String'];
+  id: Scalars['String'];
+  lastName: Scalars['String'];
   login: Scalars['String'];
-  profile: GetUsersSchemeProfile;
+  middleName: Scalars['String'];
 };
 
-export type GetUsersSchemeProfile = {
-  __typename?: 'GetUsersSchemeProfile';
-  about?: Maybe<Scalars['String']>;
-  avatar: Scalars['String'];
-  birthday?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
-  mainImage?: Maybe<Scalars['String']>;
-  middleName: Scalars['String'];
-  phone: Scalars['String'];
-  relatives?: Maybe<Scalars['String']>;
-  school?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+export type InlineStyleRanges = {
+  __typename?: 'InlineStyleRanges';
+  length: Scalars['Int'];
+  offset: Scalars['Int'];
+  style: Scalars['String'];
 };
 
 export type IsValidScheme = {
@@ -325,6 +222,18 @@ export type IsValidScheme = {
 export type LoginScheme = {
   __typename?: 'LoginScheme';
   access_token: Scalars['String'];
+};
+
+export type MessagesEntity = {
+  __typename?: 'MessagesEntity';
+  createdAt: Scalars['DateTime'];
+  dialog: DialogsEntity;
+  file?: Maybe<FilesEntity>;
+  id: Scalars['ID'];
+  image?: Maybe<FilesEntity>;
+  owner: UserEntity;
+  text: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Mutation = {
@@ -376,21 +285,58 @@ export type MutationRegisterArgs = {
   registerData: Register;
 };
 
+export type PostEntity = {
+  __typename?: 'PostEntity';
+  childrenPosts: Array<PostEntity>;
+  createdAt: Scalars['DateTime'];
+  files?: Maybe<FilesEntity>;
+  id: Scalars['ID'];
+  images?: Maybe<FilesEntity>;
+  likes?: Maybe<Array<Scalars['String']>>;
+  owner: UserEntity;
+  parentPost?: Maybe<PostEntity>;
+  text: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  views?: Maybe<Array<Scalars['String']>>;
+};
+
+export type ProfileEntity = {
+  __typename?: 'ProfileEntity';
+  about?: Maybe<Scalars['String']>;
+  avatar: FilesEntity;
+  birthday?: Maybe<Scalars['DateTime']>;
+  city?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  mainImage: FilesEntity;
+  middleName: Scalars['String'];
+  owner: UserEntity;
+  phone: Scalars['String'];
+  relatives?: Maybe<Scalars['String']>;
+  school?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  auth: AuthScheme;
-  blogsOfUser: Array<BlogsOfUserScheme>;
-  get: GetProfileScheme;
-  getDialog: GetDialogScheme;
-  getDialogs: Array<GetDialogsScheme>;
+  blogsMe: Array<BlogEntity>;
+  blogsOfUser: Array<BlogEntity>;
+  dialog: DialogsEntity;
+  dialogs: Array<DialogsEntity>;
   getFollowUsers: Array<GetFollowScheme>;
-  getMe: GetUserScheme;
-  getPost: GetPostScheme;
-  getPosts: Array<GetPostsScheme>;
-  getUserById: GetUserScheme;
-  getUsers: Array<GetUserScheme>;
   isValidFields: IsValidScheme;
   login: LoginScheme;
+  post: PostEntity;
+  posts: Array<PostEntity>;
+  profile: ProfileEntity;
+  user: UserEntity;
+  userMe: UserEntity;
+  userMeBaseInfo: GetUserBaseInfo;
+  users: Array<UserEntity>;
 };
 
 
@@ -399,32 +345,12 @@ export type QueryBlogsOfUserArgs = {
 };
 
 
-export type QueryGetArgs = {
-  userId: Scalars['String'];
-};
-
-
-export type QueryGetDialogArgs = {
+export type QueryDialogArgs = {
   id: Scalars['String'];
 };
 
 
 export type QueryGetFollowUsersArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryGetPostArgs = {
-  postId: Scalars['String'];
-};
-
-
-export type QueryGetPostsArgs = {
-  userId: Scalars['String'];
-};
-
-
-export type QueryGetUserByIdArgs = {
   id: Scalars['String'];
 };
 
@@ -440,9 +366,43 @@ export type QueryLoginArgs = {
   password: Scalars['String'];
 };
 
+
+export type QueryPostArgs = {
+  postId: Scalars['ID'];
+};
+
+
+export type QueryPostsArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type QueryProfileArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
 export type RegisterScheme = {
   __typename?: 'RegisterScheme';
   access_token: Scalars['String'];
+};
+
+export type UserEntity = {
+  __typename?: 'UserEntity';
+  blogs: Array<BlogEntity>;
+  createdAt: Scalars['DateTime'];
+  dialogs: Array<DialogsEntity>;
+  email: Scalars['String'];
+  id: Scalars['ID'];
+  login: Scalars['String'];
+  messages: Array<MessagesEntity>;
+  posts: Array<PostEntity>;
+  profile: ProfileEntity;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Register = {
@@ -453,10 +413,44 @@ export type Register = {
   phone: Scalars['String'];
 };
 
-export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
+export type BlogsFragment = { __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName: string, lastName: string, firstName: string, avatar: { __typename?: 'FilesEntity', filePath: string } } } };
+
+export type PersonFragmentFragment = { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName: string, relatives?: string | null, school?: string | null, status?: string | null, avatar: { __typename?: 'FilesEntity', filePath: string }, mainImage: { __typename?: 'FilesEntity', filePath: string } } };
+
+export type PostsFragment = { __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName: string, lastName: string, firstName: string, avatar: { __typename?: 'FilesEntity', filePath: string } } } };
+
+export type UserBaseInfoFragment = { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null };
+
+export type GetBaseInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AuthQuery = { __typename?: 'Query', auth: { __typename?: 'AuthScheme', lastName: string, firstName: string, email: string, login: string, avatar?: string | null, id: string, notifications: number } };
+export type GetBaseInfoQuery = { __typename?: 'Query', baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+
+export type GetUserBlogsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserBlogsQuery = { __typename?: 'Query', blogsOfUser: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName: string, lastName: string, firstName: string, avatar: { __typename?: 'FilesEntity', filePath: string } } } }> };
+
+export type GetUserMePageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserMePageQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName: string, relatives?: string | null, school?: string | null, status?: string | null, avatar: { __typename?: 'FilesEntity', filePath: string }, mainImage: { __typename?: 'FilesEntity', filePath: string } } }, blogs: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName: string, lastName: string, firstName: string, avatar: { __typename?: 'FilesEntity', filePath: string } } } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+
+export type GetUserPersonQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserPersonQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName: string, relatives?: string | null, school?: string | null, status?: string | null, avatar: { __typename?: 'FilesEntity', filePath: string }, mainImage: { __typename?: 'FilesEntity', filePath: string } } } };
+
+export type GetUserPostsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName: string, lastName: string, firstName: string, avatar: { __typename?: 'FilesEntity', filePath: string } } } }> };
 
 export type LoginQueryVariables = Exact<{
   login: Scalars['String'];
@@ -477,59 +471,286 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterScheme', access_token: string } };
 
-export type UserBlogsQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type UserBlogsQuery = { __typename?: 'Query', blogsOfUser: Array<{ __typename?: 'BlogsOfUserScheme', id: string, mainImage?: string | null, createdAt: string, isLiked: boolean, likes: number, updatedAt: string, views: number, text: Array<{ __typename?: 'BlogsOfUserSchemeTextBlock', text: string, createdAt: string, id: string, depth: number, key: string, type: string, updatedAt: string, inlineStyleRanges?: { __typename?: 'BlogsOfUserSchemeInlineStyleRanges', length: number, offset: number, style: string } | null }>, profile: { __typename?: 'BlogsOfUserSchemeProfile', middleName?: string | null, lastName?: string | null, firstName?: string | null, avatar?: string | null } }> };
-
-export type UserMeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserMeQuery = { __typename?: 'Query', getMe: { __typename?: 'GetUserScheme', id: string, login: string, email: string, profile: { __typename?: 'GetUsersSchemeProfile', id: string, avatar: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: string | null, city?: string | null, country?: string | null, mainImage?: string | null, middleName: string, relatives?: string | null, school?: string | null, status?: string | null } } };
-
-
-export const AuthDocument = gql`
-    query Auth {
-  auth {
-    lastName
-    firstName
-    email
-    login
-    avatar
+export const BlogsFragmentDoc = gql`
+    fragment Blogs on BlogEntity {
+  id
+  mainImage {
+    filePath
+  }
+  createdAt
+  likes
+  textBlocks {
+    text
+    createdAt
     id
-    notifications
+    depth
+    inlineStyleRanges {
+      length
+      offset
+      style
+    }
+    key
+    type
+    updatedAt
+  }
+  updatedAt
+  views
+  owner {
+    profile {
+      middleName
+      lastName
+      firstName
+      avatar {
+        filePath
+      }
+    }
+  }
+  entityMap
+}
+    `;
+export const PersonFragmentFragmentDoc = gql`
+    fragment PersonFragment on UserEntity {
+  id
+  profile {
+    id
+    avatar {
+      filePath
+    }
+    firstName
+    lastName
+    phone
+    about
+    birthday
+    city
+    country
+    mainImage {
+      filePath
+    }
+    middleName
+    relatives
+    school
+    status
+  }
+  login
+  email
+}
+    `;
+export const PostsFragmentDoc = gql`
+    fragment Posts on PostEntity {
+  id
+  images {
+    filePath
+  }
+  createdAt
+  likes
+  text
+  updatedAt
+  views
+  owner {
+    profile {
+      middleName
+      lastName
+      firstName
+      avatar {
+        filePath
+      }
+    }
   }
 }
     `;
+export const UserBaseInfoFragmentDoc = gql`
+    fragment UserBaseInfo on GetUserBaseInfo {
+  email
+  login
+  id
+  avatar {
+    filePath
+  }
+  lastName
+  firstName
+}
+    `;
+export const GetBaseInfoDocument = gql`
+    query GetBaseInfo {
+  baseInfo: userMeBaseInfo {
+    ...UserBaseInfo
+  }
+}
+    ${UserBaseInfoFragmentDoc}`;
 
 /**
- * __useAuthQuery__
+ * __useGetBaseInfoQuery__
  *
- * To run a query within a React component, call `useAuthQuery` and pass it any options that fit your needs.
- * When your component renders, `useAuthQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBaseInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBaseInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAuthQuery({
+ * const { data, loading, error } = useGetBaseInfoQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAuthQuery(baseOptions?: Apollo.QueryHookOptions<AuthQuery, AuthQueryVariables>) {
+export function useGetBaseInfoQuery(baseOptions?: Apollo.QueryHookOptions<GetBaseInfoQuery, GetBaseInfoQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+        return Apollo.useQuery<GetBaseInfoQuery, GetBaseInfoQueryVariables>(GetBaseInfoDocument, options);
       }
-export function useAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthQuery, AuthQueryVariables>) {
+export function useGetBaseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBaseInfoQuery, GetBaseInfoQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+          return Apollo.useLazyQuery<GetBaseInfoQuery, GetBaseInfoQueryVariables>(GetBaseInfoDocument, options);
         }
-export type AuthQueryHookResult = ReturnType<typeof useAuthQuery>;
-export type AuthLazyQueryHookResult = ReturnType<typeof useAuthLazyQuery>;
-export type AuthQueryResult = Apollo.QueryResult<AuthQuery, AuthQueryVariables>;
+export type GetBaseInfoQueryHookResult = ReturnType<typeof useGetBaseInfoQuery>;
+export type GetBaseInfoLazyQueryHookResult = ReturnType<typeof useGetBaseInfoLazyQuery>;
+export type GetBaseInfoQueryResult = Apollo.QueryResult<GetBaseInfoQuery, GetBaseInfoQueryVariables>;
+export const GetUserBlogsDocument = gql`
+    query GetUserBlogs($id: ID!) {
+  blogsOfUser(id: $id) {
+    ...Blogs
+  }
+}
+    ${BlogsFragmentDoc}`;
+
+/**
+ * __useGetUserBlogsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBlogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBlogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBlogsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserBlogsQuery(baseOptions: Apollo.QueryHookOptions<GetUserBlogsQuery, GetUserBlogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserBlogsQuery, GetUserBlogsQueryVariables>(GetUserBlogsDocument, options);
+      }
+export function useGetUserBlogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserBlogsQuery, GetUserBlogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserBlogsQuery, GetUserBlogsQueryVariables>(GetUserBlogsDocument, options);
+        }
+export type GetUserBlogsQueryHookResult = ReturnType<typeof useGetUserBlogsQuery>;
+export type GetUserBlogsLazyQueryHookResult = ReturnType<typeof useGetUserBlogsLazyQuery>;
+export type GetUserBlogsQueryResult = Apollo.QueryResult<GetUserBlogsQuery, GetUserBlogsQueryVariables>;
+export const GetUserMePageDocument = gql`
+    query GetUserMePage {
+  user: userMe {
+    ...PersonFragment
+  }
+  blogs: blogsMe {
+    ...Blogs
+  }
+  baseInfo: userMeBaseInfo {
+    ...UserBaseInfo
+  }
+}
+    ${PersonFragmentFragmentDoc}
+${BlogsFragmentDoc}
+${UserBaseInfoFragmentDoc}`;
+
+/**
+ * __useGetUserMePageQuery__
+ *
+ * To run a query within a React component, call `useGetUserMePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserMePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserMePageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserMePageQuery(baseOptions?: Apollo.QueryHookOptions<GetUserMePageQuery, GetUserMePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserMePageQuery, GetUserMePageQueryVariables>(GetUserMePageDocument, options);
+      }
+export function useGetUserMePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserMePageQuery, GetUserMePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserMePageQuery, GetUserMePageQueryVariables>(GetUserMePageDocument, options);
+        }
+export type GetUserMePageQueryHookResult = ReturnType<typeof useGetUserMePageQuery>;
+export type GetUserMePageLazyQueryHookResult = ReturnType<typeof useGetUserMePageLazyQuery>;
+export type GetUserMePageQueryResult = Apollo.QueryResult<GetUserMePageQuery, GetUserMePageQueryVariables>;
+export const GetUserPersonDocument = gql`
+    query GetUserPerson($id: ID!) {
+  user(id: $id) {
+    ...PersonFragment
+  }
+}
+    ${PersonFragmentFragmentDoc}`;
+
+/**
+ * __useGetUserPersonQuery__
+ *
+ * To run a query within a React component, call `useGetUserPersonQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPersonQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPersonQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserPersonQuery(baseOptions: Apollo.QueryHookOptions<GetUserPersonQuery, GetUserPersonQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserPersonQuery, GetUserPersonQueryVariables>(GetUserPersonDocument, options);
+      }
+export function useGetUserPersonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPersonQuery, GetUserPersonQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserPersonQuery, GetUserPersonQueryVariables>(GetUserPersonDocument, options);
+        }
+export type GetUserPersonQueryHookResult = ReturnType<typeof useGetUserPersonQuery>;
+export type GetUserPersonLazyQueryHookResult = ReturnType<typeof useGetUserPersonLazyQuery>;
+export type GetUserPersonQueryResult = Apollo.QueryResult<GetUserPersonQuery, GetUserPersonQueryVariables>;
+export const GetUserPostsDocument = gql`
+    query GetUserPosts($id: ID!) {
+  posts(userId: $id) {
+    ...Posts
+  }
+}
+    ${PostsFragmentDoc}`;
+
+/**
+ * __useGetUserPostsQuery__
+ *
+ * To run a query within a React component, call `useGetUserPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPostsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserPostsQuery(baseOptions: Apollo.QueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(GetUserPostsDocument, options);
+      }
+export function useGetUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(GetUserPostsDocument, options);
+        }
+export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery>;
+export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
+export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
 export const LoginDocument = gql`
     query Login($login: String!, $password: String!) {
   login(loginOrEmail: $login, password: $password) {
@@ -605,116 +826,3 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const UserBlogsDocument = gql`
-    query UserBlogs($id: ID!) {
-  blogsOfUser(id: $id) {
-    id
-    mainImage
-    createdAt
-    isLiked
-    likes
-    text {
-      text
-      createdAt
-      id
-      depth
-      inlineStyleRanges {
-        length
-        offset
-        style
-      }
-      key
-      type
-      updatedAt
-    }
-    updatedAt
-    views
-    profile {
-      middleName
-      lastName
-      firstName
-      avatar
-    }
-  }
-}
-    `;
-
-/**
- * __useUserBlogsQuery__
- *
- * To run a query within a React component, call `useUserBlogsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserBlogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserBlogsQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useUserBlogsQuery(baseOptions: Apollo.QueryHookOptions<UserBlogsQuery, UserBlogsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserBlogsQuery, UserBlogsQueryVariables>(UserBlogsDocument, options);
-      }
-export function useUserBlogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserBlogsQuery, UserBlogsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserBlogsQuery, UserBlogsQueryVariables>(UserBlogsDocument, options);
-        }
-export type UserBlogsQueryHookResult = ReturnType<typeof useUserBlogsQuery>;
-export type UserBlogsLazyQueryHookResult = ReturnType<typeof useUserBlogsLazyQuery>;
-export type UserBlogsQueryResult = Apollo.QueryResult<UserBlogsQuery, UserBlogsQueryVariables>;
-export const UserMeDocument = gql`
-    query userMe {
-  getMe {
-    id
-    profile {
-      id
-      avatar
-      firstName
-      lastName
-      phone
-      about
-      birthday
-      city
-      country
-      mainImage
-      middleName
-      relatives
-      school
-      status
-    }
-    login
-    email
-  }
-}
-    `;
-
-/**
- * __useUserMeQuery__
- *
- * To run a query within a React component, call `useUserMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUserMeQuery(baseOptions?: Apollo.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, options);
-      }
-export function useUserMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, options);
-        }
-export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
-export type UserMeLazyQueryHookResult = ReturnType<typeof useUserMeLazyQuery>;
-export type UserMeQueryResult = Apollo.QueryResult<UserMeQuery, UserMeQueryVariables>;

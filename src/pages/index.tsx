@@ -14,7 +14,6 @@ import {Button, Checkbox, Input} from "@/components";
 import Cookies from "cookies";
 import styled from "styled-components";
 import {IRegisterPage} from "@/models/pages/IRegisterPage";
-import client from "../../apollo-client";
 import {
     LoginDocument,
     LoginQuery,
@@ -24,6 +23,7 @@ import {
     RegisterMutationVariables
 } from "@/generated/graphql";
 import {NetworkStatus} from "@apollo/client";
+import nextClient from "@/apolloNextClient";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -33,7 +33,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     if (process.env.AUTH_DONE === 'true' && process.env.AUTH_LOGIN && process.env.AUTH_PASSWORD && !cookiesToken) {
         const cookies = new Cookies(ctx.req, ctx.res);
         let token: string | undefined;
-        const {data, error, networkStatus} = await client.query<LoginQuery, LoginQueryVariables>({
+        const {data, error, networkStatus} = await nextClient.query<LoginQuery, LoginQueryVariables>({
             query: LoginDocument,
             variables: {
                 login: process.env.AUTH_LOGIN,
@@ -54,7 +54,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
                 lastName: 'tester',
                 phone: '+7 950 453 10 12',
             }
-            const {data, errors} = await client.mutate<RegisterMutation, RegisterMutationVariables>({
+            const {data, errors} = await nextClient.mutate<RegisterMutation, RegisterMutationVariables>({
                 mutation: RegisterDocument,
                 variables: dataToBeSent,
                 errorPolicy: "all"
@@ -67,7 +67,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
         if (token) {
             cookies.set('jwt', token, {
-                httpOnly: true,
+                httpOnly: false,
                 expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
                 sameSite: 'lax',
             });

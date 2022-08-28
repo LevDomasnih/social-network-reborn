@@ -46,18 +46,18 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
 
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        if (access_token) {
-            dispatch(dialogsRoom())
-            dispatch(dialogsGetMessage())
-            dispatch(dialogsGetNewDialog())
-        }
-
-        return () => {
-            dispatch(dialogsGetMessage('unsubscribe'))
-            dispatch(dialogsGetNewDialog('unsubscribe'))
-        }
-    }, [dispatch, access_token])
+    // useEffect(() => {
+    //     if (access_token) {
+    //         dispatch(dialogsRoom())
+    //         dispatch(dialogsGetMessage())
+    //         dispatch(dialogsGetNewDialog())
+    //     }
+    //
+    //     return () => {
+    //         dispatch(dialogsGetMessage('unsubscribe'))
+    //         dispatch(dialogsGetNewDialog('unsubscribe'))
+    //     }
+    // }, [dispatch, access_token])
 
     return (
         <Container className={className}>

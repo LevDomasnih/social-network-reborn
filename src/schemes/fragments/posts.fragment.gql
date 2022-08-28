@@ -1,0 +1,21 @@
+fragment Posts on PostEntity {
+    id,
+    images {
+        filePath
+    }
+    createdAt,
+    likes,
+    text
+    updatedAt,
+    views,
+    owner {
+        profile {
+            middleName,
+            lastName,
+            firstName,
+            avatar {
+                filePath
+            },
+        }
+    }
+}

@@ -11,6 +11,7 @@ import {IProfile} from "../../models/IProfile";
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 import styled, {css} from "styled-components";
 import {editAvatar, editMainImage, editProfile} from "../../store/modules/user/userThunk";
+import {useGetBaseInfoQuery, useGetUserPersonQuery} from "@/generated/graphql";
 
 const Container = styled.div``;
 
@@ -139,32 +140,26 @@ const Status = styled.div`
   font-weight: 400;
   color: ${(props) => props.theme.colors.dark};`;
 
-export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) => {
+export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
     const [isEdit, setIsEdit] = useState(false)
     const [isOwnProfile, setIsOwnProfile] = useState(false)
     const avatarInput = React.useRef<HTMLInputElement>(null);
     const mainImageInput = React.useRef<HTMLInputElement>(null);
 
+    const personQuery = useGetUserPersonQuery({variables: { id: userId }})
+    const baseInfoQuery = useGetBaseInfoQuery()
+
     const dispatch = useAppDispatch()
-
-    const {
-        profile: {
-            avatar,
-            mainImage
-        },
-    } = userProfile
-
-    const {id} = useAppSelector(state => state.authSlice)
 
     const methods = useForm({
         defaultValues: useMemo(() => ({
-            ...userProfile.profile, email: userProfile.email, login: userProfile.login
-        }), [userProfile.email, userProfile.login, userProfile.profile])
+            ...personQuery.data?.user.profile, email: personQuery.data?.user.email, login: personQuery.data?.user.login
+        }), [personQuery.data?.user.profile, personQuery.data?.user.email, personQuery.data?.user.login])
     });
 
     useEffect(() => {
-        setIsOwnProfile(id === userProfile.id)
-    }, [id, userProfile.id])
+        setIsOwnProfile(baseInfoQuery.data?.baseInfo.id === personQuery.data?.user.id)
+    }, [baseInfoQuery.data?.baseInfo.id, personQuery.data?.user.id])
 
     const mainImageClick = () => {
         if (mainImageInput.current) {
@@ -185,7 +180,6 @@ export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) =>
         }
     }
 
-
     const avatarChange = (event: FormEvent<HTMLInputElement>) => {
         const fileUploaded: File = (event.target as HTMLInputElement).files![0];
         const formData = new FormData();
@@ -195,18 +189,22 @@ export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) =>
 
     useEffect(() => {
         methods.reset({
-            ...userProfile.profile, email: userProfile.email, login: userProfile.login
+            ...personQuery.data?.user.profile, email: personQuery.data?.user.email, login: personQuery.data?.user.login
         });
-    }, [methods, userProfile.profile, userProfile.email, userProfile.login]);
+    }, [methods, personQuery.data?.user.profile, personQuery.data?.user.email, personQuery.data?.user.login]);
 
     const onSubmit = ({avatar, mainImage, ...profile}: IProfile) => {
         dispatch(editProfile(profile))
     }
 
+    if (!personQuery.data) {
+        return null
+    }
+
     return (
         <Container className={className}>
             <Background
-                src={mainImage}
+                src={personQuery.data?.user.profile.mainImage.filePath || null}
                 isEdit={isEdit}
                 ref={mainImageInput}
                 onChange={mainImageChange}
@@ -225,7 +223,7 @@ export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) =>
                                 onChange={avatarChange}
                             />
                             <Avatar
-                                img={avatar || '/avatar.png'}
+                                img={personQuery.data?.user.profile.avatar.filePath || '/avatar.png'}
                                 width={175}
                                 height={175}
                             />
@@ -248,7 +246,7 @@ export const Profile: FC<ProfileProps> = ({userProfile, className, ...props}) =>
                     <FormBottom>
                         {isEdit ? (
                             <ProfileEdit
-                                profile={{...userProfile.profile, email: userProfile.email, login: userProfile.login}}
+                                profile={{...personQuery.data?.user.profile, email: personQuery.data?.user.email, login: personQuery.data?.user.login}}
                                 setIsEdit={setIsEdit}
                             />
                         ) : (

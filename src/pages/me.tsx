@@ -1,35 +1,27 @@
 import Head from "next/head"
-import React, {useEffect} from "react"
+import React from "react"
 import {GetServerSidePropsContext, NextPage} from "next"
 import routes from "../utils/routes"
-import axios from "axios"
 import MainLayout from "../layout/MainLayout/MainLayout"
 import {Card, Menu, Post, Profile, RightSidebarFriend} from "@/components"
-import {useAppDispatch, useAppSelector} from "@/store/hooks"
-import {setAuth} from "@/store/modules/auth/authSlice"
 import {IMenuItem} from "@/components/Menu/Menu.props"
-import {IBlog} from "@/models/IBlog"
-import {IPost} from "@/models/IPost"
 import styled from "styled-components";
 import {IMePage} from "@/models/pages/IMePage";
-import {setUserData} from "@/store/modules/user/userSlice";
-import {getBlogs, getPosts} from "@/store/modules/user/userThunk";
-import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
-import client from "../../apollo-client";
 import {
-    AuthDocument,
-    AuthQuery,
-    UserBlogsDocument,
-    UserBlogsQuery, UserBlogsQueryVariables,
-    UserMeDocument,
-    UserMeQuery
+    BlogsFragmentDoc,
+    GetUserMePageDocument,
+    GetUserMePageQuery,
+    PostsFragmentDoc,
+    useGetUserMePageQuery
 } from "@/generated/graphql";
+import {gql} from "@apollo/client";
+import nextClient from "@/apolloNextClient";
+import client from "@/apolloClient";
+import {Blog} from "@/components/Blog/Blog";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<Promise<{ props: IMePage }> | { redirect: { destination: string; permanent: boolean } }> => {
     const access_token = ctx.req.cookies.jwt
-    let auth
-    let blogs
-    let user
+    let mePageData
     if (!access_token) {
         return {
             redirect: {
@@ -39,36 +31,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
         }
     }
     try {
-        auth = await client.query<AuthQuery>({
-            query: AuthDocument,
+        mePageData = await nextClient.query<GetUserMePageQuery>({
+            query: GetUserMePageDocument,
             errorPolicy: "all",
             context: {
                 headers: {
                     cookieToken: access_token
                 }
-            }
-        });
-        user = await client.query<UserMeQuery>({
-            query: UserMeDocument,
-            errorPolicy: "all",
-            context: {
-                headers: {
-                    cookieToken: access_token
-                }
-            }
-        });
-        blogs = await client.query<UserBlogsQuery, UserBlogsQueryVariables>({
-            query: UserBlogsDocument,
-            variables: {
-                id: auth.data.auth.id
             },
-            errorPolicy: "all",
-            context: {
-                headers: {
-                    cookieToken: access_token
-                }
-            }
-        });
+        })
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -78,12 +49,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
             },
         }
     }
+
     return {
         props: {
-            access_token,
-            auth: auth.data,
-            user: user.data,
-            blogs: blogs.data,
+            baseInfo: mePageData.data.baseInfo,
+            user: mePageData.data.user,
+            blogs: mePageData.data.blogs,
         },
     }
 }
@@ -104,43 +75,14 @@ const Cards = styled.div`
 `;
 
 const MePage: NextPage<IMePage> = (props) => {
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        dispatch(setAuth({
-            access_token: props.access_token,
-            ...props.auth
-        }))
-        dispatch(setUserId(props.auth.id))
-    }, [dispatch, props.access_token, props.auth])
-
-    useEffect(() => {
-
-        dispatch(setUserData({
-            ...props.user,
-            records: {
-                posts: [],
-                postsLiked: [],
-                postsSaved: [],
-                blogs: props.blogs,
-            }
-        }))
-    }, [dispatch, props.blogs, props.user])
-
-    const {
-        id: userId,
-        profile,
-        email,
-        login: userLogin,
-        records: {
-            blogs,
-            posts
+    client.writeQuery({
+        query: GetUserMePageDocument,
+        data: {
+            ...props
         }
-    } = useAppSelector(state => state.userSlice)
-    const {
-        login,
-        id
-    } = useAppSelector(state => state.authSlice)
+    })
+
+    const {data} = useGetUserMePageQuery({ssr: false})
 
     const menu = [
         "Все записи",
@@ -151,20 +93,36 @@ const MePage: NextPage<IMePage> = (props) => {
         "Нравится",
     ]
 
-    const menuItems: IMenuItem<IBlog | IPost>[] = [
+    const menuItems: IMenuItem[] = [
         {
             name: "Блоги",
-            data: blogs,
-            component: Post,
-            onSelect: () => dispatch(getBlogs(id))
+            component: Blog,
+            query: gql`
+                ${BlogsFragmentDoc}
+                query GetUserBlogs($id: ID!) {
+                    menuItems: blogsOfUser(id: $id) {
+                        ...Blogs
+                    }
+                }
+            `
         },
         {
             name: "Посты",
-            data: posts,
             component: Post,
-            onSelect: () => dispatch(getPosts(id))
+            query: gql`
+                ${PostsFragmentDoc}
+                query GetUserPosts($id: ID!) {
+                    menuItems: posts(userId: $id) {
+                        ...Posts
+                    }
+                }
+            `
         },
     ]
+
+    if (!data) {
+        return null;
+    }
 
     return (
         <MainLayout
@@ -177,7 +135,7 @@ const MePage: NextPage<IMePage> = (props) => {
                 </Head>
             }
         >
-            <ProfileStyled userProfile={{profile, login: userLogin, email, id: userId}}/>
+            <ProfileStyled userId={data.user.id}/>
             <Body>
                 <Cards>
                     {/*TODO MOCK PHOTO*/}

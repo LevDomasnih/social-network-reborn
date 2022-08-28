@@ -1,9 +1,10 @@
 import React, {FC} from "react"
-import {PostProps} from "./Post.props";
+import {BlogProps} from "./Blog.props";
 import {BackgroundImage} from "../index"
+import {convertFromRaw, EditorState, RawDraftContentBlock} from "draft-js"
 import styled from "styled-components"
-import {PostTop} from "./PostTop/PostTop";
-import {PostBottom} from "./PostBottom/PostBottom";
+import {BlogTop} from "./BlogTop/BlogTop";
+import {BlogBottom} from "./BlogBottom/BlogBottom";
 
 const Container = styled.div`
   border-radius: 0.25rem;
@@ -21,12 +22,12 @@ const Background = styled(props => <BackgroundImage {...props} />)`
   position: relative;
 `;
 
-export const Post: FC<PostProps> = (props) => {
+export const Blog: FC<BlogProps> = (props) => {
     const {
         id,
-        text,
+        textBlocks,
         createdAt,
-        images,
+        mainImage,
         likes,
         views,
         owner: {
@@ -34,27 +35,32 @@ export const Post: FC<PostProps> = (props) => {
                 firstName,
                 lastName,
                 avatar
-            },
-        }
+            }
+        },
     } = props;
+
+    const editorText = EditorState.createWithContent(convertFromRaw({
+        blocks: textBlocks as RawDraftContentBlock[],
+        entityMap: props.entityMap || {}
+    }))
 
     return (
         <Container>
             <ContainerItem>
-                <PostTop
+                <BlogTop
                     firstName={firstName}
                     lastName={lastName}
                     avatar={avatar.filePath}
                     createdAt={createdAt}
-                    text={text}
+                    text={editorText}
                 />
             </ContainerItem>
-            {images && <Background src={images.filePath}/>}
+            {mainImage && <Background src={mainImage.filePath}/>}
             <ContainerItem>
-                <PostBottom
+                <BlogBottom
                     id={id}
-                    likes={likes?.length || 0}
-                    views={views?.length || 0}
+                    likes={likes}
+                    views={views}
                     isLiked={false}
                 />
             </ContainerItem>

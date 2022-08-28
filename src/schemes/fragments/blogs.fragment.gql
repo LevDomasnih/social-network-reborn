@@ -1,0 +1,35 @@
+fragment Blogs on BlogEntity {
+    id,
+    mainImage {
+        filePath
+    },
+    createdAt,
+    likes,
+    textBlocks {
+        text,
+        createdAt,
+        id,
+        depth,
+        inlineStyleRanges {
+            length,
+            offset,
+            style,
+        },
+        key,
+        type,
+        updatedAt
+    }
+    updatedAt,
+    views,
+    owner {
+        profile {
+            middleName,
+            lastName,
+            firstName,
+            avatar {
+                filePath
+            },
+        }
+    }
+    entityMap
+}

@@ -1,9 +1,10 @@
 import React, {FC} from "react";
 import {HeaderProps} from "./Header.props";
 import {Avatar, Button as DefaultButton, Search as DefaultSearch, SvgImage} from "../index";
-import {useAppDispatch, useAppSelector} from "@/store/hooks"
+import {useAppDispatch} from "@/store/hooks"
 import styled from "styled-components";
 import {setBlogModalActive} from "@/store/modules/user/userSlice";
+import {useGetBaseInfoQuery} from "@/generated/graphql";
 
 const Button = styled(DefaultButton)`
   width: 134px;
@@ -65,8 +66,8 @@ const SettingItem = styled.div`
 `;
 
 export const Header: FC<HeaderProps> = ({className, ...props}) => {
+    const {data} = useGetBaseInfoQuery()
     const dispatch = useAppDispatch()
-    const {avatar} = useAppSelector(state => state.authSlice)
 
     const openModal = () => {
         dispatch(setBlogModalActive(true))
@@ -84,7 +85,7 @@ export const Header: FC<HeaderProps> = ({className, ...props}) => {
                 </SearchWrapper>
                 <SettingsWrapper>
                     <SettingItem>
-                        <Avatar img={avatar || '/avatar.png'} width={50} height={50}/>
+                        <Avatar img={data?.baseInfo.avatar?.filePath || '/avatar.png'} width={50} height={50}/>
                     </SettingItem>
                     <SettingItem>
                         <SvgImage svg='mail' color='#161616'/>

@@ -1,0 +1,10 @@
+fragment UserBaseInfo on GetUserBaseInfo {
+    email,
+    login,
+    id,
+    avatar {
+        filePath
+    }
+    lastName,
+    firstName
+}

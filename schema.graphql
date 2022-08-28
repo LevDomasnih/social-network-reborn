@@ -5,50 +5,31 @@ schema {
     mutation: Mutation
 }
 
-type AuthScheme {
-    avatar: String
-    email: String!
-    firstName: String!
+type BlogEntity {
+    createdAt: DateTime!
+    entityMap: JSON
+    headers: [String!]
     id: ID!
-    lastName: String!
-    login: String!
-    notifications: Int!
-}
-
-type BlogsOfUserScheme {
-    createdAt: String!
-    id: ID!
-    isLiked: Boolean!
     likes: Int!
-    mainImage: String
-    profile: BlogsOfUserSchemeProfile!
-    text: [BlogsOfUserSchemeTextBlock!]!
-    updatedAt: String!
+    mainImage: FilesEntity
+    owner: UserEntity!
+    textBlocks: [BlogTextBlockEntity!]!
+    updatedAt: DateTime!
     views: Int!
 }
 
-type BlogsOfUserSchemeInlineStyleRanges {
-    length: Float!
-    offset: Float!
-    style: String!
-}
-
-type BlogsOfUserSchemeProfile {
-    avatar: String
-    firstName: String
-    lastName: String
-    middleName: String
-}
-
-type BlogsOfUserSchemeTextBlock {
-    createdAt: String!
+type BlogTextBlockEntity {
+    createdAt: DateTime!
+    data: JSON
     depth: Int!
+    entityRanges: [String!]
     id: ID!
-    inlineStyleRanges: BlogsOfUserSchemeInlineStyleRanges
+    inlineStyleRanges: [InlineStyleRanges!]
     key: String!
+    postOwner: BlogEntity!
     text: String!
     type: String!
-    updatedAt: String!
+    updatedAt: DateTime!
 }
 
 type ChangeLikeScheme {
@@ -98,6 +79,16 @@ type DeleteBlogScheme {
     deleted: Boolean!
 }
 
+type DialogsEntity {
+    createdAt: DateTime!
+    id: ID!
+    lastMessage: MessagesEntity!
+    messages: [MessagesEntity!]!
+    owners: [UserEntity!]!
+    status: DialogType!
+    updatedAt: DateTime!
+}
+
 type EditImageScheme {
     fileName: String!
 }
@@ -106,63 +97,22 @@ type EditProfileScheme {
     updated: Boolean!
 }
 
-type GetDialogScheme {
-    id: ID
-    info: GetDialogSchemeInfo!
-    messages: [GetDialogSchemeMessages!]!
-    status: String!
-    users: [GetDialogSchemeUser!]!
-}
-
-type GetDialogSchemeInfo {
-    id: ID!
-    image: String
-    name: String!
-}
-
-type GetDialogSchemeMessages {
+type FilesEntity {
     createdAt: DateTime!
+    filePath: String!
     id: ID!
-    ownerId: ID!
-    text: String!
+    name: String!
+    owner: UserEntity!
     updatedAt: DateTime!
 }
 
-type GetDialogSchemeUser {
-    avatar: String
-    firstName: String!
-    id: ID!
-    lastName: String!
-}
-
-type GetDialogsScheme {
-    id: ID!
-    info: GetDialogsSchemeInfo!
-    lastMessage: GetDialogsSchemeLastMessages!
-    status: String!
-    userId: ID!
-    users: [GetDialogsSchemeUser!]!
-}
-
-type GetDialogsSchemeInfo {
-    id: ID!
-    image: String
-    name: String!
-}
-
-type GetDialogsSchemeLastMessages {
+type FollowEntity {
     createdAt: DateTime!
     id: ID!
-    ownerId: ID!
-    text: String!
+    owner: UserEntity!
+    subscriber: [FollowEntity!]!
+    subscriberOwner: [FollowEntity!]!
     updatedAt: DateTime!
-}
-
-type GetDialogsSchemeUser {
-    avatar: String
-    firstName: String!
-    id: ID!
-    lastName: String!
 }
 
 type GetFollowScheme {
@@ -171,67 +121,20 @@ type GetFollowScheme {
     login: String!
 }
 
-type GetPostScheme {
-    likes: [String!]!
-    text: String!
-    views: [String!]!
-}
-
-type GetPostsScheme {
-    createdAt: DateTime!
-    id: ID!
-    isLiked: Boolean!
-    likes: Int!
-    profile: GetPostsSchemeProfile!
-    text: String!
-    updatedAt: DateTime!
-    views: Int!
-}
-
-type GetPostsSchemeProfile {
-    avatar: String
-    firstName: String!
-    lastName: String!
-}
-
-type GetProfileScheme {
-    about: String
-    avatar: String
-    birthday: DateTime
-    city: String
-    country: String
-    firstName: String!
-    lastName: String!
-    mainImage: String
-    middleName: String!
-    phone: String!
-    relatives: String
-    school: String
-    status: String
-}
-
-type GetUserScheme {
+type GetUserBaseInfo {
+    avatar: FilesEntity
     email: String!
-    id: ID!
+    firstName: String!
+    id: String!
+    lastName: String!
     login: String!
-    profile: GetUsersSchemeProfile!
+    middleName: String!
 }
 
-type GetUsersSchemeProfile {
-    about: String
-    avatar: String!
-    birthday: String
-    city: String
-    country: String
-    firstName: String!
-    id: ID!
-    lastName: String!
-    mainImage: String
-    middleName: String!
-    phone: String!
-    relatives: String
-    school: String
-    status: String
+type InlineStyleRanges {
+    length: Int!
+    offset: Int!
+    style: String!
 }
 
 type IsValidScheme {
@@ -240,6 +143,17 @@ type IsValidScheme {
 
 type LoginScheme {
     access_token: String!
+}
+
+type MessagesEntity {
+    createdAt: DateTime!
+    dialog: DialogsEntity!
+    file: FilesEntity
+    id: ID!
+    image: FilesEntity
+    owner: UserEntity!
+    text: String!
+    updatedAt: DateTime!
 }
 
 type Mutation {
@@ -252,28 +166,84 @@ type Mutation {
     register(registerData: register!): RegisterScheme!
 }
 
+type PostEntity {
+    childrenPosts: [PostEntity!]!
+    createdAt: DateTime!
+    files: FilesEntity
+    id: ID!
+    images: FilesEntity
+    likes: [String!]
+    owner: UserEntity!
+    parentPost: PostEntity
+    text: String!
+    updatedAt: DateTime!
+    views: [String!]
+}
+
+type ProfileEntity {
+    about: String
+    avatar: FilesEntity!
+    birthday: DateTime
+    city: String
+    country: String
+    createdAt: DateTime!
+    firstName: String!
+    id: ID!
+    lastName: String!
+    mainImage: FilesEntity!
+    middleName: String!
+    owner: UserEntity!
+    phone: String!
+    relatives: String
+    school: String
+    status: String
+    updatedAt: DateTime!
+}
+
 type Query {
-    auth: AuthScheme!
-    blogsOfUser(id: ID!): [BlogsOfUserScheme!]!
-    get(userId: String!): GetProfileScheme!
-    getDialog(id: String!): GetDialogScheme!
-    getDialogs: [GetDialogsScheme!]!
+    blogsMe: [BlogEntity!]!
+    blogsOfUser(id: ID!): [BlogEntity!]!
+    dialog(id: String!): DialogsEntity!
+    dialogs: [DialogsEntity!]!
     getFollowUsers(id: String!): [GetFollowScheme!]!
-    getMe: GetUserScheme!
-    getPost(postId: String!): GetPostScheme!
-    getPosts(userId: String!): [GetPostsScheme!]!
-    getUserById(id: String!): GetUserScheme!
-    getUsers: [GetUserScheme!]!
     isValidFields(fieldName: String!, fieldValue: String!): IsValidScheme!
     login(loginOrEmail: String!, password: String!): LoginScheme!
+    post(postId: ID!): PostEntity!
+    posts(userId: ID!): [PostEntity!]!
+    profile(userId: String!): ProfileEntity!
+    user(id: ID!): UserEntity!
+    userMe: UserEntity!
+    userMeBaseInfo: GetUserBaseInfo!
+    users: [UserEntity!]!
 }
 
 type RegisterScheme {
     access_token: String!
 }
 
+type UserEntity {
+    blogs: [BlogEntity!]!
+    createdAt: DateTime!
+    dialogs: [DialogsEntity!]!
+    email: String!
+    id: ID!
+    login: String!
+    messages: [MessagesEntity!]!
+    posts: [PostEntity!]!
+    profile: ProfileEntity!
+    updatedAt: DateTime!
+}
+
+enum DialogType {
+    CHAT
+    DIALOGS
+}
+
 "A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
 scalar DateTime
+
+"The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+scalar JSON
 
 "The `Upload` scalar type represents a file upload."
 scalar Upload

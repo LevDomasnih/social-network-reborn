@@ -1,13 +1,13 @@
-import {IMenuItem, MenuProps} from "./Menu.props"
+import {MenuProps} from "./Menu.props"
 import React, {FC, useState} from "react"
 import {Avatar, Button as DefaultButton} from "../index"
 import {Tag} from "../Tag/Tag"
-import {IBlog} from "../../models/IBlog"
-import {useAppDispatch, useAppSelector} from "../../store/hooks"
-import {IPost} from "../../models/IPost"
+import {useAppDispatch} from "@/store/hooks"
 import styled, {css} from "styled-components";
 import {setBlogModalActive} from "../../store/modules/user/userSlice";
 import {createPost} from "../../store/modules/user/userThunk";
+import {BlogsFragment, PostsFragment, useGetBaseInfoQuery, useGetUserPersonQuery} from "@/generated/graphql";
+import {useQuery} from "@apollo/client";
 
 const Button = styled(DefaultButton)`
   width: 134px;
@@ -164,34 +164,30 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
 
     const dispatch = useAppDispatch()
 
-    const {avatar, firstName, lastName} = useAppSelector(state => state.userSlice.profile)
-    const {id} = useAppSelector(state => state.authSlice)
+    const baseInfoQuery = useGetBaseInfoQuery()
 
-    const items = (menuItems: IMenuItem<IBlog | IPost>[]) => {
-        const activeItem = menuItems.find((item, i) => i === activeMenu)
-        if (!activeItem) {
-            return <></>
+    const personQuery = useGetUserPersonQuery({variables: {id: baseInfoQuery.data?.baseInfo.id}})
+
+    const menuListQuery = useQuery<{ menuItems: (BlogsFragment | PostsFragment)[] }>(
+        menuItems[activeMenu].query,
+        {
+            variables: {id: baseInfoQuery.data?.baseInfo.id}
         }
-        const Component = activeItem.component
-        return activeItem.data.map(el => {
-            return <Component key={el.id} {...el} />
-        })
-    }
+    )
 
-    const handleChangeTab = (index: number, onSelect: (...data: any) => void) => {
-        setActiveMenu(index)
-        onSelect()
-    }
+    const ActiveComponent = menuItems[activeMenu].component
 
     const openBlogModal = () => {
         dispatch(setBlogModalActive(true))
     }
 
     const handleCreatePost = () => {
-        let data = new FormData()
-        data.append("text", postValue)
-        dispatch(createPost({formData: data, userId: id}))
-        setPostValue("")
+        if (baseInfoQuery.data?.baseInfo.id) {
+            let data = new FormData()
+            data.append("text", postValue)
+            dispatch(createPost({formData: data, userId: baseInfoQuery.data?.baseInfo.id}))
+            setPostValue("")
+        }
     }
 
     return (
@@ -199,7 +195,7 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
             <MenuTitles>
                 {menuItems.map((e, i, arr) => (
                     <MenuTitle key={e.name}>
-                        <MenuLink onClick={() => handleChangeTab(i, e.onSelect)} active={i === activeMenu}>
+                        <MenuLink onClick={() => setActiveMenu(i)} active={i === activeMenu}>
                             {e.name}
                         </MenuLink>
                         {arr.length - 1 !== i && <MenuDivider/>}
@@ -222,9 +218,10 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
             <MenuCreate>
                 <MenuCreateTop>
                     <MenuCreateAvatarWrapper>
-                        {avatar && <Avatar img={avatar} width={22} height={22}/>}
+                        {personQuery.data?.user.profile.avatar.filePath &&
+                            <Avatar img={personQuery.data?.user.profile.avatar.filePath} width={22} height={22}/>}
                         <MenuCreateUsername>
-                            {`${firstName} ${lastName}`}
+                            {`${personQuery.data?.user.profile.firstName} ${personQuery.data?.user.profile.lastName}`}
                         </MenuCreateUsername>
                     </MenuCreateAvatarWrapper>
                     <MenuCreateButtons>
@@ -239,7 +236,9 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
                     onChange={(e) => setPostValue(e.target.value)}
                 />
             </MenuCreate>
-            {menuItems && items(menuItems)}
+            {menuListQuery.data && menuListQuery.data.menuItems.map(data => (
+                <ActiveComponent key={data.id} {...data} />
+            ))}
         </Container>
     )
 }
