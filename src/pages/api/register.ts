@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from "axios"
 import Cookies from "cookies"
-import { NextApiRequest, NextApiResponse } from "next"
-import { IToken } from "../../models/IToken"
-import { IRegister } from "../../models/IRegister"
+import {NextApiRequest, NextApiResponse} from "next"
+import {IRegister} from "../../models/IRegister"
+import nextClient from "@/apolloNextClient";
+import {RegisterDocument, RegisterMutation, RegisterMutationVariables} from "@/generated/graphql";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = new Cookies(req, res)
@@ -14,29 +14,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         phone: req.body.phone,
     }
 
-    return axios
-        .post<IToken, AxiosResponse<IToken>, IRegister>(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, dataToBeSent)
-        .then((response) => {
-            if (response.status === 201) {
-                cookies.set("jwt", response.data.access_token, {
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                    sameSite: "lax",
-                })
+    const registerMutationFetchResult = await nextClient.mutate<RegisterMutation, RegisterMutationVariables>({
+        mutation: RegisterDocument,
+        variables: dataToBeSent,
+        errorPolicy: "all"
+    });
 
-                return res.status(201).json({
-                    access_token: response.data.access_token,
-                })
-            }
-
-            return res.status(500)
+    if (registerMutationFetchResult.data) {
+        cookies.set("jwt", registerMutationFetchResult.data.register.access_token, {
+            httpOnly: false,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            sameSite: "lax",
         })
-        .catch((err) => {
-
-            const { statusCode, ...error } = err.response.data
-
-            return res.status(statusCode).json({
-                ...error,
-            })
+        return res.status(201).json({
+            access_token: registerMutationFetchResult.data.register.access_token,
         })
+    }
+
+    return res.status(500)
 };

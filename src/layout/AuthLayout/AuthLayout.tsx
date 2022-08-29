@@ -5,6 +5,7 @@ import {useRouter} from 'next/router'
 import routes from "../../utils/routes";
 import {Htag} from "../../components";
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 //TODO обработка ошибок
 
@@ -47,21 +48,13 @@ const AuthLayout: FC<AuthLayoutProps> = ({className, children, head, ...props}) 
 
     const router = useRouter()
 
-    const {authError} = useAppSelector(state => state.authSlice)
-    const {access_token} = useAppSelector(state => state.authSlice)
-
-    // useEffect(() => {
-    //     if (authError.message) {
-    //         openNotification(authError.message)
-    //     }
-    // }, [authError])
+    const token = Cookies.get('jwt')
 
     useEffect(() => {
-        if (access_token !== '') {
+        if (token) {
             router.push(routes.me)
         }
-    }, [access_token, router])
-
+    }, [token, router])
 
     return (
         <Container className={className}>

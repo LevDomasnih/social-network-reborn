@@ -1,39 +1,31 @@
-import axios, {AxiosResponse} from 'axios';
 import Cookies from 'cookies';
 import {NextApiRequest, NextApiResponse} from "next";
-import {IToken} from "../../models/IToken";
-import {ILogin} from "../../models/ILogin";
+import nextClient from "@/apolloNextClient";
+import {LoginDocument, LoginQuery, LoginQueryVariables} from "@/generated/graphql";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = new Cookies(req, res);
     const dataToBeSent = {
-        loginOrEmail: req.body.loginOrEmail,
+        login: req.body.loginOrEmail,
         password: req.body.password,
     };
 
-    return axios
-        .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, dataToBeSent)
-        .then((response) => {
-            if (response.status === 200) {
-                cookies.set('jwt', response.data.access_token, {
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                    sameSite: 'lax',
-                });
+    const {data, error, networkStatus} = await nextClient.query<LoginQuery, LoginQueryVariables>({
+        query: LoginDocument,
+        variables: dataToBeSent,
+        errorPolicy: "all"
+    });
 
-                return res.status(200).json({
-                    access_token: response.data.access_token
-                });
-            }
-
-            return res.status(500)
-        })
-        .catch((err) => {
-
-            const {statusCode, ...error} = err.response.data
-
-            return res.status(statusCode).json({
-                ...error
-            });
+    if (data) {
+        cookies.set('jwt', data.login.access_token, {
+            httpOnly: false,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            sameSite: 'lax',
         });
+        return res.status(201).json({
+            access_token: data.login.access_token,
+        })
+    }
+
+    return res.status(500)
 };
