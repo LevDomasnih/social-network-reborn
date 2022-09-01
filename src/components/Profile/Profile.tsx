@@ -204,7 +204,7 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
     return (
         <Container className={className}>
             <Background
-                src={personQuery.data?.user.profile.mainImage.filePath || null}
+                src={personQuery.data?.user.profile.mainImage?.filePath || null}
                 isEdit={isEdit}
                 ref={mainImageInput}
                 onChange={mainImageChange}
@@ -223,7 +223,7 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
                                 onChange={avatarChange}
                             />
                             <Avatar
-                                img={personQuery.data?.user.profile.avatar.filePath || '/avatar.png'}
+                                img={personQuery.data?.user.profile.avatar?.filePath || '/avatar.png'}
                                 width={175}
                                 height={175}
                             />

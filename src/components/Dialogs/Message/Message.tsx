@@ -38,18 +38,17 @@ const MessageBlock = styled.div`
 
 const Message: FC<MessageProps> = React.memo((props) => {
     const {
-        ownerId,
         text,
-        createdAt,
-        users,
+        owner,
+        createdAt
     } = props;
 
     return (
         <MessageWrapper>
-            <Link href={`/users/${ownerId}`}>
+            <Link href={`/users/${owner.id}`}>
                 <a>
                     <Avatar
-                        img={users?.find(u => u.id === ownerId)?.avatar || '/avatar.png'}
+                        img={owner.profile.avatar?.filePath || '/avatar.png'}
                         width={50}
                         height={50}
                     />
@@ -58,7 +57,7 @@ const Message: FC<MessageProps> = React.memo((props) => {
             <MessageBlock>
                 <MessageInfoBlock>
                     <MessageUserName>
-                        {users?.find(u => u.id === ownerId)?.firstName}
+                        {owner.profile.firstName}
                     </MessageUserName>
                     <MessageTime>
                         {format(new Date(createdAt), 'HH:mm')}

@@ -79,9 +79,16 @@ type DeleteBlogScheme {
     deleted: Boolean!
 }
 
+type DialogInfoSchema {
+    id: ID!
+    image: FilesEntity
+    name: String!
+}
+
 type DialogsEntity {
     createdAt: DateTime!
     id: ID!
+    info: DialogInfoSchema!
     lastMessage: MessagesEntity!
     messages: [MessagesEntity!]!
     owners: [UserEntity!]!
@@ -182,7 +189,7 @@ type PostEntity {
 
 type ProfileEntity {
     about: String
-    avatar: FilesEntity!
+    avatar: FilesEntity
     birthday: DateTime
     city: String
     country: String
@@ -190,8 +197,8 @@ type ProfileEntity {
     firstName: String!
     id: ID!
     lastName: String!
-    mainImage: FilesEntity!
-    middleName: String!
+    mainImage: FilesEntity
+    middleName: String
     owner: UserEntity!
     phone: String!
     relatives: String
@@ -203,7 +210,7 @@ type ProfileEntity {
 type Query {
     blogsMe: [BlogEntity!]!
     blogsOfUser(id: ID!): [BlogEntity!]!
-    dialog(id: String!): DialogsEntity!
+    dialog(id: ID!): DialogsEntity!
     dialogs: [DialogsEntity!]!
     getFollowUsers(id: String!): [GetFollowScheme!]!
     isValidFields(fieldName: String!, fieldValue: String!): IsValidScheme!

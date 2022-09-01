@@ -1,0 +1,13 @@
+fragment Users on UserEntity {
+    id
+    profile {
+        avatar {
+            filePath
+        }
+        firstName
+        lastName
+        middleName
+    }
+    login
+    email
+}

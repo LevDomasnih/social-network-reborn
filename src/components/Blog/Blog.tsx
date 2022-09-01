@@ -50,12 +50,12 @@ export const Blog: FC<BlogProps> = (props) => {
                 <BlogTop
                     firstName={firstName}
                     lastName={lastName}
-                    avatar={avatar.filePath}
+                    avatar={avatar?.filePath}
                     createdAt={createdAt}
                     text={editorText}
                 />
             </ContainerItem>
-            {mainImage && <Background src={mainImage.filePath}/>}
+            {mainImage && <Background src={mainImage?.filePath}/>}
             <ContainerItem>
                 <BlogBottom
                     id={id}

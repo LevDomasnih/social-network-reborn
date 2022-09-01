@@ -49,7 +49,7 @@ export const Post: FC<PostProps> = (props) => {
                     text={text}
                 />
             </ContainerItem>
-            {images && <Background src={images.filePath}/>}
+            {images && <Background src={images?.filePath}/>}
             <ContainerItem>
                 <PostBottom
                     id={id}

@@ -1,0 +1,25 @@
+fragment Dialog on DialogsEntity {
+    id
+    info {
+        id
+        name
+        image {
+            id
+            filePath
+        }
+    }
+    messages {
+        id
+        text
+        owner {
+            id
+            profile {
+                avatar {
+                    filePath
+                }
+                firstName
+            }
+        }
+        createdAt
+    }
+}

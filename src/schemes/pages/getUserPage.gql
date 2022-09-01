@@ -1,0 +1,11 @@
+query GetUserPage($id: ID!) {
+    user: user(id: $id) {
+        ...PersonFragment
+    }
+    blogs: blogsOfUser(id: $id) {
+        ...Blogs
+    }
+    baseInfo: userMeBaseInfo {
+        ...UserBaseInfo
+    }
+}

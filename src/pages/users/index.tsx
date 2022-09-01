@@ -1,22 +1,25 @@
 import Head from "next/head";
-import React, {useEffect} from "react";
+import React from "react";
 import styled from "styled-components";
 import {GetServerSidePropsContext, NextPage} from "next";
-import axios from "axios";
 import Link from "next/link";
 import MainLayout from "../../layout/MainLayout/MainLayout";
 import {Avatar, Button, Search} from "../../components";
 import routes from "../../utils/routes";
-import {setAuth} from "../../store/modules/auth/authSlice";
-import {useAppDispatch} from "../../store/hooks";
 import {IUsersPage} from "../../models/pages/IUsersPage";
-import { useRouter } from 'next/router'
-import {setUserId} from "@/store/modules/dialogs/dialogsSlice";
+import {useRouter} from 'next/router'
+import nextClient from "@/apolloNextClient";
+import {
+    GetUsersPageDocument,
+    GetUsersPageQuery,
+    GetUsersPageQueryVariables,
+    useGetUsersPageQuery
+} from "@/generated/graphql";
+import client from "@/apolloClient";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const access_token = ctx.req.cookies.jwt
-    let users
-    let auth
+    let usersPageData
     if (!access_token) {
         return {
             redirect: {
@@ -26,12 +29,16 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         }
     }
     try {
-        const query = axios.create({
-            baseURL: process.env.NEXT_PUBLIC_API_URL,
-            headers: {Authorization: `Bearer ${access_token}`},
+        usersPageData = await nextClient.query<GetUsersPageQuery, GetUsersPageQueryVariables>({
+            query: GetUsersPageDocument,
+            errorPolicy: "all",
+            context: {
+                headers: {
+                    cookieToken: access_token
+                }
+            },
         })
-        users = (await query.get(`/users`)).data
-        auth = (await query.get(`/auth/userInfo`)).data
+        console.log(usersPageData)
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -44,9 +51,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     return {
         props: {
-            access_token,
-            auth,
-            users
+            baseInfo: usersPageData.data.baseInfo,
+            users: usersPageData.data.users,
         },
     }
 }
@@ -106,16 +112,20 @@ const StyledButton = styled(Button)`
 `;
 
 const Users: NextPage<IUsersPage> = (props) => {
-    const dispatch = useAppDispatch()
+    client.writeQuery({
+        query: GetUsersPageDocument,
+        data: {
+            ...props
+        }
+    })
+
+    const {data} = useGetUsersPageQuery({ssr: false});
+
     const router = useRouter()
 
-    useEffect(() => {
-        dispatch(setAuth({
-            access_token: props.access_token,
-            ...props.auth
-        }))
-        dispatch(setUserId(props.auth.id))
-    }, [dispatch, props.access_token, props.auth])
+    if (!data) {
+        return null
+    }
 
     return (
         <MainLayout
@@ -131,12 +141,13 @@ const Users: NextPage<IUsersPage> = (props) => {
             <MainBody>
                 <Search placeholder={'Найти пользователя'}/>
                 <UsersWrapper>
-                    {props.users.map(e => (
+                    {data.users.map(e => (
                         <UserBlockWrapper key={e.id}>
                             <div>
-                                <Link href={`users/${e.id}`} >
+                                <Link href={`users/${e.id}`}>
                                     <UserBlock>
-                                        <Avatar img={e.profile.avatar || '/avatar.png'} width={80} height={80}/>
+                                        <Avatar img={e.profile.avatar?.filePath || '/avatar.png'} width={80}
+                                                height={80}/>
                                         <UserInfo>
                                             <UserFio>{e.profile.firstName} {e.profile.lastName} {e.profile.middleName}</UserFio>
                                             <UserAddInfo>{e.email}</UserAddInfo>

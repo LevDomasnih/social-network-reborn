@@ -218,8 +218,8 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
             <MenuCreate>
                 <MenuCreateTop>
                     <MenuCreateAvatarWrapper>
-                        {personQuery.data?.user.profile.avatar.filePath &&
-                            <Avatar img={personQuery.data?.user.profile.avatar.filePath} width={22} height={22}/>}
+                        {personQuery.data?.user.profile.avatar?.filePath &&
+                            <Avatar img={personQuery.data?.user.profile.avatar?.filePath} width={22} height={22}/>}
                         <MenuCreateUsername>
                             {`${personQuery.data?.user.profile.firstName} ${personQuery.data?.user.profile.lastName}`}
                         </MenuCreateUsername>
