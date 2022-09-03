@@ -1,0 +1,6 @@
+mutation UpdateProfileAvatar($field: String!, $file: Upload!) {
+    editImg(field: $field, file: $file) {
+        filePath
+
+    }
+}

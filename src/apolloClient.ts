@@ -1,7 +1,13 @@
-import {ApolloClient, ApolloLink, concat, HttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, ApolloLink, concat, from, HttpLink, InMemoryCache} from "@apollo/client";
 import Cookies from "js-cookie";
+import { createUploadLink } from 'apollo-upload-client';
 
-const httpLink = new HttpLink({
+
+// const httpLink = new HttpLink({
+//     uri: process.env.NEXT_PUBLIC_API_URL + '/graphql',
+// });
+
+const uploadLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_API_URL + '/graphql',
 });
 
@@ -20,7 +26,7 @@ const authLink = new ApolloLink((operation, forward) => {
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: concat(authLink, httpLink),
+    link: from([authLink, uploadLink]),
     connectToDevTools: true,
 });
 

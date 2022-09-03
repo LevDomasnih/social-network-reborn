@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import {GetServerSidePropsContext, NextPage} from "next";
 import Link from "next/link";
@@ -38,7 +38,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
                 }
             },
         })
-        console.log(usersPageData)
     } catch (err) {
         ctx.res.setHeader("set-cookie", "jwt=; max-age=0")
         return {
@@ -112,12 +111,14 @@ const StyledButton = styled(Button)`
 `;
 
 const Users: NextPage<IUsersPage> = (props) => {
-    client.writeQuery({
-        query: GetUsersPageDocument,
-        data: {
-            ...props
-        }
-    })
+    useEffect(() => {
+        client.writeQuery({
+            query: GetUsersPageDocument,
+            data: {
+                ...props
+            }
+        })
+    }, [props])
 
     const {data} = useGetUsersPageQuery({ssr: false});
 
@@ -132,7 +133,7 @@ const Users: NextPage<IUsersPage> = (props) => {
             rightSidebar={<></>}
             head={
                 <Head>
-                    <title>Create Next App</title>
+                    <title>Users</title>
                     <meta name="description" content="Users"/>
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>

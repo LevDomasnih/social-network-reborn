@@ -6,12 +6,19 @@ import {SvgImage} from "../SvgImage/SvgImage";
 import {format} from "date-fns";
 import {ProfileEdit} from "../ProfileEdit/ProfileEdit";
 import {FormProvider, useForm} from "react-hook-form";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {useAppDispatch} from "../../store/hooks";
 import {IProfile} from "../../models/IProfile";
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 import styled, {css} from "styled-components";
-import {editAvatar, editMainImage, editProfile} from "../../store/modules/user/userThunk";
-import {useGetBaseInfoQuery, useGetUserPersonQuery} from "@/generated/graphql";
+import {editProfile} from "../../store/modules/user/userThunk";
+import {
+    GetBaseInfoDocument,
+    GetUserPersonDocument,
+    useGetBaseInfoQuery,
+    useGetUserPersonQuery,
+    useUpdateProfileAvatarMutation,
+    useUpdateProfileMainImageMutation
+} from "@/generated/graphql";
 
 const Container = styled.div``;
 
@@ -146,7 +153,62 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
     const avatarInput = React.useRef<HTMLInputElement>(null);
     const mainImageInput = React.useRef<HTMLInputElement>(null);
 
-    const personQuery = useGetUserPersonQuery({variables: { id: userId }})
+    const [updateMainImage] = useUpdateProfileMainImageMutation({
+        update: (cache, {data}) => {
+            cache.updateQuery({
+                query: GetUserPersonDocument,
+                variables: {id: userId},
+            }, (person) => ({
+                user: {
+                    ...person.user,
+                    profile: {
+                        ...person.user.profile,
+                        mainImage: {
+                            ...person.user.profile.mainImage,
+                            filePath: data!.editImg!.filePath
+                        }
+                    }
+                }
+            }))
+        },
+    })
+
+    const [updateAvatar] = useUpdateProfileAvatarMutation({
+        update: (cache, {data}) => {
+            cache.updateQuery({
+                query: GetUserPersonDocument,
+                variables: {id: userId},
+            }, (person) => ({
+                user: {
+                    ...person.user,
+                    profile: {
+                        ...person.user.profile,
+                        avatar: {
+                            ...person.user.profile.avatar,
+                            filePath: data!.editImg!.filePath
+                        }
+                    }
+                }
+            }))
+
+            cache.updateQuery({
+                query: GetBaseInfoDocument,
+            }, (baseInfo) => ({
+                baseInfo: {
+                    ...baseInfo.baseInfo,
+                    avatar: {
+                        ...baseInfo.baseInfo.avatar,
+                        filePath: data!.editImg!.filePath
+                    }
+                }
+            }))
+        },
+    })
+
+
+    const personQuery = useGetUserPersonQuery({
+        variables: {id: userId},
+    })
     const baseInfoQuery = useGetBaseInfoQuery()
 
     const dispatch = useAppDispatch()
@@ -169,9 +231,12 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
 
     const mainImageChange = (event: FormEvent<HTMLInputElement>) => {
         const fileUploaded: File = (event.target as HTMLInputElement).files![0];
-        const formData = new FormData();
-        formData.append("image", fileUploaded);
-        dispatch(editMainImage(formData))
+        updateMainImage({
+            variables: {
+                file: fileUploaded,
+                field: 'mainImage'
+            }
+        })
     }
 
     const avatarClick = () => {
@@ -182,9 +247,12 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
 
     const avatarChange = (event: FormEvent<HTMLInputElement>) => {
         const fileUploaded: File = (event.target as HTMLInputElement).files![0];
-        const formData = new FormData();
-        formData.append("image", fileUploaded);
-        dispatch(editAvatar(formData))
+        updateAvatar({
+            variables: {
+                file: fileUploaded,
+                field: 'avatar'
+            }
+        })
     }
 
     useEffect(() => {
@@ -246,7 +314,11 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
                     <FormBottom>
                         {isEdit ? (
                             <ProfileEdit
-                                profile={{...personQuery.data?.user.profile, email: personQuery.data?.user.email, login: personQuery.data?.user.login}}
+                                profile={{
+                                    ...personQuery.data?.user.profile,
+                                    email: personQuery.data?.user.email,
+                                    login: personQuery.data?.user.login
+                                }}
                                 setIsEdit={setIsEdit}
                             />
                         ) : (

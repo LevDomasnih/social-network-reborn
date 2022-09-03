@@ -1,5 +1,5 @@
 import Head from "next/head"
-import React from "react"
+import React, {useEffect} from "react"
 import {GetServerSidePropsContext, NextPage} from "next"
 import routes from "../utils/routes"
 import MainLayout from "../layout/MainLayout/MainLayout"
@@ -75,12 +75,15 @@ const Cards = styled.div`
 `;
 
 const MePage: NextPage<IMePage> = (props) => {
-    client.writeQuery({
-        query: GetUserMePageDocument,
-        data: {
-            ...props
-        }
-    })
+
+    useEffect(() => {
+        client.writeQuery({
+            query: GetUserMePageDocument,
+            data: {
+                ...props
+            }
+        })
+    }, [props])
 
     const {data} = useGetUserMePageQuery({ssr: false})
 
@@ -129,7 +132,7 @@ const MePage: NextPage<IMePage> = (props) => {
             rightSidebar={<RightSidebarFriend/>}
             head={
                 <Head>
-                    <title>Create Next App</title>
+                    <title>{data.user.profile.firstName} {data.user.profile.lastName}</title>
                     <meta name="description" content="Profile"/>
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>

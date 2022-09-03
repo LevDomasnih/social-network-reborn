@@ -96,14 +96,6 @@ type DialogsEntity {
     updatedAt: DateTime!
 }
 
-type EditImageScheme {
-    fileName: String!
-}
-
-type EditProfileScheme {
-    updated: Boolean!
-}
-
 type FilesEntity {
     createdAt: DateTime!
     filePath: String!
@@ -168,8 +160,8 @@ type Mutation {
     createBlog(blogData: CreateBlogDto!, files: [Upload!]!): [CreateBlogScheme!]!
     createPost(data: CreatePostInput!, files: [Upload!]!): CreatePostScheme!
     deleteBlog(id: String!): DeleteBlogScheme!
-    edit(data: EditProfileInput!): EditProfileScheme!
-    editImg(field: String!, files: [Upload!]!): EditImageScheme!
+    edit(data: EditProfileInput!): UserEntity!
+    editImg(field: String!, file: Upload!): FilesEntity
     register(registerData: register!): RegisterScheme!
 }
 

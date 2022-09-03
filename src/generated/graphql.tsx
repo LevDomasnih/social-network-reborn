@@ -149,11 +149,6 @@ export type DialogsEntity = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type EditImageScheme = {
-  __typename?: 'EditImageScheme';
-  fileName: Scalars['String'];
-};
-
 export type EditProfileInput = {
   about?: InputMaybe<Scalars['String']>;
   birthday?: InputMaybe<Scalars['String']>;
@@ -170,11 +165,6 @@ export type EditProfileInput = {
   school?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
-};
-
-export type EditProfileScheme = {
-  __typename?: 'EditProfileScheme';
-  updated: Scalars['Boolean'];
 };
 
 export type FilesEntity = {
@@ -250,8 +240,8 @@ export type Mutation = {
   createBlog: Array<CreateBlogScheme>;
   createPost: CreatePostScheme;
   deleteBlog: DeleteBlogScheme;
-  edit: EditProfileScheme;
-  editImg: EditImageScheme;
+  edit: UserEntity;
+  editImg?: Maybe<FilesEntity>;
   register: RegisterScheme;
 };
 
@@ -285,7 +275,7 @@ export type MutationEditArgs = {
 
 export type MutationEditImgArgs = {
   field: Scalars['String'];
-  files: Array<Scalars['Upload']>;
+  file: Scalars['Upload'];
 };
 
 
@@ -481,6 +471,17 @@ export type LoginQueryVariables = Exact<{
 
 export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginScheme', access_token: string } };
 
+export type RegisterMutationVariables = Exact<{
+  password: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  phone: Scalars['String'];
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterScheme', access_token: string } };
+
 export type GetDialogsPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -503,16 +504,42 @@ export type GetUsersPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetUsersPageQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
 
-export type RegisterMutationVariables = Exact<{
-  password: Scalars['String'];
+export type UpdateProfileMutationVariables = Exact<{
+  about?: InputMaybe<Scalars['String']>;
+  birthday?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  login: Scalars['String'];
+  middleName: Scalars['String'];
   phone: Scalars['String'];
+  relatives?: InputMaybe<Scalars['String']>;
+  school?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterScheme', access_token: string } };
+export type UpdateProfileMutation = { __typename?: 'Mutation', edit: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } } };
+
+export type UpdateProfileAvatarMutationVariables = Exact<{
+  field: Scalars['String'];
+  file: Scalars['Upload'];
+}>;
+
+
+export type UpdateProfileAvatarMutation = { __typename?: 'Mutation', editImg?: { __typename?: 'FilesEntity', filePath: string } | null };
+
+export type UpdateProfileMainImageMutationVariables = Exact<{
+  field: Scalars['String'];
+  file: Scalars['Upload'];
+}>;
+
+
+export type UpdateProfileMainImageMutation = { __typename?: 'Mutation', editImg?: { __typename?: 'FilesEntity', filePath: string } | null };
 
 export const BlogsFragmentDoc = gql`
     fragment Blogs on BlogEntity {
@@ -923,6 +950,45 @@ export function useLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Logi
 export type LoginQueryHookResult = ReturnType<typeof useLoginQuery>;
 export type LoginLazyQueryHookResult = ReturnType<typeof useLoginLazyQuery>;
 export type LoginQueryResult = Apollo.QueryResult<LoginQuery, LoginQueryVariables>;
+export const RegisterDocument = gql`
+    mutation Register($password: String!, $email: String!, $firstName: String!, $lastName: String!, $phone: String!) {
+  register(
+    registerData: {password: $password, email: $email, firstName: $firstName, lastName: $lastName, phone: $phone}
+  ) {
+    access_token
+  }
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *      email: // value for 'email'
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *      phone: // value for 'phone'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const GetDialogsPageDocument = gql`
     query GetDialogsPage {
   dialogs {
@@ -1084,42 +1150,120 @@ export function useGetUsersPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetUsersPageQueryHookResult = ReturnType<typeof useGetUsersPageQuery>;
 export type GetUsersPageLazyQueryHookResult = ReturnType<typeof useGetUsersPageLazyQuery>;
 export type GetUsersPageQueryResult = Apollo.QueryResult<GetUsersPageQuery, GetUsersPageQueryVariables>;
-export const RegisterDocument = gql`
-    mutation Register($password: String!, $email: String!, $firstName: String!, $lastName: String!, $phone: String!) {
-  register(
-    registerData: {password: $password, email: $email, firstName: $firstName, lastName: $lastName, phone: $phone}
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($about: String, $birthday: String, $city: String, $country: String, $createdAt: DateTime!, $email: String!, $firstName: String!, $lastName: String!, $login: String!, $middleName: String!, $phone: String!, $relatives: String, $school: String, $status: String, $updatedAt: DateTime!) {
+  edit(
+    data: {about: $about, city: $city, birthday: $birthday, country: $country, createdAt: $createdAt, email: $email, firstName: $firstName, lastName: $lastName, login: $login, middleName: $middleName, phone: $phone, relatives: $relatives, school: $school, status: $status, updatedAt: $updatedAt}
   ) {
-    access_token
+    ...PersonFragment
   }
 }
-    `;
-export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+    ${PersonFragmentFragmentDoc}`;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
 
 /**
- * __useRegisterMutation__
+ * __useUpdateProfileMutation__
  *
- * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
  *   variables: {
- *      password: // value for 'password'
+ *      about: // value for 'about'
+ *      birthday: // value for 'birthday'
+ *      city: // value for 'city'
+ *      country: // value for 'country'
+ *      createdAt: // value for 'createdAt'
  *      email: // value for 'email'
  *      firstName: // value for 'firstName'
  *      lastName: // value for 'lastName'
+ *      login: // value for 'login'
+ *      middleName: // value for 'middleName'
  *      phone: // value for 'phone'
+ *      relatives: // value for 'relatives'
+ *      school: // value for 'school'
+ *      status: // value for 'status'
+ *      updatedAt: // value for 'updatedAt'
  *   },
  * });
  */
-export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
       }
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const UpdateProfileAvatarDocument = gql`
+    mutation UpdateProfileAvatar($field: String!, $file: Upload!) {
+  editImg(field: $field, file: $file) {
+    filePath
+  }
+}
+    `;
+export type UpdateProfileAvatarMutationFn = Apollo.MutationFunction<UpdateProfileAvatarMutation, UpdateProfileAvatarMutationVariables>;
+
+/**
+ * __useUpdateProfileAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileAvatarMutation, { data, loading, error }] = useUpdateProfileAvatarMutation({
+ *   variables: {
+ *      field: // value for 'field'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useUpdateProfileAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileAvatarMutation, UpdateProfileAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileAvatarMutation, UpdateProfileAvatarMutationVariables>(UpdateProfileAvatarDocument, options);
+      }
+export type UpdateProfileAvatarMutationHookResult = ReturnType<typeof useUpdateProfileAvatarMutation>;
+export type UpdateProfileAvatarMutationResult = Apollo.MutationResult<UpdateProfileAvatarMutation>;
+export type UpdateProfileAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateProfileAvatarMutation, UpdateProfileAvatarMutationVariables>;
+export const UpdateProfileMainImageDocument = gql`
+    mutation UpdateProfileMainImage($field: String!, $file: Upload!) {
+  editImg(field: $field, file: $file) {
+    filePath
+  }
+}
+    `;
+export type UpdateProfileMainImageMutationFn = Apollo.MutationFunction<UpdateProfileMainImageMutation, UpdateProfileMainImageMutationVariables>;
+
+/**
+ * __useUpdateProfileMainImageMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMainImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMainImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMainImageMutation, { data, loading, error }] = useUpdateProfileMainImageMutation({
+ *   variables: {
+ *      field: // value for 'field'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useUpdateProfileMainImageMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMainImageMutation, UpdateProfileMainImageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMainImageMutation, UpdateProfileMainImageMutationVariables>(UpdateProfileMainImageDocument, options);
+      }
+export type UpdateProfileMainImageMutationHookResult = ReturnType<typeof useUpdateProfileMainImageMutation>;
+export type UpdateProfileMainImageMutationResult = Apollo.MutationResult<UpdateProfileMainImageMutation>;
+export type UpdateProfileMainImageMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMainImageMutation, UpdateProfileMainImageMutationVariables>;
