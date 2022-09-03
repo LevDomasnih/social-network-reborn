@@ -1034,13 +1034,9 @@
             "name": "parentPost",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -1064,33 +1060,6 @@
           }
         ],
         "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "CreatePostScheme",
-        "description": null,
-        "fields": [
-          {
-            "name": "text",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -1419,22 +1388,6 @@
             "deprecationReason": null
           },
           {
-            "name": "createdAt",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "email",
             "description": null,
             "type": {
@@ -1561,22 +1514,6 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -2406,19 +2343,15 @@
                 "name": "files",
                 "description": null,
                 "type": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "LIST",
+                    "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "SCALAR",
-                        "name": "Upload",
-                        "ofType": null
-                      }
+                      "kind": "SCALAR",
+                      "name": "Upload",
+                      "ofType": null
                     }
                   }
                 },
@@ -2432,7 +2365,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreatePostScheme",
+                "name": "PostEntity",
                 "ofType": null
               }
             },

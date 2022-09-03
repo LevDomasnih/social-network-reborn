@@ -43,7 +43,7 @@ export const Button: FC<ButtonProps> = ({children, onClick, ...props}) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
-      e.preventDefault();
+      // e.preventDefault();
       onClick(e)
     }
   }

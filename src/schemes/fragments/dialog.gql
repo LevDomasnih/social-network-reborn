@@ -14,7 +14,9 @@ fragment Dialog on DialogsEntity {
         owner {
             id
             profile {
+                id
                 avatar {
+                    id
                     filePath
                 }
                 firstName

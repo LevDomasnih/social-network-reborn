@@ -1,7 +1,9 @@
 fragment Users on UserEntity {
     id
     profile {
+        id
         avatar {
+            id
             filePath
         }
         firstName

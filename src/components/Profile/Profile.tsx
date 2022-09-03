@@ -6,19 +6,18 @@ import {SvgImage} from "../SvgImage/SvgImage";
 import {format} from "date-fns";
 import {ProfileEdit} from "../ProfileEdit/ProfileEdit";
 import {FormProvider, useForm} from "react-hook-form";
-import {useAppDispatch} from "../../store/hooks";
-import {IProfile} from "../../models/IProfile";
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage";
 import styled, {css} from "styled-components";
-import {editProfile} from "../../store/modules/user/userThunk";
 import {
     GetBaseInfoDocument,
     GetUserPersonDocument,
     useGetBaseInfoQuery,
     useGetUserPersonQuery,
     useUpdateProfileAvatarMutation,
-    useUpdateProfileMainImageMutation
+    useUpdateProfileMainImageMutation,
+    useUpdateProfileMutation
 } from "@/generated/graphql";
+import {IPerson} from "@/models/IPerson";
 
 const Container = styled.div``;
 
@@ -153,6 +152,8 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
     const avatarInput = React.useRef<HTMLInputElement>(null);
     const mainImageInput = React.useRef<HTMLInputElement>(null);
 
+    const [updateProfile] = useUpdateProfileMutation()
+
     const [updateMainImage] = useUpdateProfileMainImageMutation({
         update: (cache, {data}) => {
             cache.updateQuery({
@@ -205,13 +206,10 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
         },
     })
 
-
     const personQuery = useGetUserPersonQuery({
         variables: {id: userId},
     })
     const baseInfoQuery = useGetBaseInfoQuery()
-
-    const dispatch = useAppDispatch()
 
     const methods = useForm({
         defaultValues: useMemo(() => ({
@@ -261,8 +259,40 @@ export const Profile: FC<ProfileProps> = ({userId, className, ...props}) => {
         });
     }, [methods, personQuery.data?.user.profile, personQuery.data?.user.email, personQuery.data?.user.login]);
 
-    const onSubmit = ({avatar, mainImage, ...profile}: IProfile) => {
-        dispatch(editProfile(profile))
+    const onSubmit = (data: IPerson) => {
+        const {
+            email,
+            login,
+            middleName,
+            firstName,
+            about,
+            city,
+            country,
+            lastName,
+            status,
+            birthday,
+            phone,
+            school,
+            relatives
+        } = data
+
+        updateProfile({
+            variables: {
+                email,
+                login,
+                middleName,
+                firstName,
+                about,
+                city,
+                country,
+                lastName,
+                status,
+                birthday,
+                phone,
+                school,
+                relatives
+            }
+        })
     }
 
     if (!personQuery.data) {

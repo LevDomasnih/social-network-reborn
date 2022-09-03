@@ -9,11 +9,14 @@ fragment Posts on PostEntity {
     updatedAt,
     views,
     owner {
+        id
         profile {
+            id
             middleName,
             lastName,
             firstName,
             avatar {
+                id
                 filePath
             },
         }

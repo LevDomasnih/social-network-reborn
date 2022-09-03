@@ -3,6 +3,7 @@ fragment UserBaseInfo on GetUserBaseInfo {
     login,
     id,
     avatar {
+        id
         filePath
     }
     lastName,

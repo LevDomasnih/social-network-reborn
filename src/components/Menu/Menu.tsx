@@ -5,8 +5,13 @@ import {Tag} from "../Tag/Tag"
 import {useAppDispatch} from "@/store/hooks"
 import styled, {css} from "styled-components";
 import {setBlogModalActive} from "../../store/modules/user/userSlice";
-import {createPost} from "../../store/modules/user/userThunk";
-import {BlogsFragment, PostsFragment, useGetBaseInfoQuery, useGetUserPersonQuery} from "@/generated/graphql";
+import {
+    BlogsFragment, GetBaseInfoDocument, GetUserPostsDocument,
+    PostsFragment,
+    useCreatePostMutation,
+    useGetBaseInfoQuery,
+    useGetUserPersonQuery
+} from "@/generated/graphql";
 import {useQuery} from "@apollo/client";
 
 const Button = styled(DefaultButton)`
@@ -175,6 +180,20 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
         }
     )
 
+    const [createPost] = useCreatePostMutation({
+        update: (cache, {data}) => {
+            const postsQuery: {posts: []} | null = cache.readQuery({query: GetUserPostsDocument, variables: {id: baseInfoQuery.data?.baseInfo.id}})
+
+            cache.writeQuery({
+                query: GetUserPostsDocument,
+                variables: {id: baseInfoQuery.data?.baseInfo.id},
+                data: {
+                    posts: [data!.createPost, ...postsQuery!.posts]
+                }
+            })
+        }
+    })
+
     const ActiveComponent = menuItems[activeMenu].component
 
     const openBlogModal = () => {
@@ -185,7 +204,11 @@ export const Menu: FC<MenuProps> = ({isTag, className, menuItems, ...props}) => 
         if (baseInfoQuery.data?.baseInfo.id) {
             let data = new FormData()
             data.append("text", postValue)
-            dispatch(createPost({formData: data, userId: baseInfoQuery.data?.baseInfo.id}))
+            createPost({
+                variables: {
+                    text: postValue,
+                }
+            })
             setPostValue("")
         }
     }

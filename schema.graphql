@@ -71,10 +71,6 @@ type CreateBlogSchemeTextBlock {
     updatedAt: DateTime!
 }
 
-type CreatePostScheme {
-    text: String!
-}
-
 type DeleteBlogScheme {
     deleted: Boolean!
 }
@@ -158,7 +154,7 @@ type MessagesEntity {
 type Mutation {
     changeLike(postId: String!): ChangeLikeScheme!
     createBlog(blogData: CreateBlogDto!, files: [Upload!]!): [CreateBlogScheme!]!
-    createPost(data: CreatePostInput!, files: [Upload!]!): CreatePostScheme!
+    createPost(data: CreatePostInput!, files: [Upload!]): PostEntity!
     deleteBlog(id: String!): DeleteBlogScheme!
     edit(data: EditProfileInput!): UserEntity!
     editImg(field: String!, file: Upload!): FilesEntity
@@ -267,7 +263,7 @@ input CreateBlogDtoTextBlocks {
 }
 
 input CreatePostInput {
-    parentPost: String!
+    parentPost: String
     text: String!
 }
 
@@ -276,7 +272,6 @@ input EditProfileInput {
     birthday: String
     city: String
     country: String
-    createdAt: DateTime!
     email: String!
     firstName: String!
     lastName: String!
@@ -286,7 +281,6 @@ input EditProfileInput {
     relatives: String
     school: String
     status: String
-    updatedAt: DateTime!
 }
 
 input register {

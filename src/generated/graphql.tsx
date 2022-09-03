@@ -111,12 +111,7 @@ export type CreateBlogSchemeTextBlock = {
 };
 
 export type CreatePostInput = {
-  parentPost: Scalars['String'];
-  text: Scalars['String'];
-};
-
-export type CreatePostScheme = {
-  __typename?: 'CreatePostScheme';
+  parentPost?: InputMaybe<Scalars['String']>;
   text: Scalars['String'];
 };
 
@@ -154,7 +149,6 @@ export type EditProfileInput = {
   birthday?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -164,7 +158,6 @@ export type EditProfileInput = {
   relatives?: InputMaybe<Scalars['String']>;
   school?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
 };
 
 export type FilesEntity = {
@@ -238,7 +231,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   changeLike: ChangeLikeScheme;
   createBlog: Array<CreateBlogScheme>;
-  createPost: CreatePostScheme;
+  createPost: PostEntity;
   deleteBlog: DeleteBlogScheme;
   edit: UserEntity;
   editImg?: Maybe<FilesEntity>;
@@ -259,7 +252,7 @@ export type MutationCreateBlogArgs = {
 
 export type MutationCreatePostArgs = {
   data: CreatePostInput;
-  files: Array<Scalars['Upload']>;
+  files?: InputMaybe<Array<Scalars['Upload']>>;
 };
 
 
@@ -411,31 +404,39 @@ export type Register = {
   phone: Scalars['String'];
 };
 
-export type BlogsFragment = { __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } };
+export type CreatePostMutationVariables = Exact<{
+  text: Scalars['String'];
+  parentPost?: InputMaybe<Scalars['String']>;
+}>;
 
-export type DialogFragment = { __typename?: 'DialogsEntity', id: string, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', id: string, filePath: string } | null }, messages: Array<{ __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }> };
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } } };
+
+export type BlogsFragment = { __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } };
+
+export type DialogFragment = { __typename?: 'DialogsEntity', id: string, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', id: string, filePath: string } | null }, messages: Array<{ __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }> };
 
 export type DialogsFragment = { __typename?: 'DialogsEntity', id: string, status: DialogType, lastMessage: { __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', firstName: string } } }, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', filePath: string } | null } };
 
-export type PersonFragmentFragment = { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type PersonFragmentFragment = { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
-export type PostsFragment = { __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } };
+export type PostsFragment = { __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } };
 
-export type UserBaseInfoFragment = { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null };
+export type UserBaseInfoFragment = { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null };
 
-export type UsersFragment = { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type UsersFragment = { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type GetBaseInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBaseInfoQuery = { __typename?: 'Query', baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type GetBaseInfoQuery = { __typename?: 'Query', baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type GetDialogQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetDialogQuery = { __typename?: 'Query', dialog: { __typename?: 'DialogsEntity', id: string, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', id: string, filePath: string } | null }, messages: Array<{ __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }> } };
+export type GetDialogQuery = { __typename?: 'Query', dialog: { __typename?: 'DialogsEntity', id: string, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', id: string, filePath: string } | null }, messages: Array<{ __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }> } };
 
 export type GetDialogsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -447,21 +448,21 @@ export type GetUserBlogsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserBlogsQuery = { __typename?: 'Query', blogsOfUser: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }> };
+export type GetUserBlogsQuery = { __typename?: 'Query', blogsOfUser: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }> };
 
 export type GetUserPersonQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetUserPersonQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } } };
+export type GetUserPersonQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } };
 
 export type GetUserPostsQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }> };
+export type GetUserPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'PostEntity', id: string, createdAt: any, likes?: Array<string> | null, text: string, updatedAt: any, views?: Array<string> | null, images?: { __typename?: 'FilesEntity', filePath: string } | null, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }> };
 
 export type LoginQueryVariables = Exact<{
   login: Scalars['String'];
@@ -485,31 +486,30 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 export type GetDialogsPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetDialogsPageQuery = { __typename?: 'Query', dialogs: Array<{ __typename?: 'DialogsEntity', id: string, status: DialogType, lastMessage: { __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', firstName: string } } }, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type GetDialogsPageQuery = { __typename?: 'Query', dialogs: Array<{ __typename?: 'DialogsEntity', id: string, status: DialogType, lastMessage: { __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', firstName: string } } }, info: { __typename?: 'DialogInfoSchema', id: string, name: string, image?: { __typename?: 'FilesEntity', filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type GetUserMePageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserMePageQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } }, blogs: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type GetUserMePageQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } }, blogs: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type GetUserPageQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetUserPageQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } }, blogs: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', profile: { __typename?: 'ProfileEntity', middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type GetUserPageQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } }, blogs: Array<{ __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type GetUsersPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersPageQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', filePath: string } | null } };
+export type GetUsersPageQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
 
 export type UpdateProfileMutationVariables = Exact<{
   about?: InputMaybe<Scalars['String']>;
   birthday?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -519,11 +519,10 @@ export type UpdateProfileMutationVariables = Exact<{
   relatives?: InputMaybe<Scalars['String']>;
   school?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', edit: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', filePath: string } | null } } };
+export type UpdateProfileMutation = { __typename?: 'Mutation', edit: { __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, phone: string, about?: string | null, birthday?: any | null, city?: string | null, country?: string | null, middleName?: string | null, relatives?: string | null, school?: string | null, status?: string | null, avatar?: { __typename?: 'FilesEntity', filePath: string } | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } };
 
 export type UpdateProfileAvatarMutationVariables = Exact<{
   field: Scalars['String'];
@@ -545,6 +544,7 @@ export const BlogsFragmentDoc = gql`
     fragment Blogs on BlogEntity {
   id
   mainImage {
+    id
     filePath
   }
   createdAt
@@ -566,11 +566,14 @@ export const BlogsFragmentDoc = gql`
   updatedAt
   views
   owner {
+    id
     profile {
+      id
       middleName
       lastName
       firstName
       avatar {
+        id
         filePath
       }
     }
@@ -595,7 +598,9 @@ export const DialogFragmentDoc = gql`
     owner {
       id
       profile {
+        id
         avatar {
+          id
           filePath
         }
         firstName
@@ -645,6 +650,7 @@ export const PersonFragmentFragmentDoc = gql`
     city
     country
     mainImage {
+      id
       filePath
     }
     middleName
@@ -668,11 +674,14 @@ export const PostsFragmentDoc = gql`
   updatedAt
   views
   owner {
+    id
     profile {
+      id
       middleName
       lastName
       firstName
       avatar {
+        id
         filePath
       }
     }
@@ -685,6 +694,7 @@ export const UserBaseInfoFragmentDoc = gql`
   login
   id
   avatar {
+    id
     filePath
   }
   lastName
@@ -695,7 +705,9 @@ export const UsersFragmentDoc = gql`
     fragment Users on UserEntity {
   id
   profile {
+    id
     avatar {
+      id
       filePath
     }
     firstName
@@ -706,6 +718,40 @@ export const UsersFragmentDoc = gql`
   email
 }
     `;
+export const CreatePostDocument = gql`
+    mutation CreatePost($text: String!, $parentPost: String) {
+  createPost(data: {parentPost: $parentPost, text: $text}) {
+    ...Posts
+  }
+}
+    ${PostsFragmentDoc}`;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      parentPost: // value for 'parentPost'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const GetBaseInfoDocument = gql`
     query GetBaseInfo {
   baseInfo: userMeBaseInfo {
@@ -1151,9 +1197,9 @@ export type GetUsersPageQueryHookResult = ReturnType<typeof useGetUsersPageQuery
 export type GetUsersPageLazyQueryHookResult = ReturnType<typeof useGetUsersPageLazyQuery>;
 export type GetUsersPageQueryResult = Apollo.QueryResult<GetUsersPageQuery, GetUsersPageQueryVariables>;
 export const UpdateProfileDocument = gql`
-    mutation UpdateProfile($about: String, $birthday: String, $city: String, $country: String, $createdAt: DateTime!, $email: String!, $firstName: String!, $lastName: String!, $login: String!, $middleName: String!, $phone: String!, $relatives: String, $school: String, $status: String, $updatedAt: DateTime!) {
+    mutation UpdateProfile($about: String, $birthday: String, $city: String, $country: String, $email: String!, $firstName: String!, $lastName: String!, $login: String!, $middleName: String!, $phone: String!, $relatives: String, $school: String, $status: String) {
   edit(
-    data: {about: $about, city: $city, birthday: $birthday, country: $country, createdAt: $createdAt, email: $email, firstName: $firstName, lastName: $lastName, login: $login, middleName: $middleName, phone: $phone, relatives: $relatives, school: $school, status: $status, updatedAt: $updatedAt}
+    data: {about: $about, city: $city, birthday: $birthday, country: $country, email: $email, firstName: $firstName, lastName: $lastName, login: $login, middleName: $middleName, phone: $phone, relatives: $relatives, school: $school, status: $status}
   ) {
     ...PersonFragment
   }
@@ -1178,7 +1224,6 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutat
  *      birthday: // value for 'birthday'
  *      city: // value for 'city'
  *      country: // value for 'country'
- *      createdAt: // value for 'createdAt'
  *      email: // value for 'email'
  *      firstName: // value for 'firstName'
  *      lastName: // value for 'lastName'
@@ -1188,7 +1233,6 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutat
  *      relatives: // value for 'relatives'
  *      school: // value for 'school'
  *      status: // value for 'status'
- *      updatedAt: // value for 'updatedAt'
  *   },
  * });
  */

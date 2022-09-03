@@ -3,7 +3,6 @@ mutation UpdateProfile(
     $birthday: String
     $city: String
     $country: String
-    $createdAt: DateTime!
     $email: String!
     $firstName: String!
     $lastName: String!
@@ -13,14 +12,12 @@ mutation UpdateProfile(
     $relatives: String
     $school: String
     $status: String
-    $updatedAt: DateTime!
 ) {
     edit(data: {
         about: $about
         city: $city
         birthday: $birthday
         country: $country
-        createdAt: $createdAt
         email: $email
         firstName: $firstName
         lastName: $lastName
@@ -30,7 +27,6 @@ mutation UpdateProfile(
         relatives: $relatives
         school: $school
         status: $status
-        updatedAt: $updatedAt
     }) {
         ...PersonFragment
     }
