@@ -53,6 +53,7 @@ export type ChangeLikeScheme = {
 };
 
 export type CreateBlogDto = {
+  entityMap: Scalars['JSON'];
   textBlocks: Array<CreateBlogDtoTextBlocks>;
 };
 
@@ -63,51 +64,13 @@ export type CreateBlogDtoInlineStyleRangesDto = {
 };
 
 export type CreateBlogDtoTextBlocks = {
+  data: Scalars['JSON'];
   depth: Scalars['Int'];
   entityRanges: Array<Scalars['String']>;
   inlineStyleRanges: Array<CreateBlogDtoInlineStyleRangesDto>;
   key: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
-};
-
-export type CreateBlogScheme = {
-  __typename?: 'CreateBlogScheme';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  likes: Scalars['Int'];
-  mainImage?: Maybe<Scalars['String']>;
-  profile: CreateBlogSchemeProfile;
-  text: Array<CreateBlogSchemeTextBlock>;
-  updatedAt: Scalars['DateTime'];
-  views: Scalars['Int'];
-};
-
-export type CreateBlogSchemeInlineStyleRanges = {
-  __typename?: 'CreateBlogSchemeInlineStyleRanges';
-  length: Scalars['Float'];
-  offset: Scalars['Float'];
-  style: Scalars['String'];
-};
-
-export type CreateBlogSchemeProfile = {
-  __typename?: 'CreateBlogSchemeProfile';
-  avatar?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  middleName?: Maybe<Scalars['String']>;
-};
-
-export type CreateBlogSchemeTextBlock = {
-  __typename?: 'CreateBlogSchemeTextBlock';
-  createdAt: Scalars['DateTime'];
-  depth: Scalars['Int'];
-  id: Scalars['ID'];
-  inlineStyleRanges?: Maybe<CreateBlogSchemeInlineStyleRanges>;
-  key: Scalars['String'];
-  text: Scalars['String'];
-  type: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
 };
 
 export type CreatePostInput = {
@@ -230,7 +193,7 @@ export type MessagesEntity = {
 export type Mutation = {
   __typename?: 'Mutation';
   changeLike: ChangeLikeScheme;
-  createBlog: Array<CreateBlogScheme>;
+  createBlog: BlogEntity;
   createPost: PostEntity;
   deleteBlog: DeleteBlogScheme;
   edit: UserEntity;
@@ -246,7 +209,7 @@ export type MutationChangeLikeArgs = {
 
 export type MutationCreateBlogArgs = {
   blogData: CreateBlogDto;
-  files: Array<Scalars['Upload']>;
+  files?: InputMaybe<Array<Scalars['Upload']>>;
 };
 
 
@@ -403,6 +366,14 @@ export type Register = {
   password: Scalars['String'];
   phone: Scalars['String'];
 };
+
+export type CreateBlogMutationVariables = Exact<{
+  blogData: CreateBlogDto;
+  files?: InputMaybe<Array<Scalars['Upload']> | Scalars['Upload']>;
+}>;
+
+
+export type CreateBlogMutation = { __typename?: 'Mutation', createBlog: { __typename?: 'BlogEntity', id: string, createdAt: any, likes: number, updatedAt: any, views: number, entityMap?: any | null, mainImage?: { __typename?: 'FilesEntity', id: string, filePath: string } | null, textBlocks: Array<{ __typename?: 'BlogTextBlockEntity', text: string, createdAt: any, id: string, depth: number, key: string, type: string, updatedAt: any, inlineStyleRanges?: Array<{ __typename?: 'InlineStyleRanges', length: number, offset: number, style: string }> | null }>, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, middleName?: string | null, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } } };
 
 export type CreatePostMutationVariables = Exact<{
   text: Scalars['String'];
@@ -718,6 +689,40 @@ export const UsersFragmentDoc = gql`
   email
 }
     `;
+export const CreateBlogDocument = gql`
+    mutation CreateBlog($blogData: CreateBlogDto!, $files: [Upload!]) {
+  createBlog(files: $files, blogData: $blogData) {
+    ...Blogs
+  }
+}
+    ${BlogsFragmentDoc}`;
+export type CreateBlogMutationFn = Apollo.MutationFunction<CreateBlogMutation, CreateBlogMutationVariables>;
+
+/**
+ * __useCreateBlogMutation__
+ *
+ * To run a mutation, you first call `useCreateBlogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBlogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBlogMutation, { data, loading, error }] = useCreateBlogMutation({
+ *   variables: {
+ *      blogData: // value for 'blogData'
+ *      files: // value for 'files'
+ *   },
+ * });
+ */
+export function useCreateBlogMutation(baseOptions?: Apollo.MutationHookOptions<CreateBlogMutation, CreateBlogMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBlogMutation, CreateBlogMutationVariables>(CreateBlogDocument, options);
+      }
+export type CreateBlogMutationHookResult = ReturnType<typeof useCreateBlogMutation>;
+export type CreateBlogMutationResult = Apollo.MutationResult<CreateBlogMutation>;
+export type CreateBlogMutationOptions = Apollo.BaseMutationOptions<CreateBlogMutation, CreateBlogMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($text: String!, $parentPost: String) {
   createPost(data: {parentPost: $parentPost, text: $text}) {

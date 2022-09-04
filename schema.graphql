@@ -36,41 +36,6 @@ type ChangeLikeScheme {
     text: String!
 }
 
-type CreateBlogScheme {
-    createdAt: DateTime!
-    id: ID!
-    likes: Int!
-    mainImage: String
-    profile: CreateBlogSchemeProfile!
-    text: [CreateBlogSchemeTextBlock!]!
-    updatedAt: DateTime!
-    views: Int!
-}
-
-type CreateBlogSchemeInlineStyleRanges {
-    length: Float!
-    offset: Float!
-    style: String!
-}
-
-type CreateBlogSchemeProfile {
-    avatar: String
-    firstName: String
-    lastName: String
-    middleName: String
-}
-
-type CreateBlogSchemeTextBlock {
-    createdAt: DateTime!
-    depth: Int!
-    id: ID!
-    inlineStyleRanges: CreateBlogSchemeInlineStyleRanges
-    key: String!
-    text: String!
-    type: String!
-    updatedAt: DateTime!
-}
-
 type DeleteBlogScheme {
     deleted: Boolean!
 }
@@ -153,7 +118,7 @@ type MessagesEntity {
 
 type Mutation {
     changeLike(postId: String!): ChangeLikeScheme!
-    createBlog(blogData: CreateBlogDto!, files: [Upload!]!): [CreateBlogScheme!]!
+    createBlog(blogData: CreateBlogDto!, files: [Upload!]): BlogEntity!
     createPost(data: CreatePostInput!, files: [Upload!]): PostEntity!
     deleteBlog(id: String!): DeleteBlogScheme!
     edit(data: EditProfileInput!): UserEntity!
@@ -244,6 +209,7 @@ scalar JSON
 scalar Upload
 
 input CreateBlogDto {
+    entityMap: JSON!
     textBlocks: [CreateBlogDtoTextBlocks!]!
 }
 
@@ -254,6 +220,7 @@ input CreateBlogDtoInlineStyleRangesDto {
 }
 
 input CreateBlogDtoTextBlocks {
+    data: JSON!
     depth: Int!
     entityRanges: [String!]!
     inlineStyleRanges: [CreateBlogDtoInlineStyleRangesDto!]!
