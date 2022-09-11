@@ -1,0 +1,18 @@
+subscription OnMessageAdded {
+    messageCreated {
+        id
+        text
+        owner {
+            id
+            profile {
+                id
+                avatar {
+                    id
+                    filePath
+                }
+                firstName
+            }
+        }
+        createdAt
+    }
+}

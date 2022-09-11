@@ -1,0 +1,5 @@
+query GetBaseInfo {
+    baseInfo: userMeBaseInfo {
+        ...UserBaseInfo
+    }
+}

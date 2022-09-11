@@ -1,0 +1,11 @@
+query GetUserMePage {
+    user: userMe {
+        ...PersonFragment
+    }
+    blogs: blogsMe {
+        ...Blogs
+    }
+    baseInfo: userMeBaseInfo {
+        ...UserBaseInfo
+    }
+}

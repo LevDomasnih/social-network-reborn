@@ -1,0 +1,26 @@
+fragment PersonFragment on UserEntity {
+    id,
+    profile {
+        id,
+        avatar {
+            filePath
+        },
+        firstName,
+        lastName,
+        phone,
+        about,
+        birthday,
+        city,
+        country,
+        mainImage {
+            id
+            filePath
+        },
+        middleName,
+        relatives,
+        school,
+        status,
+    },
+    login,
+    email
+}

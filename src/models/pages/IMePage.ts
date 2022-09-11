@@ -3,11 +3,8 @@ import {IBlog} from "../IBlog";
 import {IAuth} from "../IAuth";
 import {IUser} from "../IUser";
 import {IProfile} from "../IProfile";
+import {GetUserMePageQuery} from "@/generated/graphql";
 
-export interface IMePage extends IToken {
-    auth: IAuth,
-    blogs: IBlog[],
-    user: {
-        profile: IProfile
-    } & IUser
+export interface IMePage extends GetUserMePageQuery {
+
 }

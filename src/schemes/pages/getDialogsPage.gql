@@ -1,0 +1,8 @@
+query GetDialogsPage {
+    dialogs {
+        ...Dialogs
+    }
+    baseInfo: userMeBaseInfo {
+        ...UserBaseInfo
+    }
+}

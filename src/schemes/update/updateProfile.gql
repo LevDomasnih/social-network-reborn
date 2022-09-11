@@ -1,0 +1,33 @@
+mutation UpdateProfile(
+    $about: String
+    $birthday: String
+    $city: String
+    $country: String
+    $email: String!
+    $firstName: String!
+    $lastName: String!
+    $login: String!
+    $middleName: String!
+    $phone: String!
+    $relatives: String
+    $school: String
+    $status: String
+) {
+    edit(data: {
+        about: $about
+        city: $city
+        birthday: $birthday
+        country: $country
+        email: $email
+        firstName: $firstName
+        lastName: $lastName
+        login: $login
+        middleName: $middleName
+        phone: $phone
+        relatives: $relatives
+        school: $school
+        status: $status
+    }) {
+        ...PersonFragment
+    }
+}

@@ -1,0 +1,16 @@
+overwrite: true
+schema: "http://localhost:3000/graphql"
+documents: "src/**/*.gql"
+watch: true
+watchConfig:
+  usePolling: true
+  interval: 1000
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

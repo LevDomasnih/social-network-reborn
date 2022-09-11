@@ -1,0 +1,5 @@
+query GetDialog($id: ID!) {
+    dialog(id: $id) {
+        ...Dialog
+    }
+}

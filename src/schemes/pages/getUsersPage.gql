@@ -1,0 +1,8 @@
+query GetUsersPage {
+    users {
+        ...Users
+    }
+    baseInfo: userMeBaseInfo {
+        ...UserBaseInfo
+    }
+}

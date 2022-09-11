@@ -1,7 +1,6 @@
 import React, {FC} from "react"
 import {PostProps} from "./Post.props";
 import {BackgroundImage} from "../index"
-import {convertFromRaw, EditorState, RawDraftContentBlock} from "draft-js"
 import styled from "styled-components"
 import {PostTop} from "./PostTop/PostTop";
 import {PostBottom} from "./PostBottom/PostBottom";
@@ -27,42 +26,36 @@ export const Post: FC<PostProps> = (props) => {
         id,
         text,
         createdAt,
-        mainImage,
+        images,
         likes,
         views,
-        isLiked,
-        profile: {
-            firstName,
-            lastName,
-            middleName,
-            avatar
-        },
+        owner: {
+            profile: {
+                firstName,
+                lastName,
+                avatar
+            },
+        }
     } = props;
 
-    const userText = typeof text === 'string'
-        ? text
-        : EditorState.createWithContent(convertFromRaw({
-            blocks: text as RawDraftContentBlock[],
-            entityMap: props.entityMap || {}
-        }))
     return (
         <Container>
             <ContainerItem>
                 <PostTop
                     firstName={firstName}
                     lastName={lastName}
-                    avatar={avatar}
+                    avatar={avatar.filePath}
                     createdAt={createdAt}
-                    text={userText}
+                    text={text}
                 />
             </ContainerItem>
-            {mainImage && <Background src={mainImage}/>}
+            {images && <Background src={images?.filePath}/>}
             <ContainerItem>
                 <PostBottom
                     id={id}
-                    likes={likes}
-                    views={views}
-                    isLiked={isLiked}
+                    likes={likes?.length || 0}
+                    views={views?.length || 0}
+                    isLiked={false}
                 />
             </ContainerItem>
         </Container>

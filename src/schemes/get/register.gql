@@ -1,0 +1,17 @@
+mutation Register(
+    $password: String!,
+    $email: String!,
+    $firstName: String!
+    $lastName: String!,
+    $phone: String!
+) {
+    register(registerData: {
+        password: $password,
+        email: $email,
+        firstName: $firstName,
+        lastName: $lastName,
+        phone: $phone,
+    }) {
+        access_token
+    }
+}

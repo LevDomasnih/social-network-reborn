@@ -1,0 +1,5 @@
+mutation CreateBlog($blogData: CreateBlogDto!, $files: [Upload!]) {
+    createBlog(files: $files, blogData: $blogData) {
+        ...Blogs
+    }
+}
