@@ -73,6 +73,11 @@ export type CreateBlogDtoTextBlocks = {
   type: Scalars['String'];
 };
 
+export type CreateDialogMessageInput = {
+  dialogId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
 export type CreatePostInput = {
   parentPost?: InputMaybe<Scalars['String']>;
   text: Scalars['String'];
@@ -194,6 +199,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   changeLike: ChangeLikeScheme;
   createBlog: BlogEntity;
+  createMessage: MessagesEntity;
   createPost: PostEntity;
   deleteBlog: DeleteBlogScheme;
   edit: UserEntity;
@@ -210,6 +216,13 @@ export type MutationChangeLikeArgs = {
 export type MutationCreateBlogArgs = {
   blogData: CreateBlogDto;
   files?: InputMaybe<Array<Scalars['Upload']>>;
+};
+
+
+export type MutationCreateMessageArgs = {
+  data: CreateDialogMessageInput;
+  file: Scalars['Upload'];
+  image: Scalars['Upload'];
 };
 
 
@@ -345,6 +358,11 @@ export type RegisterScheme = {
   access_token: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  messageCreated: MessagesEntity;
+};
+
 export type UserEntity = {
   __typename?: 'UserEntity';
   blogs: Array<BlogEntity>;
@@ -475,6 +493,11 @@ export type GetUsersPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUsersPageQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserEntity', id: string, login: string, email: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, lastName: string, middleName?: string | null, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } }>, baseInfo: { __typename?: 'GetUserBaseInfo', email: string, login: string, id: string, lastName: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } };
+
+export type OnMessageAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnMessageAddedSubscription = { __typename?: 'Subscription', messageCreated: { __typename?: 'MessagesEntity', id: string, text: string, createdAt: any, owner: { __typename?: 'UserEntity', id: string, profile: { __typename?: 'ProfileEntity', id: string, firstName: string, avatar?: { __typename?: 'FilesEntity', id: string, filePath: string } | null } } } };
 
 export type UpdateProfileMutationVariables = Exact<{
   about?: InputMaybe<Scalars['String']>;
@@ -1201,6 +1224,48 @@ export function useGetUsersPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetUsersPageQueryHookResult = ReturnType<typeof useGetUsersPageQuery>;
 export type GetUsersPageLazyQueryHookResult = ReturnType<typeof useGetUsersPageLazyQuery>;
 export type GetUsersPageQueryResult = Apollo.QueryResult<GetUsersPageQuery, GetUsersPageQueryVariables>;
+export const OnMessageAddedDocument = gql`
+    subscription OnMessageAdded {
+  messageCreated {
+    id
+    text
+    owner {
+      id
+      profile {
+        id
+        avatar {
+          id
+          filePath
+        }
+        firstName
+      }
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useOnMessageAddedSubscription__
+ *
+ * To run a query within a React component, call `useOnMessageAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnMessageAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnMessageAddedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnMessageAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnMessageAddedSubscription, OnMessageAddedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnMessageAddedSubscription, OnMessageAddedSubscriptionVariables>(OnMessageAddedDocument, options);
+      }
+export type OnMessageAddedSubscriptionHookResult = ReturnType<typeof useOnMessageAddedSubscription>;
+export type OnMessageAddedSubscriptionResult = Apollo.SubscriptionResult<OnMessageAddedSubscription>;
 export const UpdateProfileDocument = gql`
     mutation UpdateProfile($about: String, $birthday: String, $city: String, $country: String, $email: String!, $firstName: String!, $lastName: String!, $login: String!, $middleName: String!, $phone: String!, $relatives: String, $school: String, $status: String) {
   edit(

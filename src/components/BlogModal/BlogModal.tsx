@@ -56,8 +56,6 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
         update: (cache, {data}) => {
             const blogsQuery: {blogsOfUser: []} | null = cache.readQuery({query: GetUserBlogsDocument, variables: {id: baseInfoQuery.data?.baseInfo.id}})
 
-            console.log(blogsQuery)
-
             cache.writeQuery({
                 query: GetUserBlogsDocument,
                 variables: {id: baseInfoQuery.data?.baseInfo.id},

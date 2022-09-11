@@ -3,6 +3,7 @@
 schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
 }
 
 type BlogEntity {
@@ -119,6 +120,7 @@ type MessagesEntity {
 type Mutation {
     changeLike(postId: String!): ChangeLikeScheme!
     createBlog(blogData: CreateBlogDto!, files: [Upload!]): BlogEntity!
+    createMessage(data: CreateDialogMessageInput!, file: Upload!, image: Upload!): MessagesEntity!
     createPost(data: CreatePostInput!, files: [Upload!]): PostEntity!
     deleteBlog(id: String!): DeleteBlogScheme!
     edit(data: EditProfileInput!): UserEntity!
@@ -181,6 +183,10 @@ type RegisterScheme {
     access_token: String!
 }
 
+type Subscription {
+    messageCreated: MessagesEntity!
+}
+
 type UserEntity {
     blogs: [BlogEntity!]!
     createdAt: DateTime!
@@ -227,6 +233,11 @@ input CreateBlogDtoTextBlocks {
     key: String!
     text: String!
     type: String!
+}
+
+input CreateDialogMessageInput {
+    dialogId: ID!
+    text: String!
 }
 
 input CreatePostInput {

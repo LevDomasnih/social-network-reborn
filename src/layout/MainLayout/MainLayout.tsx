@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import styled from "styled-components";
 import Push from "@/components/Push/Push";
 import {dialogsGetMessage, dialogsGetNewDialog, dialogsRoom} from "@/store/modules/dialogs/dialogsSlice";
+import {useOnMessageAddedSubscription} from "@/generated/graphql";
 
 const BlogModal = dynamic(
     () => import('../../components/BlogModal/BlogModal'),
@@ -43,6 +44,12 @@ const RightSidebarWrapper = styled.div`
 const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, className, ...props}) => {
     const {blogModalIsActive} = useAppSelector(state => state.userSlice)
     const {access_token} = useAppSelector(state => state.authSlice)
+
+    // useOnMessageAddedSubscription({
+    //     onSubscriptionData: (options) => {
+    //         console.log(options)
+    //     }
+    // })
 
     const dispatch = useAppDispatch();
 
