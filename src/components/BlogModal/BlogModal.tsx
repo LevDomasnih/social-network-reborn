@@ -1,14 +1,19 @@
 import React, {FC, FormEvent, useEffect, useRef, useState} from "react"
 import {EditorState, RawDraftContentState} from "draft-js"
 import {BlogModalProps} from "./BlogModal.props"
-import {Modal} from "../Modal/Modal"
+import {Modal} from "@/components"
 import {BackgroundImage} from "../BackgroundImage/BackgroundImage"
-import {RichEditor} from "../RichEditor/RichEditor"
-import {useFileReader} from "../../hooks"
-import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {RichEditor} from "@/components"
+import {useFileReader} from "@/hooks"
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
 import styled from "styled-components";
-import {createBlog} from "../../store/modules/user/userThunk";
-import {setBlogModalActive} from "../../store/modules/user/userSlice";
+import {setBlogModalActive} from "@/store/modules/user/userSlice";
+import {
+    GetUserBlogsDocument,
+    GetUserPostsDocument,
+    useCreateBlogMutation,
+    useGetBaseInfoQuery
+} from "@/generated/graphql";
 
 const ContainerEditor = styled.div`
   overflow: auto;
@@ -36,7 +41,7 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
     const mainImageInput = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
 
-    const {id} = useAppSelector(state => state.authSlice)
+    const baseInfoQuery = useGetBaseInfoQuery()
 
     useEffect(() => {
         setMainImage(null)
@@ -47,14 +52,30 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
         dispatch(setBlogModalActive(false))
     }
 
-    const handleCreateBlog = (state: RawDraftContentState) => {
-        let data = new FormData()
-        if (mainImageFile) {
-            data.append("files", mainImageFile)
+    const [createBlog] = useCreateBlogMutation({
+        update: (cache, {data}) => {
+            const blogsQuery: {blogsOfUser: []} | null = cache.readQuery({query: GetUserBlogsDocument, variables: {id: baseInfoQuery.data?.baseInfo.id}})
+
+            cache.writeQuery({
+                query: GetUserBlogsDocument,
+                variables: {id: baseInfoQuery.data?.baseInfo.id},
+                data: {
+                    blogsOfUser: [data!.createBlog, ...blogsQuery!.blogsOfUser]
+                }
+            })
         }
-        data.append("textBlocks", JSON.stringify(state.blocks))
-        data.append("entityMap", JSON.stringify(state.entityMap))
-        dispatch(createBlog({formData: data, userId: id}))
+    })
+
+    const handleCreateBlog = (state: RawDraftContentState) => {
+        createBlog({
+            variables: {
+                files: mainImageFile ? [mainImageFile] : [],
+                blogData: {
+                    entityMap: state.entityMap,
+                    textBlocks: state.blocks
+                }
+            }
+        })
         closeModal()
     }
 
@@ -69,7 +90,7 @@ const BlogModal: FC<BlogModalProps> = ({active, ...props}) => {
     }
 
     return (
-        <Modal active={active} closeModal={closeModal} {...props}>
+        <Modal data-testid='modal' active={active} closeModal={closeModal} {...props}>
             <ContainerEditor>
                 <ContainerBackground>
                     <Background

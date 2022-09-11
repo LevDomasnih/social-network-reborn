@@ -16,7 +16,7 @@ const Container = styled.div<ContainerInterface>`
 `;
 
 export const Avatar: FC<AvatarProps> = ({img, width, height, objectFit, classname, ...props}) => (
-    <Container {...props} className={classname} width={width} height={height}>
+    <Container data-testid={'avatarContainer'} {...props} className={classname} width={width} height={height}>
         <Image src={img} width={width} height={height} objectFit={objectFit || 'cover'}/>
     </Container>
 )

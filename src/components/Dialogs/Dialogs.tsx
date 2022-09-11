@@ -5,6 +5,7 @@ import UserDialog from "@/components/Dialogs/UserDialog/UserDialog";
 import {Search, SvgImage} from "@/components";
 import {useAppSelector} from "@/store/hooks";
 import ChatDialog from "@/components/Dialogs/ChatDialog/ChatDialog";
+import {useGetBaseInfoQuery, useGetDialogsPageQuery} from "@/generated/graphql";
 
 const DialogsContainer = styled.div`
   width: 100%;
@@ -48,8 +49,7 @@ const AddFriend = styled(props => <SvgImage svg='addFriend' color={'#000'} {...p
 
 
 const Dialogs: FC<DialogsProps> = (props) => {
-    const {dialogs, activeDialog} = useAppSelector(state => state.dialogsSlice)
-    const {id} = useAppSelector(state => state.authSlice)
+    const dialogs = useGetDialogsPageQuery()
 
     return (
         <DialogsContainer style={{height: 840}}>
@@ -59,10 +59,10 @@ const Dialogs: FC<DialogsProps> = (props) => {
                     <AddFriend/>
                 </MenuOptions>
                 <UserDialogs>
-                    {dialogs.map((dialog) => <UserDialog key={dialog.id} {...dialog} />)}
+                    {dialogs.data?.dialogs.map((dialog) => <UserDialog key={dialog.id} {...dialog} />)}
                 </UserDialogs>
             </DialogsMenu>
-            <ChatDialog activeDialog={activeDialog} currentUserId={id}/>
+            <ChatDialog />
         </DialogsContainer>
     )
 }

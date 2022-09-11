@@ -6,6 +6,8 @@ import {useAppDispatch} from "@/store/hooks";
 import {dialogsSendMessage} from "@/store/modules/dialogs/dialogsSlice";
 import Message from "@/components/Dialogs/Message/Message";
 import Link from "next/link";
+import {useGetDialogQuery} from "@/generated/graphql";
+import {useRouter} from "next/router";
 
 const Container = styled.div`
   flex: 1;
@@ -68,13 +70,17 @@ const UserFullName = styled.div`
   line-height: ${(props) => props.theme.lineHeight.lg};
 `;
 
-const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}) => {
+const ChatDialog: FC<ChatDialogProps> = (props) => {
     const [message, setMessage] = useState('')
     const dispatch = useAppDispatch()
+    const router = useRouter()
 
-    const messages = activeDialog?.messages
-    const users = activeDialog?.users
-    const info = activeDialog?.info
+    const {userId} = router.query
+
+    const dialog = useGetDialogQuery({variables: {id: userId?.[0]}, })
+
+    const messages = dialog.data?.dialog.messages
+    const info = dialog.data?.dialog.info
 
     const handleMessageChange = (event: FormEvent<HTMLTextAreaElement>) => {
         setMessage((event.target as HTMLTextAreaElement).value);
@@ -98,16 +104,16 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
 
     return (
         <Container>
-            {activeDialog && (
+            {dialog.data?.dialog.id && (
                 <PickedChat>
                     {info && (
                         <ChatHeader>
                             <UserFullName>
-                                {activeDialog.info.name}
+                                {info.name}
                             </UserFullName>
                             <Link href={`/users/${info.id}`}>
                                 <a>
-                                    <Avatar img={activeDialog.info.image || '/avatar.png'} width={38} height={38}/>
+                                    <Avatar img={info.image?.filePath || '/avatar.png'} width={38} height={38}/>
                                 </a>
                             </Link>
                         </ChatHeader>
@@ -117,9 +123,8 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
                             <Message
                                 key={m.id}
                                 text={m.text}
-                                ownerId={m.ownerId}
+                                owner={m.owner}
                                 createdAt={m.createdAt}
-                                users={users}
                             />
                         ))}
                     </ChatScreen>
@@ -138,7 +143,7 @@ const ChatDialog: FC<ChatDialogProps> = ({activeDialog, currentUserId, ...props}
                     </ChatControl>
                 </PickedChat>
             )}
-            {!activeDialog && (
+            {!dialog.data?.dialog.id && (
                 <NotPickedChat>
                     Выберете чат или создайте диалог
                 </NotPickedChat>

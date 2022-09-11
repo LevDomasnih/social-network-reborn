@@ -11,12 +11,19 @@ import routes from "../utils/routes";
 import {defaultError} from "@/store/modules/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Checkbox, Input} from "@/components";
-import axios, {AxiosResponse} from "axios";
-import {IToken} from "@/models/IToken";
-import {ILogin} from "@/models/ILogin";
 import Cookies from "cookies";
 import styled from "styled-components";
 import {IRegisterPage} from "@/models/pages/IRegisterPage";
+import {
+    LoginDocument,
+    LoginQuery,
+    LoginQueryVariables,
+    RegisterDocument,
+    RegisterMutation,
+    RegisterMutationVariables
+} from "@/generated/graphql";
+import {NetworkStatus} from "@apollo/client";
+import nextClient from "@/apolloNextClient";
 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -25,18 +32,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     // DEV AUTH
     if (process.env.AUTH_DONE === 'true' && process.env.AUTH_LOGIN && process.env.AUTH_PASSWORD && !cookiesToken) {
         const cookies = new Cookies(ctx.req, ctx.res);
-        let token = await axios
-            .post<IToken, AxiosResponse<IToken>, ILogin>(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-                loginOrEmail: process.env.AUTH_LOGIN,
-                password: process.env.AUTH_PASSWORD,
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.data.access_token
-                }
-                return null
-            })
-            .catch((err) => null);
+        let token: string | undefined;
+        const {data, error, networkStatus} = await nextClient.query<LoginQuery, LoginQueryVariables>({
+            query: LoginDocument,
+            variables: {
+                login: process.env.AUTH_LOGIN,
+                password: process.env.AUTH_PASSWORD
+            },
+            errorPolicy: "all"
+        });
+
+        if (networkStatus === NetworkStatus.ready) {
+            token = data.login.access_token
+        }
 
         if (!token) {
             const dataToBeSent: IRegister = {
@@ -46,25 +54,24 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
                 lastName: 'tester',
                 phone: '+7 950 453 10 12',
             }
+            const {data, errors} = await nextClient.mutate<RegisterMutation, RegisterMutationVariables>({
+                mutation: RegisterDocument,
+                variables: dataToBeSent,
+                errorPolicy: "all"
+            });
 
-            token = await axios
-                .post<IToken, AxiosResponse<IToken>, IRegister>(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, dataToBeSent)
-                .then((response) => {
-                    if (response.status === 200) {
-                        return response.data.access_token
-                    }
-                    return null
-                })
-                .catch((err) => null);
+            if (!errors) {
+                token = data?.register.access_token
+            }
         }
 
         if (token) {
             cookies.set('jwt', token, {
-                httpOnly: true,
+                httpOnly: false,
                 expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
                 sameSite: 'lax',
             });
-            cookiesToken = token
+            cookiesToken = token // FOR FRONT-BACK
         }
     }
 

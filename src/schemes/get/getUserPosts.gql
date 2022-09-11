@@ -1,0 +1,5 @@
+query GetUserPosts($id: ID!) {
+    posts(userId: $id) {
+        ...Posts
+    }
+}

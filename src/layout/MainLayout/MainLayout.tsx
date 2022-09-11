@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import styled from "styled-components";
 import Push from "@/components/Push/Push";
 import {dialogsGetMessage, dialogsGetNewDialog, dialogsRoom} from "@/store/modules/dialogs/dialogsSlice";
+import {useOnMessageAddedSubscription} from "@/generated/graphql";
 
 const BlogModal = dynamic(
     () => import('../../components/BlogModal/BlogModal'),
@@ -44,20 +45,26 @@ const MainLayout: FC<MainLayoutProps> = ({children, rightSidebar, head, classNam
     const {blogModalIsActive} = useAppSelector(state => state.userSlice)
     const {access_token} = useAppSelector(state => state.authSlice)
 
+    // useOnMessageAddedSubscription({
+    //     onSubscriptionData: (options) => {
+    //         console.log(options)
+    //     }
+    // })
+
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        if (access_token) {
-            dispatch(dialogsRoom())
-            dispatch(dialogsGetMessage())
-            dispatch(dialogsGetNewDialog())
-        }
-
-        return () => {
-            dispatch(dialogsGetMessage('unsubscribe'))
-            dispatch(dialogsGetNewDialog('unsubscribe'))
-        }
-    }, [dispatch, access_token])
+    // useEffect(() => {
+    //     if (access_token) {
+    //         dispatch(dialogsRoom())
+    //         dispatch(dialogsGetMessage())
+    //         dispatch(dialogsGetNewDialog())
+    //     }
+    //
+    //     return () => {
+    //         dispatch(dialogsGetMessage('unsubscribe'))
+    //         dispatch(dialogsGetNewDialog('unsubscribe'))
+    //     }
+    // }, [dispatch, access_token])
 
     return (
         <Container className={className}>

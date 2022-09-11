@@ -40,7 +40,7 @@ export const Modal: FC<ModalProps> = ({children, active, ...props}) => {
     }
 
     return (
-        <Container className='modal' onMouseDown={closeModal}>
+        <Container className='modal' onMouseDown={closeModal} {...props}>
             {children}
         </Container>
     )

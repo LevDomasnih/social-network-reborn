@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {SvgImage} from "../SvgImage/SvgImage";
+import {SvgImage} from "@/components";
 import React, {ForwardedRef, forwardRef} from "react";
 import {BackgroundImageProps} from "./BackgroundImage.props";
 import cn from "classnames";
@@ -34,18 +34,18 @@ const GallerySvg = styled(SvgImage)`
 export const BackgroundImage = forwardRef(({onChange, isEdit, className, src, ...props}: BackgroundImageProps, ref: ForwardedRef<HTMLInputElement | null>) => {
     return (
         <div className={cn(className)} {...props}>
-            {ref && <Input type='file' ref={ref} onChange={onChange}/>}
+            {ref && <Input data-testid='background-input' type='file' ref={ref} onChange={onChange}/>}
             {src ? (
-                <Image src={src} layout='fill' objectFit='cover' objectPosition='center' />
+                <Image data-testid='background-image' src={src} layout='fill' objectFit='cover' objectPosition='center' />
             ) : (
-                <EmptyImage>
+                <EmptyImage data-testid='empty-image'>
                     <ContainerSvg>
                         <GallerySvg svg='gallery' color='#FFF' />
                     </ContainerSvg>
                 </EmptyImage>
             )}
             {isEdit && (
-                <ContainerSvg>
+                <ContainerSvg data-testid='image-edit'>
                     <GallerySvg svg='gallery' color='#FFF' />
                 </ContainerSvg>
             )}

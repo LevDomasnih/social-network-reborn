@@ -1,15 +1,13 @@
-import { DetailedHTMLProps, FC, HTMLAttributes } from "react"
-import { IBlog } from "../../models/IBlog"
-import { IPost } from "../../models/IPost"
+import {DetailedHTMLProps, FC, HTMLAttributes} from "react"
+import {DocumentNode} from "graphql";
 
 export interface MenuProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     isTag?: boolean
-    menuItems: IMenuItem<IBlog | IPost>[]
+    menuItems: IMenuItem[]
 }
 
-export interface IMenuItem<DataModel> {
+export interface IMenuItem {
     name: string,
-    data: DataModel[],
     component: FC<any>,
-    onSelect: (...data: any) => void
+    query: DocumentNode
 }

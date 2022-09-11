@@ -1,5 +1,6 @@
 import Document, {DocumentContext, DocumentInitialProps, Head, Html, Main, NextScript} from "next/document";
 import {ServerStyleSheet} from 'styled-components'
+import 'module-alias/register'
 
 class MyDocument extends Document {
 

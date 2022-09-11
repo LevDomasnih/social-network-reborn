@@ -5,6 +5,7 @@ import {UserDialogProps} from "./UserDialog.props";
 import {format} from "date-fns";
 import {useRouter} from "next/router";
 import {useAppSelector} from "@/store/hooks";
+import {useGetBaseInfoQuery, useGetDialogQuery} from "@/generated/graphql";
 
 const Container = styled.div<{ isActive: boolean }>`
   width: 100%;
@@ -75,15 +76,16 @@ const UserDialog: FC<UserDialogProps> = (props) => {
         id,
         status,
         lastMessage,
-        users,
         info,
         ...otherProps
     } = props;
 
-    const authId = useAppSelector(state => state.authSlice.id)
-    const {activeDialog} = useAppSelector(state => state.dialogsSlice)
-
     const router = useRouter()
+
+    const {userId} = router.query
+
+    const baseInfoQuery = useGetBaseInfoQuery()
+    const dialog = useGetDialogQuery({variables: {id: userId?.[0]}})
 
     const isRead = true // FIXME mock
 
@@ -92,8 +94,8 @@ const UserDialog: FC<UserDialogProps> = (props) => {
     }
 
     return (
-        <Container {...otherProps} onClick={handleClick} isActive={activeDialog?.id === id}>
-            <Avatar img={info.image || '/avatar.png'} width={50} height={50}/>
+        <Container {...otherProps} onClick={handleClick} isActive={dialog.data?.dialog.id === id}>
+            <Avatar img={info.image?.filePath || '/avatar.png'} width={50} height={50}/>
             <Info>
                 <TopInfo>
                     <UserFullName>
@@ -106,7 +108,7 @@ const UserDialog: FC<UserDialogProps> = (props) => {
                 <BottomInfo>
                     <LastMessage>
                         <WhoSend>
-                            {lastMessage?.ownerId === authId ? 'Вы' : users.find(u => u.id === lastMessage?.ownerId)?.firstName}:
+                            {lastMessage?.owner.id === baseInfoQuery.data?.baseInfo.id ? 'Вы' : lastMessage?.owner.profile.firstName}:
                         </WhoSend>
                         {lastMessage?.text}
                     </LastMessage>

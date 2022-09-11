@@ -2,16 +2,16 @@ import Head from "next/head";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Link from "next/link";
 import React from "react";
-import {useAppDispatch, useAppSelector} from "../store/hooks"
-import {ILogin} from "../models/ILogin";
-import {login} from "../store/modules/auth/authThunks";
+import {useAppDispatch, useAppSelector} from "@/store/hooks"
+import {ILogin} from "@/models/ILogin";
+import {login} from "@/store/modules/auth/authThunks";
 import {GetServerSidePropsContext, NextPage} from "next";
 import routes from "../utils/routes";
-import {defaultError} from "../store/modules/auth/authSlice";
+import {defaultError} from "@/store/modules/auth/authSlice";
 import {Controller, useForm} from "react-hook-form";
-import {Button, Checkbox, Input} from "../components";
+import {Button, Checkbox, Input} from "@/components";
 import styled from "styled-components";
-import {ILoginPage} from "../models/pages/ILoginPage";
+import {ILoginPage} from "@/models/pages/ILoginPage";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
